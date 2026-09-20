@@ -56,7 +56,7 @@ def model_status() -> AIStatusData:
     return AIStatusData(
         configured=True,
         model=settings.ai_model if external else "pengzhi-local-agent",
-        message="外部模型服务已连接" if external else "本地农业智能体可用",
+        message="外部模型已配置，本地知识库兜底可用" if external else "本地农业智能体可用",
         knowledge_items=len(load_knowledge()),
     )
 
@@ -397,13 +397,36 @@ async def stream_chat(
         db.commit()
         completed = True
         yield {"event": "error", "data": {"message": "尚未配置模型服务"}}
-    except LLMProviderError:
-        assistant.content = "模型服务暂时不可用，请稍后重试。"
-        assistant.status = "error"
-        conversation.updated_at = utc_now()
-        db.commit()
-        completed = True
-        yield {"event": "error", "data": {"message": assistant.content}}
+    except LLMProviderError as exception:
+        logger.warning("外部模型服务不可用，切换到本地知识库：%s", exception)
+        if not content_parts:
+            context = greenhouse_context(db, conversation.greenhouse_id)
+            reply = _local_evidence_reply(user_message.content, context, evidence)
+            for start in range(0, len(reply), 24):
+                delta = reply[start:start + 24]
+                content_parts.append(delta)
+                yield {"event": "delta", "data": {"content": delta}}
+                await asyncio.sleep(0)
+            assistant.content = "".join(content_parts).strip()
+            assistant.status = "completed"
+            conversation.updated_at = utc_now()
+            db.commit()
+            db.refresh(assistant)
+            completed = True
+            yield {
+                "event": "done",
+                "data": {
+                    "message": AIMessageData.model_validate(assistant).model_dump(mode="json"),
+                    "fallback": "local_knowledge",
+                },
+            }
+        else:
+            assistant.content = "".join(content_parts).strip()
+            assistant.status = "stopped"
+            conversation.updated_at = utc_now()
+            db.commit()
+            completed = True
+            yield {"event": "error", "data": {"message": "外部模型响应中断，已保留当前内容。"}}
     except Exception:
         logger.exception("AI智能体流式处理失败")
         assistant.content = "棚小智处理请求时发生异常，请稍后重试。"

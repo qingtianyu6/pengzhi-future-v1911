@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import {
-  BookOutlined,
+  CheckCircleFilled,
+  CloudServerOutlined,
+  DatabaseOutlined,
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
@@ -10,6 +12,8 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { Button, Empty, Input, Modal, Segmented, Select, Space, Spin, Tag, Tooltip, message } from 'antd'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import {
   createAIConversation,
   deleteAIConversation,
@@ -24,6 +28,7 @@ import { getGreenhouses } from '../../api/greenhouseApi'
 import { AgriculturalAgentMascot } from '../../components/AgriculturalAgentMascot'
 import type { AIChatPayload, AIConversation, AIConversationMode, AIMessage as AIMessageType, AIStatus } from '../../types/ai'
 import type { Greenhouse } from '../../types/greenhouse'
+import './AIAssistantPage.css'
 
 const { TextArea } = Input
 
@@ -266,15 +271,16 @@ export default function AIAssistantPage() {
     <section className="agent-chat-shell">
       <header className="agent-chat-header">
         <div>
-          <strong>{activeConversation?.title ?? '你好，我是棚小智'}</strong>
+          <div className="agent-chat-title"><strong>{activeConversation?.title ?? '你好，我是棚小智'}</strong><span className="agent-live-dot" /></div>
           <span>{activeConversation?.mode === 'greenhouse'
             ? `大棚问答：${activeGreenhouse?.name ?? '未选择'}`
             : '通用问答：使用农业知识库，不读取任何大棚数据'}</span>
         </div>
-        <Space wrap>
-          <Tag color="green" icon={<BookOutlined />}>知识库 {status?.knowledge_items ?? 0} 条</Tag>
-          <Tag>{status?.model === 'pengzhi-local-agent' ? '本地智能体' : status?.model}</Tag>
-        </Space>
+        <div className="agent-status-group">
+          <span><DatabaseOutlined /> 知识库 {status?.knowledge_items ?? 0} 条</span>
+          <span><CloudServerOutlined /> {status?.model === 'pengzhi-local-agent' ? '本地智能体' : status?.model}</span>
+          <span className="agent-status-ready"><CheckCircleFilled /> 可用</span>
+        </div>
       </header>
 
       <div className="agent-mode-banner">
@@ -292,7 +298,13 @@ export default function AIAssistantPage() {
           <div className="agent-message-avatar">{item.role === 'user' ? <UserOutlined /> : <AgriculturalAgentMascot compact />}</div>
           <div className="agent-message-body">
             <div className="agent-message-meta"><strong>{item.role === 'user' ? '你' : '棚小智'}</strong><span>{new Date(item.created_at).toLocaleString('zh-CN', { hour12: false })}</span></div>
-            <div className="agent-message-content">{item.content || (item.status === 'streaming' ? '正在整理证据…' : '暂无内容')}</div>
+            <div className={`agent-message-content${item.status === 'error' ? ' is-error' : ''}`}>
+              {item.content
+                ? item.role === 'assistant'
+                  ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{item.content}</ReactMarkdown>
+                  : item.content
+                : item.status === 'streaming' ? <span className="agent-thinking">正在整理证据</span> : '暂无内容'}
+            </div>
           </div>
         </div>) : <div className="agent-empty-state">
           <AgriculturalAgentMascot />

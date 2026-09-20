@@ -5,6 +5,7 @@ from sqlalchemy import func, select
 
 from app.database import SessionLocal
 from app.models import AIConversation, AIMessage, AIToolCall
+from app.services.ai_provider import LLMProviderError
 
 
 def _greenhouse(client: TestClient) -> int:
@@ -119,3 +120,43 @@ def test_ai_local_copilot_can_answer_without_external_key(
     assert response.status_code == 200
     assert "event: delta" in response.text
     assert "暂无可用环境数据" in response.text
+
+
+def test_ai_falls_back_to_local_knowledge_when_external_model_fails(
+    client: TestClient, monkeypatch
+) -> None:
+    conversation_id = client.post(
+        "/api/v1/ai/conversations", json={"title": "外部模型降级测试"}
+    ).json()["data"]["id"]
+
+    class FailingProvider:
+        async def chat_stream(self, messages, tools):
+            if False:
+                yield ""
+            raise LLMProviderError("upstream unavailable")
+
+    monkeypatch.setattr(
+        "app.services.ai_service.get_settings",
+        lambda: SimpleNamespace(
+            ai_api_key="test",
+            ai_base_url="http://example.test",
+            ai_model="fake-model",
+        ),
+    )
+    monkeypatch.setattr(
+        "app.services.ai_service.get_llm_provider", lambda: FailingProvider()
+    )
+
+    response = client.post(
+        f"/api/v1/ai/conversations/{conversation_id}/chat",
+        json={"content": "番茄高湿时应该关注什么？"},
+    )
+
+    assert response.status_code == 200
+    assert '"fallback": "local_knowledge"' in response.text
+    assert "模型服务暂时不可用" not in response.text
+    messages = client.get(
+        f"/api/v1/ai/conversations/{conversation_id}/messages"
+    ).json()["data"]
+    assert messages[-1]["status"] == "completed"
+    assert messages[-1]["content"]
