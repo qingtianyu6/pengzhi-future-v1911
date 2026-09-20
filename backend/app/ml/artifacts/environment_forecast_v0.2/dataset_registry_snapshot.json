@@ -1,0 +1,1325 @@
+{
+  "generated_at": "2026-08-22",
+  "raw_data_modified": false,
+  "datasets": [
+    {
+      "dataset_id": "agc2_2019",
+      "dataset_name": "Autonomous Greenhouse Challenge, Second Edition (2019)",
+      "doi": "10.4121/uuid:88d22c60-21b3-4ea8-90db-20249a5be2a7",
+      "version": "2",
+      "license": "CC0 1.0",
+      "crop": "cherry_tomato",
+      "local_path": "data/external/autonomous_greenhouse_challenge_2nd",
+      "raw_files": [
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/AICU/CropParameters.csv",
+          "format": ".csv",
+          "size_bytes": 746
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/AICU/GreenhouseClimate.csv",
+          "format": ".csv",
+          "size_bytes": 13971302
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/AICU/GrodanSens.csv",
+          "format": ".csv",
+          "size_bytes": 2342700
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/AICU/LabAnalysis.csv",
+          "format": ".csv",
+          "size_bytes": 2061
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/AICU/Production.csv",
+          "format": ".csv",
+          "size_bytes": 1073
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/AICU/Resources.csv",
+          "format": ".csv",
+          "size_bytes": 8103
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/AICU/TomQuality.csv",
+          "format": ".csv",
+          "size_bytes": 350
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Automatoes/CropParameters.csv",
+          "format": ".csv",
+          "size_bytes": 775
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Automatoes/GreenhouseClimate.csv",
+          "format": ".csv",
+          "size_bytes": 13906401
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Automatoes/GrodanSens.csv",
+          "format": ".csv",
+          "size_bytes": 2342700
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Automatoes/LabAnalysis.csv",
+          "format": ".csv",
+          "size_bytes": 2030
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Automatoes/Production.csv",
+          "format": ".csv",
+          "size_bytes": 1017
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Automatoes/Resources.csv",
+          "format": ".csv",
+          "size_bytes": 8087
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Automatoes/TomQuality.csv",
+          "format": ".csv",
+          "size_bytes": 348
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Digilog/CropParameters.csv",
+          "format": ".csv",
+          "size_bytes": 731
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Digilog/GreenhouseClimate.csv",
+          "format": ".csv",
+          "size_bytes": 13994674
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Digilog/GrodanSens.csv",
+          "format": ".csv",
+          "size_bytes": 2342700
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Digilog/LabAnalysis.csv",
+          "format": ".csv",
+          "size_bytes": 1938
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Digilog/Production.csv",
+          "format": ".csv",
+          "size_bytes": 1054
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Digilog/Resources.csv",
+          "format": ".csv",
+          "size_bytes": 8895
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Digilog/TomQuality.csv",
+          "format": ".csv",
+          "size_bytes": 349
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Economics.pdf",
+          "format": ".pdf",
+          "size_bytes": 1180896
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/IUACAAS/CropParameters.csv",
+          "format": ".csv",
+          "size_bytes": 774
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/IUACAAS/GreenhouseClimate.csv",
+          "format": ".csv",
+          "size_bytes": 13961922
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/IUACAAS/GrodanSens.csv",
+          "format": ".csv",
+          "size_bytes": 2342700
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/IUACAAS/LabAnalysis.csv",
+          "format": ".csv",
+          "size_bytes": 2048
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/IUACAAS/Production.csv",
+          "format": ".csv",
+          "size_bytes": 1049
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/IUACAAS/Resources.csv",
+          "format": ".csv",
+          "size_bytes": 8696
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/IUACAAS/TomQuality.csv",
+          "format": ".csv",
+          "size_bytes": 345
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/ReadMe.pdf",
+          "format": ".pdf",
+          "size_bytes": 733072
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Reference/CropParameters.csv",
+          "format": ".csv",
+          "size_bytes": 704
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Reference/GreenhouseClimate.csv",
+          "format": ".csv",
+          "size_bytes": 13977512
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Reference/GrodanSens.csv",
+          "format": ".csv",
+          "size_bytes": 2342700
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Reference/LabAnalysis.csv",
+          "format": ".csv",
+          "size_bytes": 2034
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Reference/Production.csv",
+          "format": ".csv",
+          "size_bytes": 1086
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Reference/Resources.csv",
+          "format": ".csv",
+          "size_bytes": 6367
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Reference/TomQuality.csv",
+          "format": ".csv",
+          "size_bytes": 395
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/TheAutomators/CropParameters.csv",
+          "format": ".csv",
+          "size_bytes": 745
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/TheAutomators/GreenhouseClimate.csv",
+          "format": ".csv",
+          "size_bytes": 13903136
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/TheAutomators/GrodanSens.csv",
+          "format": ".csv",
+          "size_bytes": 2342700
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/TheAutomators/LabAnalysis.csv",
+          "format": ".csv",
+          "size_bytes": 1956
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/TheAutomators/Production.csv",
+          "format": ".csv",
+          "size_bytes": 980
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/TheAutomators/Resources.csv",
+          "format": ".csv",
+          "size_bytes": 5805
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/TheAutomators/TomQuality.csv",
+          "format": ".csv",
+          "size_bytes": 345
+        },
+        {
+          "path": "data/external/autonomous_greenhouse_challenge_2nd/extracted/Weather/Weather.csv",
+          "format": ".csv",
+          "size_bytes": 3926624
+        }
+      ],
+      "extracted": true,
+      "readable": true,
+      "row_count": 286854,
+      "column_count": 50,
+      "columns": [
+        "%time",
+        "AssimLight",
+        "BlackScr",
+        "CO2air",
+        "Cum_irr",
+        "EC_drain_PC",
+        "EnScr",
+        "HumDef",
+        "PipeGrow",
+        "PipeLow",
+        "Rhair",
+        "Tair",
+        "Tot_PAR",
+        "Tot_PAR_Lamps",
+        "VentLee",
+        "Ventwind",
+        "assim_sp",
+        "assim_vip",
+        "co2_dos",
+        "co2_sp",
+        "co2_vip",
+        "dx_sp",
+        "dx_vip",
+        "int_blue_sp",
+        "int_blue_vip",
+        "int_farred_sp",
+        "int_farred_vip",
+        "int_red_sp",
+        "int_red_vip",
+        "int_white_sp",
+        "int_white_vip",
+        "pH_drain_PC",
+        "scr_blck_sp",
+        "scr_blck_vip",
+        "scr_enrg_sp",
+        "scr_enrg_vip",
+        "t_grow_min_sp",
+        "t_grow_min_vip",
+        "t_heat_sp",
+        "t_heat_vip",
+        "t_rail_min_sp",
+        "t_rail_min_vip",
+        "t_vent_sp",
+        "t_ventlee_vip",
+        "t_ventwind_vip",
+        "water_sup",
+        "water_sup_intervals_sp_min",
+        "water_sup_intervals_vip_min",
+        "window_pos_lee_sp",
+        "window_pos_lee_vip"
+      ],
+      "dtypes": {
+        "%time": "numeric",
+        "AssimLight": "numeric",
+        "BlackScr": "numeric",
+        "CO2air": "numeric",
+        "Cum_irr": "numeric",
+        "EC_drain_PC": "numeric",
+        "EnScr": "numeric",
+        "HumDef": "numeric",
+        "PipeGrow": "numeric",
+        "PipeLow": "numeric",
+        "Rhair": "numeric",
+        "Tair": "numeric",
+        "Tot_PAR": "numeric",
+        "Tot_PAR_Lamps": "numeric",
+        "VentLee": "numeric",
+        "Ventwind": "numeric",
+        "assim_sp": "numeric",
+        "assim_vip": "numeric",
+        "co2_dos": "numeric",
+        "co2_sp": "numeric",
+        "co2_vip": "numeric",
+        "dx_sp": "numeric",
+        "dx_vip": "numeric",
+        "int_blue_sp": "numeric",
+        "int_blue_vip": "numeric",
+        "int_farred_sp": "numeric",
+        "int_farred_vip": "numeric",
+        "int_red_sp": "numeric",
+        "int_red_vip": "numeric",
+        "int_white_sp": "numeric",
+        "int_white_vip": "numeric",
+        "pH_drain_PC": "numeric",
+        "scr_blck_sp": "numeric",
+        "scr_blck_vip": "numeric",
+        "scr_enrg_sp": "numeric",
+        "scr_enrg_vip": "numeric",
+        "t_grow_min_sp": "numeric",
+        "t_grow_min_vip": "numeric",
+        "t_heat_sp": "numeric",
+        "t_heat_vip": "numeric",
+        "t_rail_min_sp": "numeric",
+        "t_rail_min_vip": "numeric",
+        "t_vent_sp": "numeric",
+        "t_ventlee_vip": "numeric",
+        "t_ventwind_vip": "numeric",
+        "water_sup": "numeric",
+        "water_sup_intervals_sp_min": "numeric",
+        "water_sup_intervals_vip_min": "numeric",
+        "window_pos_lee_sp": "numeric",
+        "window_pos_lee_vip": "numeric"
+      },
+      "time_column": "%time",
+      "time_format": "Excel serial date",
+      "timezone": "Europe/Amsterdam (location context; CSV is timezone-naive)",
+      "sampling_interval": "300 seconds",
+      "sampling_stability": 0.7777777777777778,
+      "greenhouse_column": "parent directory/team",
+      "greenhouses": [
+        "AICU",
+        "Automatoes",
+        "Digilog",
+        "IUACAAS",
+        "Reference",
+        "TheAutomators"
+      ],
+      "available_features": [
+        "air_temperature_c",
+        "air_humidity_pct",
+        "light_intensity",
+        "co2_ppm",
+        "outside_temperature_c",
+        "outside_humidity_pct",
+        "wind_speed",
+        "window_state",
+        "ventilation_state",
+        "irrigation_amount"
+      ],
+      "available_targets": [
+        "air_temperature_c",
+        "air_humidity_pct",
+        "light_intensity"
+      ],
+      "unit_mapping": {
+        "Tair": "degree_Celsius",
+        "Rhair": "percent",
+        "Tot_PAR": "micromole_per_m2_second",
+        "CO2air": "ppm",
+        "Tout": "degree_Celsius",
+        "Rhout": "percent",
+        "Windsp": "meter_per_second"
+      },
+      "missing_rate": 0.09457844088502393,
+      "duplicate_count": 0,
+      "time_range": [
+        "2019-12-16T00:00:00",
+        "2020-05-30T00:00:00"
+      ],
+      "numeric_ranges": {
+        "Tair": [
+          -1.0,
+          37.2
+        ],
+        "Rhair": [
+          -22.2,
+          99.2
+        ],
+        "Tot_PAR": [
+          0.0,
+          1090.0
+        ],
+        "CO2air": [
+          -499.0,
+          2000.0
+        ],
+        "VentLee": [
+          0.0,
+          100.0
+        ],
+        "Ventwind": [
+          0.0,
+          100.0
+        ]
+      },
+      "abnormal_counts": {
+        "temperature_outside_-20_60": 0,
+        "humidity_outside_0_100": 3
+      },
+      "control_devices": [
+        "vents",
+        "HPS_lamps",
+        "screens",
+        "irrigation"
+      ],
+      "outside_weather": true,
+      "processed_exists_before_day04": false,
+      "simulation_present": false,
+      "source_type": "public_real_dataset",
+      "usable_for_training": true,
+      "limitations": [
+        "Timestamps are Excel serial values without embedded timezone",
+        "Tot_PAR is a computed rather than directly measured indoor PAR channel",
+        "Different teams follow different control strategies"
+      ],
+      "group_details": [
+        {
+          "greenhouse_id": "AICU",
+          "rows": 47809,
+          "time_range": [
+            "2019-12-16T00:00:00+00:00",
+            "2020-05-30T00:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 0.7777777777777778,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "Automatoes",
+          "rows": 47809,
+          "time_range": [
+            "2019-12-16T00:00:00+00:00",
+            "2020-05-30T00:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 0.7777777777777778,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "Digilog",
+          "rows": 47809,
+          "time_range": [
+            "2019-12-16T00:00:00+00:00",
+            "2020-05-30T00:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 0.7777777777777778,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "IUACAAS",
+          "rows": 47809,
+          "time_range": [
+            "2019-12-16T00:00:00+00:00",
+            "2020-05-30T00:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 0.7777777777777778,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "Reference",
+          "rows": 47809,
+          "time_range": [
+            "2019-12-16T00:00:00+00:00",
+            "2020-05-30T00:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 0.7777777777777778,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "TheAutomators",
+          "rows": 47809,
+          "time_range": [
+            "2019-12-16T00:00:00+00:00",
+            "2020-05-30T00:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 0.7777777777777778,
+          "duplicate_count": 0
+        }
+      ]
+    },
+    {
+      "dataset_id": "iran_shirvan_v2",
+      "dataset_name": "Greenhouse_Shrivan_Iran_Dataset",
+      "doi": "10.17632/ncrm9p4tc8.2",
+      "version": "2",
+      "license": "CC BY 4.0",
+      "crop": null,
+      "local_path": "datasets/public_greenhouse/01_iran_greenhouse",
+      "raw_files": [
+        {
+          "path": "datasets/public_greenhouse/01_iran_greenhouse/raw/greenhouse_dataset.csv",
+          "format": ".csv",
+          "size_bytes": 22502033
+        }
+      ],
+      "extracted": true,
+      "readable": true,
+      "row_count": 130195,
+      "column_count": 37,
+      "columns": [
+        "Unnamed: 0",
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "H1",
+        "H10",
+        "H11",
+        "H12",
+        "H2",
+        "H3",
+        "H4",
+        "H5",
+        "H6",
+        "H7",
+        "H8",
+        "H9",
+        "W1",
+        "W10",
+        "W11",
+        "W12",
+        "W16",
+        "W2",
+        "W3",
+        "W4",
+        "W5",
+        "W6",
+        "W7",
+        "W8",
+        "W9",
+        "AVGHumidityInside",
+        "HumidityOutside",
+        "L1",
+        "MeanInsideTemp",
+        "OutsideTemp",
+        "WS1",
+        "DateTime"
+      ],
+      "dtypes": {
+        "Unnamed: 0": "int64",
+        "F1": "float64",
+        "F2": "float64",
+        "F3": "float64",
+        "F4": "float64",
+        "H1": "float64",
+        "H10": "float64",
+        "H11": "float64",
+        "H12": "float64",
+        "H2": "float64",
+        "H3": "float64",
+        "H4": "float64",
+        "H5": "float64",
+        "H6": "float64",
+        "H7": "float64",
+        "H8": "float64",
+        "H9": "float64",
+        "W1": "float64",
+        "W10": "float64",
+        "W11": "float64",
+        "W12": "float64",
+        "W16": "float64",
+        "W2": "float64",
+        "W3": "float64",
+        "W4": "float64",
+        "W5": "float64",
+        "W6": "float64",
+        "W7": "float64",
+        "W8": "float64",
+        "W9": "float64",
+        "AVGHumidityInside": "float64",
+        "HumidityOutside": "float64",
+        "L1": "float64",
+        "MeanInsideTemp": "float64",
+        "OutsideTemp": "float64",
+        "WS1": "float64",
+        "DateTime": "str"
+      },
+      "time_column": "DateTime",
+      "time_format": "YYYY-MM-DD HH:MM:SS",
+      "timezone": null,
+      "time_range": [
+        "2023-12-19T00:00:00+00:00",
+        "2024-05-25T09:02:00+00:00"
+      ],
+      "sampling_interval": "120 seconds",
+      "sampling_stability": 0.5181575187796673,
+      "duplicate_count": 0,
+      "greenhouse_column": null,
+      "greenhouses": null,
+      "available_features": [
+        "inside_temperature",
+        "inside_humidity",
+        "light_lux",
+        "outside_temperature",
+        "outside_humidity",
+        "wind_speed",
+        "coded_device_states"
+      ],
+      "available_targets": [
+        "light_intensity"
+      ],
+      "unit_mapping": {
+        "MeanInsideTemp": null,
+        "AVGHumidityInside": null,
+        "L1": "lux",
+        "OutsideTemp": null,
+        "HumidityOutside": null,
+        "WS1": null
+      },
+      "missing_rate": 3.5290100192746225e-06,
+      "numeric_ranges": {
+        "MeanInsideTemp": [
+          5.5,
+          41.0
+        ],
+        "AVGHumidityInside": [
+          1.1,
+          100.0
+        ],
+        "L1": [
+          0.0,
+          65535.0
+        ],
+        "OutsideTemp": [
+          -9.4,
+          37.3
+        ],
+        "HumidityOutside": [
+          0.0,
+          100.0
+        ],
+        "WS1": [
+          0.0,
+          87.0
+        ]
+      },
+      "abnormal_counts": {
+        "humidity_outside_0_100": 0
+      },
+      "control_devices": [
+        "coded H/F/W columns; per-column codebook unavailable"
+      ],
+      "outside_weather": true,
+      "processed_exists_before_day04": false,
+      "simulation_present": false,
+      "source_type": "public_real_dataset",
+      "usable_for_training": false,
+      "limitations": [
+        "Temperature, humidity and wind units are not explicit in supplied files",
+        "Crop and timezone are not stated",
+        "Device-state codebook is incomplete"
+      ]
+    },
+    {
+      "dataset_id": "agc4_dwarf_tomato_2024",
+      "dataset_name": "4th Autonomous Greenhouse Challenge: Dwarf Tomato Timeseries and Images",
+      "doi": "10.4121/fa102772-32db-4b30-bace-12f2016722ce",
+      "version": "1",
+      "license": "CC BY 4.0",
+      "crop": "dwarf_tomato",
+      "local_path": "datasets/public_greenhouse/02_agc4_dwarf_tomato",
+      "raw_files": [
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/._.DS_Store",
+          "format": ".ds_store",
+          "size_bytes": 120
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/._channel_info.json",
+          "format": ".json",
+          "size_bytes": 219
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/._Harvest.xlsx",
+          "format": ".xlsx",
+          "size_bytes": 244
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/._ReadMe.md",
+          "format": ".md",
+          "size_bytes": 424
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._agrifusion.csv",
+          "format": ".csv",
+          "size_bytes": 219
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._ideas.csv",
+          "format": ".csv",
+          "size_bytes": 163
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._mugrow.csv",
+          "format": ".csv",
+          "size_bytes": 163
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._reference.csv",
+          "format": ".csv",
+          "size_bytes": 163
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._tomatonuts.csv",
+          "format": ".csv",
+          "size_bytes": 163
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._trigger.csv",
+          "format": ".csv",
+          "size_bytes": 163
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._weather.csv",
+          "format": ".csv",
+          "size_bytes": 163
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/__MACOSX/autonomous_greenhouse_challenge4_timeseries/timeseries/._weather_forecast.csv",
+          "format": ".csv",
+          "size_bytes": 163
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/.DS_Store",
+          "format": "",
+          "size_bytes": 6148
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/channel_info.json",
+          "format": ".json",
+          "size_bytes": 144102
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/Harvest.xlsx",
+          "format": ".xlsx",
+          "size_bytes": 77244
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/ReadMe.md",
+          "format": ".md",
+          "size_bytes": 2540
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/agrifusion.csv",
+          "format": ".csv",
+          "size_bytes": 9213579
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/ideas.csv",
+          "format": ".csv",
+          "size_bytes": 7845268
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/mugrow.csv",
+          "format": ".csv",
+          "size_bytes": 8409907
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/reference.csv",
+          "format": ".csv",
+          "size_bytes": 7181925
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/tomatonuts.csv",
+          "format": ".csv",
+          "size_bytes": 8810999
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/trigger.csv",
+          "format": ".csv",
+          "size_bytes": 9724872
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/weather.csv",
+          "format": ".csv",
+          "size_bytes": 2032859
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/extracted/autonomous_greenhouse_challenge4_timeseries/timeseries/weather_forecast.csv",
+          "format": ".csv",
+          "size_bytes": 892232
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/metadata.json",
+          "format": ".json",
+          "size_bytes": 1882
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/raw/autonomous_greenhouse_challenge4_timeseries.zip",
+          "format": ".zip",
+          "size_bytes": 6014133
+        },
+        {
+          "path": "datasets/public_greenhouse/02_agc4_dwarf_tomato/README.md",
+          "format": ".md",
+          "size_bytes": 4762
+        }
+      ],
+      "extracted": true,
+      "readable": true,
+      "row_count": 129966,
+      "column_count": 73,
+      "columns": [
+        "compartment/air_temperature",
+        "compartment/air_temperature.microclimate",
+        "compartment/co2_actuation_state",
+        "compartment/co2_concentration",
+        "compartment/co2_concentration_setpoint",
+        "compartment/co2_concentration_vip",
+        "compartment/co2_dosage_minutes_cumulative",
+        "compartment/fluorescence/gardin_actinic",
+        "compartment/fluorescence/gardin_efficiency",
+        "compartment/fluorescence/gardin_energy_balance",
+        "compartment/fluorescence/gardin_health",
+        "compartment/fluorescence/gardin_productivity",
+        "compartment/fluorescence/gardin_qe",
+        "compartment/heating_lower_circuit/pipe_temperature",
+        "compartment/heating_temperature_setpoint",
+        "compartment/heating_temperature_vip",
+        "compartment/humidity_deficit",
+        "compartment/humidity_deficit_setpoint",
+        "compartment/humidity_deficit_vip",
+        "compartment/lamps_activation_percentage",
+        "compartment/lamps_activation_percentage_setpoint",
+        "compartment/leaf_temperature",
+        "compartment/leaf_temperature.1",
+        "compartment/mass.plant",
+        "compartment/minimum_pipe_temperature_setpoint",
+        "compartment/minimum_pipe_temperature_vip",
+        "compartment/minimum_window_position_lee_side_setpoint",
+        "compartment/minimum_window_position_lee_side_vip",
+        "compartment/par",
+        "compartment/relative_humidity",
+        "compartment/relative_humidity.microclimate",
+        "compartment/screen_blackout/screen_position",
+        "compartment/screen_blackout/screen_position_setpoint",
+        "compartment/screen_blackout/screen_position_vip",
+        "compartment/screen_energy/screen_position",
+        "compartment/screen_energy/screen_position_setpoint",
+        "compartment/screen_energy/screen_position_vip",
+        "compartment/substrate/bulk_ec",
+        "compartment/substrate/bulk_ec.1",
+        "compartment/substrate/bulk_ec.2",
+        "compartment/substrate/relative_permittivity",
+        "compartment/substrate/relative_permittivity.1",
+        "compartment/substrate/relative_permittivity.2",
+        "compartment/substrate/substrate_temperature",
+        "compartment/substrate/substrate_temperature.1",
+        "compartment/substrate/substrate_temperature.2",
+        "compartment/ventilation_temperature_lee_side_vip",
+        "compartment/ventilation_temperature_setpoint",
+        "compartment/ventilation_temperature_wind_side_vip",
+        "compartment/vivent_biosignals",
+        "compartment/water_drain/ec",
+        "compartment/water_drain/ph",
+        "compartment/water_drain/water_volume",
+        "compartment/water_supply/water_flow_duration",
+        "compartment/water_supply/water_supply_interval_setpoint",
+        "compartment/water_supply/water_supply_interval_vip",
+        "compartment/window_position_lee_side",
+        "compartment/window_position_wind_side",
+        "dwarf_tomato/harvest_date",
+        "dwarf_tomato/plant_density",
+        "dwarf_tomato/pot_area",
+        "economics/co2_costs.per_m2",
+        "economics/co2_costs.per_pot",
+        "economics/fixed_costs.per_m2",
+        "economics/fixed_costs.per_pot",
+        "economics/heating_costs.per_m2",
+        "economics/heating_costs.per_pot",
+        "economics/lighting_costs.per_m2",
+        "economics/lighting_costs.per_pot",
+        "energy/co2_dosage",
+        "energy/electricity_use.lighting",
+        "energy/energy_use.heating",
+        "time"
+      ],
+      "dtypes": {
+        "time": "datetime-like",
+        "other": "numeric"
+      },
+      "time_column": "time",
+      "time_format": "ISO-like local datetime",
+      "timezone": "Europe/Amsterdam",
+      "sampling_interval": "300 seconds",
+      "sampling_stability": 1.0,
+      "duplicate_count": 0,
+      "time_range": [
+        "2024-09-02T22:00:00+00:00",
+        "2024-11-21T11:00:00+00:00"
+      ],
+      "greenhouse_column": "filename/team",
+      "greenhouses": [
+        "agrifusion",
+        "ideas",
+        "mugrow",
+        "reference",
+        "tomatonuts",
+        "trigger"
+      ],
+      "available_features": [
+        "air_temperature_c",
+        "air_humidity_pct",
+        "light_intensity",
+        "co2_ppm",
+        "outside_weather",
+        "window_state",
+        "heating",
+        "screens",
+        "substrate"
+      ],
+      "available_targets": [
+        "air_temperature_c",
+        "air_humidity_pct",
+        "light_intensity"
+      ],
+      "unit_mapping": {
+        "compartment/air_temperature": "degree_Celsius",
+        "compartment/relative_humidity": "percent",
+        "compartment/par": "micromole_per_m2_second",
+        "compartment/co2_concentration": "ppm"
+      },
+      "missing_rate": 0.0964590732861364,
+      "numeric_ranges": {
+        "compartment/air_temperature": [
+          -10.0,
+          38.2
+        ],
+        "compartment/relative_humidity": [
+          11.5,
+          100.0
+        ],
+        "compartment/par": [
+          0.0,
+          1487.0
+        ],
+        "compartment/co2_concentration": [
+          377.0,
+          1423.0
+        ]
+      },
+      "abnormal_counts": {},
+      "control_devices": [
+        "windows",
+        "heating",
+        "lamps",
+        "screens",
+        "water_supply"
+      ],
+      "outside_weather": true,
+      "processed_exists_before_day04": false,
+      "simulation_present": false,
+      "source_type": "public_real_dataset",
+      "usable_for_training": true,
+      "limitations": [
+        "Only about eleven weeks",
+        "Many optional channels differ by team",
+        "Images are intentionally excluded"
+      ],
+      "group_details": [
+        {
+          "greenhouse_id": "agrifusion",
+          "rows": 22621,
+          "time_range": [
+            "2024-09-02T22:00:00+00:00",
+            "2024-11-20T11:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 1.0,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "ideas",
+          "rows": 20317,
+          "time_range": [
+            "2024-09-02T22:00:00+00:00",
+            "2024-11-12T11:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 1.0,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "mugrow",
+          "rows": 20029,
+          "time_range": [
+            "2024-09-02T22:00:00+00:00",
+            "2024-11-11T11:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 1.0,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "reference",
+          "rows": 21181,
+          "time_range": [
+            "2024-09-02T22:00:00+00:00",
+            "2024-11-15T11:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 1.0,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "tomatonuts",
+          "rows": 22909,
+          "time_range": [
+            "2024-09-02T22:00:00+00:00",
+            "2024-11-21T11:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 1.0,
+          "duplicate_count": 0
+        },
+        {
+          "greenhouse_id": "trigger",
+          "rows": 22909,
+          "time_range": [
+            "2024-09-02T22:00:00+00:00",
+            "2024-11-21T11:00:00+00:00"
+          ],
+          "sampling_interval": "300 seconds",
+          "sampling_stability": 1.0,
+          "duplicate_count": 0
+        }
+      ]
+    },
+    {
+      "dataset_id": "gets_greenhouse_2025",
+      "dataset_name": "GETS: Greenhouse Environment Time Series",
+      "doi": null,
+      "version": null,
+      "license": "CC BY 4.0",
+      "crop": null,
+      "local_path": "datasets/public_greenhouse/03_gets_greenhouse_co2",
+      "raw_files": [
+        {
+          "path": "datasets/public_greenhouse/03_gets_greenhouse_co2/raw/GreenhouseEnvironmentTimeSeries.txt",
+          "format": ".txt",
+          "size_bytes": 1437600
+        }
+      ],
+      "extracted": true,
+      "readable": true,
+      "row_count": 41577,
+      "column_count": 4,
+      "columns": [
+        "date",
+        "co2_ppm",
+        "humidity_pct",
+        "soil_temp_F"
+      ],
+      "dtypes": {
+        "date": "str",
+        "co2_ppm": "int64",
+        "humidity_pct": "float64",
+        "soil_temp_F": "float64"
+      },
+      "time_column": "date",
+      "time_format": "datetime",
+      "timezone": "UTC",
+      "time_range": [
+        "2025-08-12T12:01:00+00:00",
+        "2025-09-10T08:59:00+00:00"
+      ],
+      "sampling_interval": "60 seconds",
+      "sampling_stability": 0.9999518953242255,
+      "duplicate_count": 0,
+      "greenhouse_column": null,
+      "greenhouses": null,
+      "available_features": [
+        "co2_ppm",
+        "air_humidity_pct",
+        "soil_temperature_c"
+      ],
+      "available_targets": [
+        "co2_ppm"
+      ],
+      "unit_mapping": {
+        "co2_ppm": "ppm",
+        "humidity_pct": "percent",
+        "soil_temp_F": "degree_Fahrenheit"
+      },
+      "missing_rate": 0.0,
+      "numeric_ranges": {
+        "co2_ppm": [
+          380.0,
+          544.0
+        ],
+        "humidity_pct": [
+          5.9,
+          94.0
+        ],
+        "soil_temp_F": [
+          65.8,
+          86.7
+        ]
+      },
+      "abnormal_counts": {},
+      "control_devices": [],
+      "outside_weather": false,
+      "processed_exists_before_day04": false,
+      "simulation_present": false,
+      "source_type": "public_real_dataset",
+      "usable_for_training": true,
+      "limitations": [
+        "Only about 29 days",
+        "Crop and location are not stated",
+        "Soil temperature requires explicit Fahrenheit-to-Celsius conversion"
+      ]
+    },
+    {
+      "dataset_id": "agricultural_irrigation_v1",
+      "dataset_name": "Agricultural Irrigation Control Dataset",
+      "doi": "10.17632/3w3pf3vnd4.1",
+      "version": "1",
+      "license": "CC BY 4.0",
+      "crop": null,
+      "local_path": "datasets/public_greenhouse/04_agricultural_irrigation",
+      "raw_files": [
+        {
+          "path": "datasets/public_greenhouse/04_agricultural_irrigation/extracted/Agricultural Irrigation Control Data/All-Data-SensorParser.xlsx",
+          "format": ".xlsx",
+          "size_bytes": 2064170
+        },
+        {
+          "path": "datasets/public_greenhouse/04_agricultural_irrigation/extracted/Agricultural Irrigation Control Data/DailyAverageSensedData1.xlsx",
+          "format": ".xlsx",
+          "size_bytes": 19799
+        }
+      ],
+      "extracted": true,
+      "readable": true,
+      "row_count": 104051,
+      "column_count": 3,
+      "columns": [
+        "SAP01",
+        "BAT",
+        100
+      ],
+      "dtypes": {
+        "SAP01": "str",
+        "BAT": "str",
+        "100": "float64"
+      },
+      "time_column": null,
+      "time_format": null,
+      "timezone": null,
+      "time_range": [
+        null,
+        null
+      ],
+      "sampling_interval": null,
+      "sampling_stability": null,
+      "duplicate_count": 0,
+      "greenhouse_column": null,
+      "greenhouses": null,
+      "available_features": [
+        "coded sensor values"
+      ],
+      "available_targets": [],
+      "unit_mapping": {
+        "TC": null,
+        "HUM": null,
+        "SOIL": null,
+        "SOILTC": null,
+        "PAR": null
+      },
+      "missing_rate": 0.0,
+      "numeric_ranges": {},
+      "abnormal_counts": {},
+      "control_devices": [],
+      "outside_weather": false,
+      "processed_exists_before_day04": false,
+      "simulation_present": false,
+      "source_type": "public_real_dataset",
+      "usable_for_training": false,
+      "limitations": [
+        "Raw long table has no timestamp",
+        "Units are not defined in supplied workbook",
+        "Daily summary has only 53 rows"
+      ],
+      "daily_summary_rows": 53,
+      "daily_time_range": [
+        "2021-03-01T00:00:00+00:00",
+        "2021-04-22T00:00:00+00:00"
+      ]
+    },
+    {
+      "dataset_id": "lstm_irrigation_v1",
+      "dataset_name": "Environmental Sensor Dataset for LSTM-Based Predictive Irrigation in Smart Home Gardening Using Edge IoT",
+      "doi": "10.17632/jtsyb593fy.1",
+      "version": "1",
+      "license": "CC BY 4.0",
+      "crop": null,
+      "local_path": "datasets/public_greenhouse/05_lstm_predictive_irrigation",
+      "raw_files": [
+        {
+          "path": "datasets/public_greenhouse/05_lstm_predictive_irrigation/raw/Edge_IoT_Predictive_Irrigation_Dataset.xlsx",
+          "format": ".xlsx",
+          "size_bytes": 52457
+        }
+      ],
+      "extracted": true,
+      "readable": true,
+      "row_count": 960,
+      "column_count": 8,
+      "columns": [
+        "Timestamp",
+        "Day",
+        "Time",
+        "Temperature_C",
+        "Humidity_pct",
+        "Soil_Moisture_pct",
+        "Light_Intensity",
+        "Pump_Status"
+      ],
+      "dtypes": {
+        "Timestamp": "str",
+        "Day": "int64",
+        "Time": "str",
+        "Temperature_C": "float64",
+        "Humidity_pct": "int64",
+        "Soil_Moisture_pct": "float64",
+        "Light_Intensity": "int64",
+        "Pump_Status": "int64"
+      },
+      "time_column": "Timestamp",
+      "time_format": "datetime",
+      "timezone": null,
+      "time_range": [
+        "2026-04-01T00:00:00+00:00",
+        "2026-04-20T23:30:00+00:00"
+      ],
+      "sampling_interval": "1800 seconds",
+      "sampling_stability": 1.0,
+      "duplicate_count": 0,
+      "greenhouse_column": null,
+      "greenhouses": null,
+      "available_features": [
+        "air_temperature_c",
+        "air_humidity_pct",
+        "soil_moisture",
+        "pump_state"
+      ],
+      "available_targets": [
+        "soil_moisture"
+      ],
+      "unit_mapping": {
+        "Temperature_C": "degree_Celsius",
+        "Humidity_pct": "percent",
+        "Soil_Moisture_pct": "percent",
+        "Light_Intensity": null,
+        "Pump_Status": "binary_0_1"
+      },
+      "missing_rate": 0.0,
+      "numeric_ranges": {
+        "Temperature_C": [
+          25.0,
+          35.0
+        ],
+        "Humidity_pct": [
+          61.0,
+          88.0
+        ],
+        "Soil_Moisture_pct": [
+          46.6,
+          85.0
+        ],
+        "Light_Intensity": [
+          0.0,
+          949.0
+        ],
+        "Pump_Status": [
+          0.0,
+          1.0
+        ]
+      },
+      "abnormal_counts": {},
+      "control_devices": [
+        "pump"
+      ],
+      "outside_weather": false,
+      "processed_exists_before_day04": false,
+      "simulation_present": false,
+      "source_type": "public_real_dataset",
+      "usable_for_training": true,
+      "limitations": [
+        "Only 20 days and 960 observations",
+        "Smart-home testbed, not a production greenhouse",
+        "Light unit and crop are unknown",
+        "Pump status is historical operation, not an optimal policy"
+      ]
+    }
+  ]
+}

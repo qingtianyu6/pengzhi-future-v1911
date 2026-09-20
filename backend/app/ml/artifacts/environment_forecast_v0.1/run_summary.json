@@ -1,0 +1,155 @@
+{
+  "status": "under_evaluation",
+  "final_model": "gru",
+  "plots": [
+    "01_gru_loss_curve.png",
+    "01_lstm_loss_curve.png",
+    "02_actual_vs_prediction_air_temperature_c.png",
+    "02_actual_vs_prediction_air_humidity_pct.png",
+    "02_actual_vs_prediction_light_intensity.png",
+    "03_error_h1.png",
+    "03_error_h3.png",
+    "03_error_h6.png",
+    "04_model_mae_comparison.png",
+    "04_model_rmse_comparison.png",
+    "04_model_r2_comparison.png",
+    "05_xgboost_feature_importance.png",
+    "06_residual_distribution.png",
+    "07_greenhouse_performance.png",
+    "08_typical_risk_period_case.png"
+  ],
+  "processing": {
+    "dataset_id": "agc2_2019",
+    "raw_rows": 286854,
+    "hourly_rows": 23910,
+    "invalid_values_set_to_missing": {
+      "temperature": 427,
+      "humidity": 429,
+      "light": 426,
+      "co2": 428
+    },
+    "interpolation": "none",
+    "aggregation": "hourly mean; temperature/humidity min/max; CO2 max; no long-gap fill",
+    "groups": [
+      {
+        "greenhouse_id": "AICU",
+        "raw_rows": 47809,
+        "hourly_rows": 3985,
+        "start": "2019-12-16T00:00:00",
+        "end": "2020-05-30T00:00:00"
+      },
+      {
+        "greenhouse_id": "Automatoes",
+        "raw_rows": 47809,
+        "hourly_rows": 3985,
+        "start": "2019-12-16T00:00:00",
+        "end": "2020-05-30T00:00:00"
+      },
+      {
+        "greenhouse_id": "Digilog",
+        "raw_rows": 47809,
+        "hourly_rows": 3985,
+        "start": "2019-12-16T00:00:00",
+        "end": "2020-05-30T00:00:00"
+      },
+      {
+        "greenhouse_id": "IUACAAS",
+        "raw_rows": 47809,
+        "hourly_rows": 3985,
+        "start": "2019-12-16T00:00:00",
+        "end": "2020-05-30T00:00:00"
+      },
+      {
+        "greenhouse_id": "Reference",
+        "raw_rows": 47809,
+        "hourly_rows": 3985,
+        "start": "2019-12-16T00:00:00",
+        "end": "2020-05-30T00:00:00"
+      },
+      {
+        "greenhouse_id": "TheAutomators",
+        "raw_rows": 47809,
+        "hourly_rows": 3985,
+        "start": "2019-12-16T00:00:00",
+        "end": "2020-05-30T00:00:00"
+      }
+    ],
+    "output": "backend/app/ml/data/processed/agc2_hourly.csv.gz",
+    "training_input_mode": "packaged_processed_snapshot",
+    "snapshot_files": [
+      "backend/app/ml/data/processed/agc2_hourly.csv.gz",
+      "backend/app/ml/data/processed/agc4_external_hourly.csv.gz"
+    ]
+  },
+  "training_metadata": {
+    "model_name": "environment-forecast-v0.1",
+    "model_version": "v0.1",
+    "model_type": "gru",
+    "model_status": "under_evaluation",
+    "training_input_mode": "packaged_processed_snapshot",
+    "training_device": "cpu",
+    "torch_version": "2.13.0+cpu",
+    "xpu_available": false,
+    "cpu_threads_used": 4,
+    "random_seed": 20260822,
+    "dataset_name": "Autonomous Greenhouse Challenge, Second Edition (2019)",
+    "dataset_version": "2",
+    "dataset_doi": "10.4121/uuid:88d22c60-21b3-4ea8-90db-20249a5be2a7",
+    "dataset_license": "CC0 1.0",
+    "crop": "cherry_tomato",
+    "training_domain": "public_real_greenhouse_tomato",
+    "input_window_hours": 24,
+    "forecast_horizon_hours": 6,
+    "sampling_interval": "1 hour",
+    "features": [
+      "air_temperature_c",
+      "air_humidity_pct",
+      "hour_sin",
+      "hour_cos",
+      "day_of_year_sin",
+      "day_of_year_cos"
+    ],
+    "targets": [
+      "air_temperature_c",
+      "air_humidity_pct",
+      "light_intensity"
+    ],
+    "train_time_range": [
+      "2019-12-16 00:00:00",
+      "2020-04-10 04:00:00"
+    ],
+    "validation_time_range": [
+      "2020-04-10 05:00:00",
+      "2020-05-05 02:00:00"
+    ],
+    "test_time_range": [
+      "2020-05-05 03:00:00",
+      "2020-05-30 00:00:00"
+    ],
+    "train_sample_count": 16380,
+    "validation_sample_count": 3414,
+    "test_sample_count": 3408,
+    "preprocessing_version": "day04-v0.1",
+    "created_at": "2026-08-29T05:48:56.656829+00:00",
+    "training_seconds": {
+      "xgboost": 9.768220406999944,
+      "gru": 31.170802184999957,
+      "lstm": 11.304300752000017
+    },
+    "parameter_count": {
+      "gru": 4434,
+      "lstm": 5714
+    },
+    "inference_ms": {
+      "xgboost": 3.0834176799999113,
+      "gru": 0.47095807999994577,
+      "lstm": 0.3433092800014492
+    },
+    "limitations": [
+      "Public Dutch tomato data; not locally calibrated for Shenxian melon",
+      "No direct hardware control",
+      "Light forecast unit is PAR; platform sensor history is klx and is not converted",
+      "Risk rules for tomato are unavailable"
+    ]
+  }
+}

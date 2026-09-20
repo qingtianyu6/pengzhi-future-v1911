@@ -1,0 +1,207 @@
+[
+  {
+    "id": "facility-winter-environment",
+    "title": "设施蔬菜冬季温湿度与光照管理",
+    "crops": ["tomato", "vegetable"],
+    "topics": ["temperature", "humidity", "light", "ventilation"],
+    "keywords": ["冬季", "低温", "通风", "排湿", "光照", "温室", "番茄"],
+    "summary": "冬季设施蔬菜管理重点是保温、合理通风排湿和提高有效光照。温度与湿度应结合天气、作物阶段和棚体条件综合判断，避免只看单一阈值。",
+    "guidance": [
+      "低温季节优先保证夜间保温，再根据棚内温度逐步通风。",
+      "早晨揭开保温覆盖后可短时通风排湿，连续阴雨雪天气可选择中午较暖时段短时排湿。",
+      "尽量保持棚膜清洁并延长有效光照时间，久阴转晴时注意避免植株突然失水。",
+      "灌溉宜减少无效蒸发并配合通风管理，持续高湿会增加多种病害风险。"
+    ],
+    "sources": [
+      {
+        "name": "农业农村部种植业管理司、全国农业技术推广服务中心等：设施蔬菜冬季生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/tzgg/202210/t20221028_6414218.htm"
+      }
+    ]
+  },
+  {
+    "id": "facility-summer-heat",
+    "title": "夏季设施蔬菜高温与通风管理",
+    "crops": ["tomato", "vegetable"],
+    "topics": ["temperature", "ventilation", "light", "heat"],
+    "keywords": ["夏季", "高温", "遮阳", "通风", "降温", "强光", "番茄"],
+    "summary": "夏季设施环境管理以通风降温、适度遮光和保证空气流通为核心。持续高夜温还会影响番茄坐果，因此需要结合日夜温度趋势判断。",
+    "guidance": [
+      "高温时优先检查顶部和侧部通风是否畅通。",
+      "强光高温时可根据作物需求采用遮阳，但不宜在阴天或早晚长期遮光。",
+      "及时去除老叶、病叶和过密枝叶有助于改善通风透光。",
+      "高温风险处置应结合天气预报和现场棚温，不建议仅依据单次传感器读数执行。"
+    ],
+    "sources": [
+      {
+        "name": "农业农村部：北方夏季蔬菜生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202206/t20220621_6403023.htm"
+      }
+    ]
+  },
+  {
+    "id": "tomato-humidity-disease",
+    "title": "番茄高湿环境与叶霉病风险",
+    "crops": ["tomato"],
+    "topics": ["humidity", "disease", "leaf_mold", "ventilation"],
+    "keywords": ["叶霉病", "高湿", "85%", "湿度", "通风", "叶片", "番茄"],
+    "summary": "番茄叶霉病在温室和高隧道环境中较常见，高相对湿度会显著增加风险。高湿持续时间和空气流通状况比单一瞬时湿度更值得关注。",
+    "guidance": [
+      "当相对湿度长期处于较高水平时，应加强巡查叶片背面和下部叶片。",
+      "优先从通风、减少叶面长时间潮湿、改善植株间空气流动等方面降低风险。",
+      "叶霉病与部分缺素或其他叶斑症状可能混淆，图像识别结果应作为候选结果并结合人工复核。"
+    ],
+    "sources": [
+      {
+        "name": "Cornell Vegetables：Tomato Leaf Mold",
+        "url": "https://www.vegetables.cornell.edu/pest-management/disease-factsheets/tomato-leaf-mold/"
+      },
+      {
+        "name": "University of Minnesota Extension：Tomato leaf mold",
+        "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/tomato-leaf-mold"
+      }
+    ]
+  },
+  {
+    "id": "tomato-late-blight",
+    "title": "番茄晚疫病识别与环境风险要点",
+    "crops": ["tomato"],
+    "topics": ["disease", "late_blight", "humidity", "temperature"],
+    "keywords": ["晚疫病", "低温", "潮湿", "高湿", "叶片", "褐斑", "番茄"],
+    "summary": "晚疫病偏好较凉、潮湿的环境，湿润叶面和高湿条件会加快病害发展。症状可能与其他叶斑病混淆，严重风险应优先人工巡查。",
+    "guidance": [
+      "凉湿天气或棚内持续高湿时提高巡查频率。",
+      "重点观察新出现的褐色病斑、叶片和茎部异常，以及高湿时可能出现的白色霉状物。",
+      "减少叶面长时间潮湿、改善空气流动，并及时隔离可疑植株。",
+      "仅凭照片不能完成可靠病原诊断，必要时应由专业人员或实验室确认。"
+    ],
+    "sources": [
+      {
+        "name": "University of Minnesota Extension：Late blight of tomato and potato",
+        "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/late-blight"
+      }
+    ]
+  },
+  {
+    "id": "tomato-early-septoria",
+    "title": "番茄早疫病与斑枯病的叶斑辨识要点",
+    "crops": ["tomato"],
+    "topics": ["disease", "early_blight", "septoria"],
+    "keywords": ["早疫病", "斑枯病", "叶斑", "同心轮纹", "黑点", "番茄"],
+    "summary": "早疫病和斑枯病都可能表现为叶片斑点。早疫病常见较深色、带轮纹的病斑；斑枯病常见较小病斑并可能出现黑色小点。图像症状相似时应保留不确定性。",
+    "guidance": [
+      "观察病斑大小、边缘、中心颜色、是否有同心轮纹或黑色小点。",
+      "记录病害首先出现的叶位和扩展速度，可帮助人工复核。",
+      "系统识别低置信时不要强行给出单一结论，应保留Top-3候选并建议复核。"
+    ],
+    "sources": [
+      {
+        "name": "University of Minnesota Extension：Tomato leaves - spots diagnostic guide",
+        "url": "https://apps.extension.umn.edu/garden/diagnose/plant/vegetable/tomato/leavesspots.html"
+      }
+    ]
+  },
+  {
+    "id": "tomato-tylcv",
+    "title": "番茄黄化曲叶病毒与白粉虱风险",
+    "crops": ["tomato"],
+    "topics": ["disease", "virus", "yellow_leaf_curl", "whitefly"],
+    "keywords": ["黄化曲叶病毒", "TYLCV", "白粉虱", "卷叶", "黄化", "病毒", "番茄"],
+    "summary": "番茄黄化曲叶病毒可由烟粉虱类害虫传播，常见黄化、叶片卷曲、植株矮化等表现。病毒性症状并不唯一，需注意与营养或高温等非病原因素区分。",
+    "guidance": [
+      "发现新叶黄化、卷曲和明显生长受抑时，同时检查白粉虱发生情况。",
+      "加强虫源阻隔、清洁生产和可疑植株管理有助于降低传播风险。",
+      "病毒病不能仅凭症状可靠确诊，疑似病例应建议专业检测。"
+    ],
+    "sources": [
+      {
+        "name": "UF/IFAS：Common Tomato High-Tunnel Production Diseases in Florida",
+        "url": "https://edis.ifas.ufl.edu/pp368"
+      }
+    ]
+  },
+  {
+    "id": "muskmelon-greenhouse-stage",
+    "title": "设施甜瓜分阶段温湿度管理",
+    "crops": ["muskmelon"],
+    "topics": ["temperature", "humidity", "growth_stage", "ventilation"],
+    "keywords": ["甜瓜", "香瓜", "缓苗", "伸蔓", "开花", "坐果", "膨大", "成熟", "温度", "湿度"],
+    "summary": "设施甜瓜的温湿度目标需要随缓苗、伸蔓、开花坐果、果实膨大和成熟阶段调整，不能使用一个固定阈值覆盖全生育期。",
+    "guidance": [
+      "缓苗和营养生长期偏重保温与稳苗，随后逐步加强通风。",
+      "开花坐果期应避免温度过高或过低影响授粉和坐果。",
+      "果实膨大期通常需要较高白天气温并兼顾昼夜温差。",
+      "成熟期应根据品种、天气和植株状态降低无效高湿，促进品质形成。"
+    ],
+    "sources": [
+      {
+        "name": "鄂尔多斯市农牧局：设施甜瓜栽培管理技术",
+        "url": "https://nmj.ordos.gov.cn/nmyw/nszd/202411/t20241105_1370900.html"
+      },
+      {
+        "name": "上海市农业技术推广服务中心：春季甜瓜大棚栽培技术",
+        "url": "https://nyncw.sh.gov.cn/nyjs/20181227/0009-109447.html"
+      }
+    ]
+  },
+  {
+    "id": "greenhouse-data-quality",
+    "title": "环境数据进入AI前的质量检查",
+    "crops": ["tomato", "muskmelon", "vegetable"],
+    "topics": ["data_quality", "sensor", "prediction"],
+    "keywords": ["数据质量", "传感器", "缺失", "异常", "连续性", "重复", "预测", "校验"],
+    "summary": "环境预测之前应先检查时间连续性、字段完整性、重复时间点和明显越界值。数据质量不足时应优先修复数据，而不是强行输出预测。",
+    "guidance": [
+      "检查时间戳是否连续、是否重复，以及采样间隔是否稳定。",
+      "检查温度、湿度、光照和CO₂等字段是否存在明显越界或大面积缺失。",
+      "关键时间段缺失会降低短期预测的可信度，系统应明确显示数据不足。",
+      "文件导入数据与现场传感器数据要保留来源标签，不能混淆数据来源。"
+    ],
+    "sources": [
+      {
+        "name": "棚智未来产品数据质量规则",
+        "url": "internal://pengzhi/data-quality"
+      }
+    ]
+  },
+  {
+    "id": "agent-safety-boundary",
+    "title": "棚小智的决策安全边界",
+    "crops": ["tomato", "muskmelon", "vegetable"],
+    "topics": ["agent", "decision", "safety", "traceability"],
+    "keywords": ["智能体", "AI", "建议", "决策", "人工确认", "追溯", "农药", "控制设备"],
+    "summary": "棚小智负责检索知识、读取业务证据、解释风险和生成决策参考，不直接代替专业诊断，也不未经确认控制设备或执行高风险操作。",
+    "guidance": [
+      "大棚模式下，关键判断优先引用当前大棚的数据、预测、预警和任务证据。",
+      "通用模式下，回答以知识库为依据，不编造不存在的大棚数据。",
+      "病害识别结果只作为候选结果，低置信度必须提示人工复核。",
+      "涉及施药剂量、设备控制或重大生产操作时，只提供核实方向并要求人工确认。"
+    ],
+    "sources": [
+      {
+        "name": "棚智未来Agent安全规范",
+        "url": "internal://pengzhi/agent-safety"
+      }
+    ]
+  },
+  {
+    "id": "sensor-integration-guide",
+    "title": "传感器与第三方设备标准接入说明",
+    "crops": ["tomato", "muskmelon", "vegetable"],
+    "topics": ["sensor", "api", "integration"],
+    "keywords": ["接口", "传感器", "API", "设备", "上报", "温度", "湿度", "CO2", "接入"],
+    "summary": "棚智未来通过标准HTTP接口接收第三方传感器数据。设备只需绑定大棚编码、携带设备标识和时间戳，即可上报温湿度、土壤湿度、光照和CO₂等指标。",
+    "guidance": [
+      "生产部署建议配置独立的SENSOR_INGEST_KEY，并通过请求头进行鉴权。",
+      "设备上报应使用统一时区和稳定采样间隔，避免同一大棚同一时间点重复写入。",
+      "缺少部分指标时允许上报，但系统会将数据质量标记为missing或suspect。",
+      "设备接入只是数据来源之一，平台仍可通过CSV/Excel和第三方数据库导入工作。"
+    ],
+    "sources": [
+      {
+        "name": "棚智未来传感器接入协议",
+        "url": "internal://pengzhi/sensor-api"
+      }
+    ]
+  }
+]

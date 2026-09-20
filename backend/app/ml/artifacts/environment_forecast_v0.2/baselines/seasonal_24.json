@@ -1,0 +1,13 @@
+{
+  "formula": "prediction(t+h) = observation(t+h-24)",
+  "horizons": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "requires_contiguous_history_hours": 24,
+  "random": false
+}

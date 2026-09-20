@@ -1,0 +1,30 @@
+.auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(480px, 1.14fr) minmax(520px, .86fr); background: #fff; }
+.auth-scene { position: relative; min-height: 100vh; overflow: hidden; color: #fff; background: url('/homepage-v11/hero-scene.jpg') center/cover no-repeat; }
+.auth-scene-overlay { position: absolute; inset: 0; background: linear-gradient(105deg, rgba(5, 49, 36, .88) 0%, rgba(8, 71, 51, .7) 48%, rgba(10, 67, 50, .25) 100%); }
+.auth-brand { position: absolute; z-index: 2; top: 44px; left: 54px; display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
+.auth-brand svg { width: 52px; height: 52px; fill: none; stroke: currentColor; stroke-width: 2.4; }
+.auth-brand strong, .auth-brand small { display: block; letter-spacing: 0; }
+.auth-brand strong { font-size: 24px; }.auth-brand small { margin-top: 2px; color: #c8e0d7; font-size: 11px; }
+.auth-scene-copy { position: absolute; z-index: 2; left: 8%; right: 9%; top: 50%; transform: translateY(-48%); max-width: 670px; }
+.auth-kicker { display: inline-block; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #72d2ae; color: #aee3cf; font-size: 12px; font-weight: 700; letter-spacing: 0; }
+.auth-scene-copy h1 { margin: 0; font-size: 52px; line-height: 1.18; letter-spacing: 0; }
+.auth-scene-copy > p { max-width: 600px; margin: 24px 0 30px; color: #d5e8e1; font-size: 16px; line-height: 1.8; }
+.auth-scene-points { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.auth-scene-points span { display: flex; align-items: center; gap: 8px; color: #f1faf6; font-size: 13px; }.auth-scene-points .anticon { color: #75d8b2; }
+.auth-scene-status { position: absolute; z-index: 2; left: 54px; bottom: 40px; display: flex; align-items: center; gap: 9px; padding: 11px 14px; border: 1px solid rgba(255,255,255,.18); background: rgba(3,40,29,.4); backdrop-filter: blur(10px); font-size: 12px; }
+.auth-scene-status i { width: 8px; height: 8px; border-radius: 50%; background: #60d39f; box-shadow: 0 0 0 4px rgba(96,211,159,.14); }.auth-scene-status b { padding-left: 10px; border-left: 1px solid rgba(255,255,255,.22); color: #bcd8ce; font-weight: 500; }
+.auth-form-area { position: relative; min-height: 100vh; display: flex; flex-direction: column; padding: 38px clamp(42px, 6vw, 88px) 24px; background: #fff; }
+.auth-back { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; color: #63766f; text-decoration: none; font-size: 13px; }.auth-back:hover { color: #168464; }
+.auth-form-wrap { width: 100%; max-width: 520px; margin: auto; padding: 36px 0; }
+.auth-form-heading > span { color: #168464; font-size: 11px; font-weight: 800; letter-spacing: 0; }
+.auth-form-heading h2 { margin: 9px 0 10px; color: #123d31; font-size: 32px; line-height: 1.25; letter-spacing: 0; }.auth-form-heading p { margin: 0 0 30px; color: #7b8d86; line-height: 1.7; }
+.auth-page .ant-form-item { margin-bottom: 20px; }.auth-page .ant-form-item-label > label { color: #334f46; font-size: 13px; font-weight: 650; }
+.auth-page .ant-input-affix-wrapper { min-height: 48px; border-radius: 6px; }.auth-page .ant-input-prefix { margin-right: 10px; color: #7e948c; }
+.auth-two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.auth-options { display: flex; align-items: center; justify-content: space-between; margin: -2px 0 26px; font-size: 13px; }
+.auth-submit { width: 100%; height: 50px; border-radius: 6px; font-weight: 700; box-shadow: 0 9px 22px rgba(22,132,100,.18); }
+.auth-guest { width: 100%; margin-top: 12px; padding: 11px; border: 0; color: #4d6a60; background: transparent; cursor: pointer; }.auth-guest:hover { color: #168464; }
+.auth-switch { margin: 24px 0 0; color: #71847d; text-align: center; font-size: 13px; }.auth-switch a { margin-left: 5px; color: #168464; font-weight: 700; }
+.auth-page .ant-checkbox-wrapper a { margin: 0 3px; }.auth-copyright { margin: 0; color: #a1afa9; text-align: center; font-size: 11px; }
+@media (max-width: 1020px) { .auth-page { grid-template-columns: 42% 58%; }.auth-scene-copy h1 { font-size: 40px; }.auth-scene-points { display: grid; }.auth-form-area { padding-inline: 40px; } }
+@media (max-width: 760px) { .auth-page { display: block; min-height: 100vh; background: linear-gradient(rgba(7,55,41,.72),rgba(7,55,41,.72)),url('/homepage-v11/hero-scene.jpg') center/cover fixed; }.auth-scene { min-height: 150px; background: transparent; }.auth-scene-overlay,.auth-scene-copy,.auth-scene-status { display: none; }.auth-brand { top: 30px; left: 24px; }.auth-form-area { min-height: calc(100vh - 150px); padding: 26px 24px 20px; border-radius: 0; }.auth-form-wrap { max-width: none; padding: 28px 0; }.auth-two-columns { grid-template-columns: 1fr; gap: 0; }.auth-form-heading h2 { font-size: 27px; } }

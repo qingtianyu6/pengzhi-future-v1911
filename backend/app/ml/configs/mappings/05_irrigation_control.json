@@ -1,0 +1,18 @@
+{
+  "dataset_id": "agricultural_irrigation_v1",
+  "time_column": null,
+  "daily_time_column": "Date",
+  "time_parser": "date_for_daily_summary_only",
+  "greenhouse_from": "sensor_node",
+  "crop": null,
+  "timezone": null,
+  "source_type": "public_real_dataset",
+  "fields": {
+    "TC": {"target": "air_temperature_c", "unit": null},
+    "HUM": {"target": "air_humidity_pct", "unit": null},
+    "SOIL": {"target": "soil_moisture", "unit": null},
+    "SOILTC": {"target": "soil_temperature_c", "unit": null},
+    "PAR": {"target": "light_intensity", "unit": null}
+  },
+  "note": "Raw long table has no timestamp and supplied files do not define units; no sequence is constructed."
+}

@@ -1,0 +1,87 @@
+.tech-page{background:#fbfdfb}.tech-hero{min-height:560px}.tech-scribble{position:absolute;z-index:5;top:90px;right:5.5vw;color:#193f34;font-family:'KaiTi','STKaiti',sans-serif;font-size:20px;line-height:1.4;transform:rotate(-7deg)}
+.tech-section{position:relative}.tech-note{position:absolute;right:6%;top:32px}.tech-note.right{right:5%;top:45px}
+.tech-data-layout{display:grid;grid-template-columns:1.12fr .88fr;gap:40px;align-items:center}.tech-source-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.tech-source-grid article{min-height:150px;padding:22px;text-align:center}.tech-source-grid .anticon{font-size:28px;color:var(--green)}.tech-source-grid b{display:block;margin:14px 0 6px;color:#164b3c}.tech-source-grid p{margin:0;color:#788c84;font-size:12px;line-height:1.6}.tech-source-grid p span{display:block}.tech-layer-visual{display:grid;grid-template-columns:1fr 150px;align-items:center;gap:16px}.tech-layer-visual img{width:100%;max-height:215px;object-fit:contain}.tech-layer-visual ul{padding:0;margin:0;list-style:none}.tech-layer-visual li{padding:8px 0}.tech-layer-visual b,.tech-layer-visual span{display:block}.tech-layer-visual b{color:#174f3e;font-size:13px}.tech-layer-visual span{color:#7a8e86;font-size:11px;margin-top:2px}
+.tech-disease-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center}.tech-disease-strip{width:100%;height:150px;object-fit:cover;border-radius:14px}.tech-disease-labels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;color:#49675d;font-size:12px;text-align:center}.tech-result-card{padding:23px}.tech-result-card h3{margin:0 0 16px}.tech-result-card>div{display:flex;gap:18px}.tech-result-card .leaf-thumb{width:105px;height:105px;flex:0 0 auto;border-radius:12px;background-image:url('../assets/highlights-design/disease-gallery.png');background-size:cover;background-position:center}.tech-result-card section{flex:1}.tech-result-card b{font-size:18px}.tech-result-card em{float:right;padding:4px 9px;border-radius:99px;color:#c64b3f;background:#fff0ed;font-size:11px;font-style:normal}.tech-result-card p{margin:10px 0}.tech-result-card p strong{color:var(--green)}.tech-result-card small{display:block;color:#6b8179;line-height:1.65}
+.knowledge-layout{display:grid;grid-template-columns:1.05fr .9fr .72fr;gap:24px;align-items:center}.knowledge-graph{position:relative;height:225px}.graph-center{position:absolute;top:50%;left:50%;display:grid;width:112px;height:112px;place-items:center;border:13px solid #d6f0e5;border-radius:50%;background:var(--green);color:#fff;text-align:center;font-size:17px;font-weight:800;transform:translate(-50%,-50%)}.kg{position:absolute;padding:8px 12px;border:1px solid #cfe4da;border-radius:99px;background:#fff;color:#315c4c;font-size:12px}.kg1{left:5%;top:8%}.kg2{right:4%;top:8%}.kg3{left:0;top:45%}.kg4{right:0;top:45%}.kg5{left:7%;bottom:7%}.kg6{right:5%;bottom:7%}.decision-list{padding:22px}.decision-list h3{margin:0 0 14px;color:#164c3d}.decision-list p{margin:0;padding:12px 0;border-top:1px solid #edf2ef}.decision-list p:first-of-type{border-top:0}.decision-list b,.decision-list span{display:block}.decision-list b{color:#244f40;font-size:13px}.decision-list span{margin-top:4px;color:#75887f;font-size:11px}.knowledge-photo{width:100%;height:220px;object-fit:cover;border-radius:14px}
+.edge-layout{display:grid;grid-template-columns:1fr .75fr;gap:24px;align-items:stretch}.edge-feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.edge-feature-grid article{padding:23px;text-align:center}.edge-feature-grid .anticon{font-size:27px;color:var(--green)}.edge-feature-grid b{display:block;margin:12px 0 6px}.edge-feature-grid p{margin:0;color:#778b83;font-size:11px;line-height:1.55}.edge-feature-grid p span{display:block}.edge-photo{position:relative;overflow:hidden;border-radius:16px}.edge-photo img{width:100%;height:100%;min-height:180px;object-fit:cover}.edge-photo ul{position:absolute;right:18px;bottom:17px;margin:0;padding:15px 18px;list-style:none;border-radius:12px;background:rgba(255,255,255,.91);box-shadow:0 6px 20px rgba(20,70,53,.12)}.edge-photo li{margin:6px 0;color:#245341;font-size:12px}.edge-photo .anticon{margin-right:6px;color:#149269}
+.iteration-layout{display:grid;grid-template-columns:1.4fr .6fr;gap:30px;align-items:center}.iteration-flow{display:flex;align-items:center;justify-content:space-between}.iteration-flow div{text-align:center}.iteration-flow div .anticon{display:grid;width:55px;height:55px;place-items:center;margin:0 auto 8px;border:1px solid #c9e0d6;border-radius:50%;color:var(--green);background:#fff;font-size:22px}.iteration-flow b,.iteration-flow span{display:block}.iteration-flow b{color:#194d3c;font-size:13px}.iteration-flow span{margin-top:3px;color:#7c8d86;font-size:11px}.iteration-flow i{flex:1;height:2px;margin:0 10px;background:linear-gradient(90deg,#b5dace,#4ba786);position:relative}.iteration-flow i::after{position:absolute;right:-1px;top:-3px;width:8px;height:8px;border-top:2px solid #4ba786;border-right:2px solid #4ba786;content:'';transform:rotate(45deg)}.iteration-layout>img{width:100%;max-height:165px;object-fit:contain;border-radius:13px}
+@media(max-width:980px){.tech-scribble,.tech-note{display:none}.tech-data-layout,.tech-disease-layout,.knowledge-layout,.edge-layout,.iteration-layout{grid-template-columns:1fr}.tech-source-grid,.edge-feature-grid{grid-template-columns:repeat(2,1fr)}.knowledge-layout{gap:18px}.knowledge-photo{height:300px}}
+@media(max-width:560px){.tech-source-grid,.edge-feature-grid{grid-template-columns:1fr 1fr}.tech-layer-visual{grid-template-columns:1fr}.tech-disease-layout{gap:18px}.tech-disease-strip{height:110px}.tech-disease-labels{font-size:10px}.knowledge-graph{transform:scale(.92)}.iteration-flow{display:grid;grid-template-columns:1fr 1fr;gap:20px}.iteration-flow i{display:none}}
+
+/* ===== 2026-09 visual deep-refinement pass ===== */
+.tech-page{background:#fff}.tech-hero{min-height:500px}.tech-scribble{display:none}
+.tech-section{padding-top:28px;padding-bottom:28px}.tech-data-layout{gap:26px}.tech-source-grid{gap:10px}.tech-source-grid article{min-height:118px;padding:15px 12px}.tech-source-grid .anticon{font-size:23px}.tech-source-grid b{margin:9px 0 4px;font-size:13px}.tech-source-grid p{font-size:10px;line-height:1.5}.tech-layer-visual{grid-template-columns:1fr 130px;gap:12px}.tech-layer-visual img{max-height:175px}.tech-layer-visual li{padding:5px 0}.tech-layer-visual b{font-size:11px}.tech-layer-visual span{font-size:9px}
+.tech-disease-layout{gap:24px}.tech-disease-strip{height:128px;border-radius:10px}.tech-disease-labels{font-size:10px}.tech-result-card{padding:16px}.tech-result-card h3{margin-bottom:10px;font-size:15px}.tech-result-card>div{gap:12px}.tech-result-card .leaf-thumb{width:86px;height:86px}.tech-result-card b{font-size:15px}.tech-result-card em{font-size:9px}.tech-result-card p{margin:6px 0;font-size:11px}.tech-result-card small{font-size:9px;line-height:1.5}
+.knowledge-layout{gap:18px;grid-template-columns:1.08fr .88fr .65fr}.knowledge-graph{height:190px}.graph-center{width:92px;height:92px;border-width:10px;font-size:14px}.kg{padding:6px 9px;font-size:10px}.decision-list{padding:15px}.decision-list h3{margin-bottom:8px;font-size:14px}.decision-list p{padding:8px 0}.decision-list b{font-size:11px}.decision-list span{font-size:9px}.knowledge-photo{height:175px;border-radius:10px}
+.edge-layout{gap:18px}.edge-feature-grid{gap:10px}.edge-feature-grid article{padding:16px 12px}.edge-feature-grid .anticon{font-size:22px}.edge-feature-grid b{margin:8px 0 4px;font-size:12px}.edge-feature-grid p{font-size:9px}.edge-photo{border-radius:11px}.edge-photo img{min-height:150px}.edge-photo ul{right:12px;bottom:10px;padding:10px 12px}.edge-photo li{margin:4px 0;font-size:9px}
+.iteration-layout{gap:22px}.iteration-flow div .anticon{width:44px;height:44px;margin-bottom:5px;font-size:18px}.iteration-flow b{font-size:11px}.iteration-flow span{font-size:9px}.iteration-layout>img{max-height:130px}.tech-note{top:20px;font-size:15px}.tech-note.right{top:26px}
+.tech-footer>div{display:none}
+@media(max-width:980px){.tech-hero{min-height:auto}.tech-section{padding-top:30px;padding-bottom:30px}}
+
+/* final density calibration against 1024×1536 reference */
+@media(min-width:981px){
+  .tech-hero{min-height:470px}.tech-hero .marketing-hero-media{min-height:470px}
+  .tech-section{padding-top:20px;padding-bottom:20px}
+  .tech-source-grid article{min-height:106px;padding:13px 11px}.tech-layer-visual img{max-height:160px}
+  .tech-disease-strip{height:116px}.tech-result-card .leaf-thumb{width:78px;height:78px}
+  .knowledge-graph{height:168px}.knowledge-photo{height:160px}
+  .edge-photo img{min-height:140px}.edge-feature-grid article{padding:13px 10px}
+  .iteration-layout>img{max-height:116px}
+}
+
+/* pure-photo/UI separation */
+.tech-page{font-family:var(--font-sans)}.tech-hero h1{font-family:var(--font-display)}
+.tech-hero-pure{position:relative;background:#eff7f3}.tech-hero-pure>img{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.92)}.tech-hero-pure::after{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.12),transparent);content:'';pointer-events:none}.tech-data-card{z-index:3}.tech-data-card.one{left:7%;bottom:18%}.tech-data-card.two{right:6%;top:25%}
+.tech-layer-visual>div:first-child{min-width:0}.tech-layer-visual .layer-stack{min-height:180px}.knowledge-photo,.edge-photo img{filter:saturate(.9)}.tech-footer{height:190px}.tech-footer img{height:190px;object-fit:cover}.tech-footer>div{display:flex;background:linear-gradient(90deg,rgba(255,255,255,.62),rgba(255,255,255,.08))}
+@media(max-width:980px){.tech-data-card{display:none}.tech-layer-visual .layer-stack{min-height:220px}}
+
+/* ===== next-layer mobile visual polish ===== */
+@media(max-width:980px){
+  .tech-section{padding-top:34px;padding-bottom:34px}.tech-data-layout,.tech-disease-layout,.knowledge-layout,.edge-layout,.iteration-layout{grid-template-columns:1fr;gap:18px}
+  .tech-source-grid,.edge-feature-grid{grid-template-columns:repeat(2,1fr);gap:10px}.tech-source-grid article,.edge-feature-grid article{min-height:112px;padding:15px 12px}
+  .tech-layer-visual{grid-template-columns:1fr 130px;gap:12px}.tech-layer-visual .layer-stack{min-height:220px}
+  .tech-disease-strip{height:150px}.tech-result-card{padding:17px}.knowledge-layout{gap:16px}.knowledge-photo{height:240px}.edge-photo img{min-height:230px}.iteration-flow{gap:6px}
+}
+@media(max-width:620px){
+  .tech-source-grid,.edge-feature-grid{grid-template-columns:1fr 1fr}.tech-source-grid article,.edge-feature-grid article{min-height:108px;padding:13px 9px}.tech-source-grid .anticon,.edge-feature-grid .anticon{font-size:20px}.tech-source-grid b,.edge-feature-grid b{font-size:11px}.tech-source-grid p,.edge-feature-grid p{font-size:9px}
+  .tech-layer-visual{grid-template-columns:1fr}.tech-layer-visual ul{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tech-layer-visual li{padding:8px 9px;border:1px solid #e2ece7;border-radius:9px;background:#fff}
+  .tech-disease-strip{height:128px}.tech-disease-labels{font-size:9px}.tech-result-card>div{align-items:flex-start}.tech-result-card .leaf-thumb{width:74px;height:74px}.tech-result-card b{font-size:13px}.tech-result-card small{font-size:9px}
+  .knowledge-graph{height:300px;transform:none}.graph-center{width:92px;height:92px}.kg{font-size:9px;padding:6px 8px}.kg1{left:2%;top:6%}.kg2{right:2%;top:6%}.kg3{left:0;top:42%}.kg4{right:0;top:42%}.kg5{left:4%;bottom:6%}.kg6{right:4%;bottom:6%}.knowledge-photo{height:210px}
+  .decision-list{padding:14px}.decision-list h3{font-size:13px}.decision-list b{font-size:10px}.decision-list span{font-size:9px}
+  .edge-photo img{min-height:210px}.edge-photo ul{right:9px;bottom:9px;padding:9px 10px}.edge-photo li{font-size:9px}
+  .iteration-flow{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px}.iteration-flow i{display:none}.iteration-flow div{padding:10px;border:1px solid #e2ece7;border-radius:11px;background:#fff}.iteration-layout>img{max-height:150px}
+  .tech-footer>div{padding:0 18px}.tech-footer h2{font-size:27px}
+}
+
+/* v1.9.3 preferred-reference hero tuning */
+@media (min-width:981px){
+  .tech-hero{height:clamp(520px,59.5vh,575px)!important;min-height:520px!important}
+  .tech-hero-media{position:absolute!important;inset:0!important;height:100%!important}
+  .tech-data-card.one{left:auto;right:28%;bottom:16%;transform:scale(.92)}
+  .tech-data-card.two{right:6%;top:21%;transform:scale(.92)}
+  .tech-scribble{display:block;z-index:5;right:5.2vw;top:70px;font-size:17px}
+}
+
+/* ===== v1.9.6 preferred-reference hero ===== */
+@media (min-width:981px){
+  .tech-hero .marketing-hero-copy{width:700px}
+  .tech-hero h1{font-size:57px!important}
+  .tech-hero-media{position:absolute!important}
+  .tech-hero-pure>picture{position:absolute;inset:0;display:block;width:100%;height:100%}
+  .tech-hero-panel{
+    position:absolute;
+    z-index:4;
+    right:max(70px,calc((100% - 1452px)/2));
+    top:50%;
+    width:615px;
+    height:390px;
+    transform:translateY(-46%);
+    pointer-events:none;
+  }
+  .tech-hero-panel .visual-data-card{pointer-events:auto;box-shadow:0 14px 32px rgba(11,74,53,.12);backdrop-filter:blur(8px)}
+  .tech-data-card.one{left:0!important;top:20px!important;bottom:auto!important}
+  .tech-data-card.two{right:0!important;top:74px!important}
+  .tech-hero-stack{position:absolute;right:54px;bottom:8px;width:410px;filter:drop-shadow(0 15px 30px rgba(12,55,42,.12))}
+  .tech-hero-stack .layer-stack{min-height:250px;background:rgba(255,255,255,.88);border-radius:18px;padding:16px;backdrop-filter:blur(8px)}
+  .tech-scribble{display:none!important}
+}

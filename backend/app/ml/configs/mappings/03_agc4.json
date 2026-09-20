@@ -1,0 +1,17 @@
+{
+  "dataset_id": "agc4_dwarf_tomato_2024",
+  "time_column": "time",
+  "time_parser": "iso_datetime",
+  "greenhouse_from": "filename",
+  "crop": "dwarf_tomato",
+  "timezone": "Europe/Amsterdam",
+  "source_type": "public_real_dataset",
+  "fields": {
+    "compartment/air_temperature": {"target": "air_temperature_c", "unit": "degree_Celsius"},
+    "compartment/relative_humidity": {"target": "air_humidity_pct", "unit": "percent"},
+    "compartment/par": {"target": "light_intensity", "unit": "micromole_per_m2_second"},
+    "compartment/co2_concentration": {"target": "co2_ppm", "unit": "ppm"},
+    "compartment/window_position_lee_side": {"target": "window_state", "unit": "percent"},
+    "compartment/window_position_wind_side": {"target": "ventilation_state", "unit": "percent"}
+  }
+}

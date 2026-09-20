@@ -1,0 +1,58 @@
+{
+  "dataset_id": "agc2_2019",
+  "raw_rows": 286854,
+  "hourly_rows": 23910,
+  "invalid_values_set_to_missing": {
+    "temperature": 427,
+    "humidity": 429,
+    "light": 426,
+    "co2": 428
+  },
+  "interpolation": "none",
+  "aggregation": "hourly mean; temperature/humidity min/max; CO2 max; no long-gap fill",
+  "groups": [
+    {
+      "greenhouse_id": "AICU",
+      "raw_rows": 47809,
+      "hourly_rows": 3985,
+      "start": "2019-12-16T00:00:00",
+      "end": "2020-05-30T00:00:00"
+    },
+    {
+      "greenhouse_id": "Automatoes",
+      "raw_rows": 47809,
+      "hourly_rows": 3985,
+      "start": "2019-12-16T00:00:00",
+      "end": "2020-05-30T00:00:00"
+    },
+    {
+      "greenhouse_id": "Digilog",
+      "raw_rows": 47809,
+      "hourly_rows": 3985,
+      "start": "2019-12-16T00:00:00",
+      "end": "2020-05-30T00:00:00"
+    },
+    {
+      "greenhouse_id": "IUACAAS",
+      "raw_rows": 47809,
+      "hourly_rows": 3985,
+      "start": "2019-12-16T00:00:00",
+      "end": "2020-05-30T00:00:00"
+    },
+    {
+      "greenhouse_id": "Reference",
+      "raw_rows": 47809,
+      "hourly_rows": 3985,
+      "start": "2019-12-16T00:00:00",
+      "end": "2020-05-30T00:00:00"
+    },
+    {
+      "greenhouse_id": "TheAutomators",
+      "raw_rows": 47809,
+      "hourly_rows": 3985,
+      "start": "2019-12-16T00:00:00",
+      "end": "2020-05-30T00:00:00"
+    }
+  ],
+  "output": "backend/app/ml/data/processed/agc2_hourly.csv.gz"
+}

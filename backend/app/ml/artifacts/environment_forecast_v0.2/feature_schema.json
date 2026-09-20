@@ -1,0 +1,64 @@
+{
+  "deployment_compatible": {
+    "features": [
+      "air_temperature_c",
+      "air_humidity_pct",
+      "hour_sin",
+      "hour_cos",
+      "day_of_year_sin",
+      "day_of_year_cos"
+    ],
+    "targets": [
+      "air_temperature_c",
+      "air_humidity_pct"
+    ],
+    "input_window_hours": 24,
+    "horizon_hours": 6,
+    "available_in_current_sqlite": true,
+    "par_dependency": false
+  },
+  "research_rich": {
+    "features": [
+      "air_temperature_c",
+      "air_humidity_pct",
+      "par_umol_m2_s",
+      "co2_ppm",
+      "outside_temperature_c",
+      "outside_humidity_pct",
+      "wind_speed_m_s",
+      "vent_lee_pct",
+      "vent_wind_pct",
+      "energy_screen_pct",
+      "blackout_screen_pct",
+      "lamp_state_pct",
+      "irrigation_l_m2",
+      "hour_sin",
+      "hour_cos",
+      "day_of_year_sin",
+      "day_of_year_cos"
+    ],
+    "targets": [
+      "air_temperature_c",
+      "air_humidity_pct",
+      "par_umol_m2_s"
+    ],
+    "status": "research_only",
+    "future_measured_weather_used": false
+  },
+  "par_research": {
+    "features": [
+      "air_temperature_c",
+      "air_humidity_pct",
+      "par_umol_m2_s",
+      "hour_sin",
+      "hour_cos",
+      "day_of_year_sin",
+      "day_of_year_cos"
+    ],
+    "targets": [
+      "par_umol_m2_s"
+    ],
+    "status": "research_only",
+    "required_light_unit": "micromole_per_m2_second"
+  }
+}

@@ -1,0 +1,34 @@
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mplconfig/
+.venv/
+venv/
+
+# Node / frontend build
+node_modules/
+dist/
+
+# Runtime data
+*.db
+*.sqlite
+*.sqlite3
+backend/uploads/
+.run/
+*.log
+
+# Local QA artifacts
+_homepage-layout-check.png
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+~$*
+.idea/
+.vscode/

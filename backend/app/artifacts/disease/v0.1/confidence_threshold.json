@@ -1,0 +1,175 @@
+{
+  "selected_threshold": 0.7,
+  "selection_rule": "max_coverage_with_accepted_accuracy_at_least_0.90",
+  "selected": {
+    "threshold": 0.7,
+    "coverage": 0.4152542372881356,
+    "accepted_accuracy": 0.9183673469387755,
+    "accepted_count": 49
+  },
+  "candidates": [
+    {
+      "threshold": 0.3,
+      "coverage": 0.940677966101695,
+      "accepted_accuracy": 0.6936936936936937,
+      "accepted_count": 111
+    },
+    {
+      "threshold": 0.325,
+      "coverage": 0.9067796610169492,
+      "accepted_accuracy": 0.7102803738317757,
+      "accepted_count": 107
+    },
+    {
+      "threshold": 0.35,
+      "coverage": 0.8983050847457628,
+      "accepted_accuracy": 0.7169811320754716,
+      "accepted_count": 106
+    },
+    {
+      "threshold": 0.375,
+      "coverage": 0.8813559322033898,
+      "accepted_accuracy": 0.7211538461538461,
+      "accepted_count": 104
+    },
+    {
+      "threshold": 0.4,
+      "coverage": 0.847457627118644,
+      "accepted_accuracy": 0.74,
+      "accepted_count": 100
+    },
+    {
+      "threshold": 0.425,
+      "coverage": 0.7966101694915254,
+      "accepted_accuracy": 0.776595744680851,
+      "accepted_count": 94
+    },
+    {
+      "threshold": 0.45,
+      "coverage": 0.7796610169491526,
+      "accepted_accuracy": 0.782608695652174,
+      "accepted_count": 92
+    },
+    {
+      "threshold": 0.475,
+      "coverage": 0.7542372881355932,
+      "accepted_accuracy": 0.7865168539325843,
+      "accepted_count": 89
+    },
+    {
+      "threshold": 0.5,
+      "coverage": 0.6949152542372882,
+      "accepted_accuracy": 0.8292682926829268,
+      "accepted_count": 82
+    },
+    {
+      "threshold": 0.525,
+      "coverage": 0.6610169491525424,
+      "accepted_accuracy": 0.8333333333333334,
+      "accepted_count": 78
+    },
+    {
+      "threshold": 0.55,
+      "coverage": 0.635593220338983,
+      "accepted_accuracy": 0.84,
+      "accepted_count": 75
+    },
+    {
+      "threshold": 0.575,
+      "coverage": 0.6271186440677966,
+      "accepted_accuracy": 0.8513513513513513,
+      "accepted_count": 74
+    },
+    {
+      "threshold": 0.6,
+      "coverage": 0.5932203389830508,
+      "accepted_accuracy": 0.8571428571428571,
+      "accepted_count": 70
+    },
+    {
+      "threshold": 0.625,
+      "coverage": 0.5677966101694916,
+      "accepted_accuracy": 0.8805970149253731,
+      "accepted_count": 67
+    },
+    {
+      "threshold": 0.65,
+      "coverage": 0.5084745762711864,
+      "accepted_accuracy": 0.8666666666666667,
+      "accepted_count": 60
+    },
+    {
+      "threshold": 0.675,
+      "coverage": 0.4576271186440678,
+      "accepted_accuracy": 0.8888888888888888,
+      "accepted_count": 54
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 0.4152542372881356,
+      "accepted_accuracy": 0.9183673469387755,
+      "accepted_count": 49
+    },
+    {
+      "threshold": 0.725,
+      "coverage": 0.3983050847457627,
+      "accepted_accuracy": 0.9148936170212766,
+      "accepted_count": 47
+    },
+    {
+      "threshold": 0.75,
+      "coverage": 0.3474576271186441,
+      "accepted_accuracy": 0.9024390243902439,
+      "accepted_count": 41
+    },
+    {
+      "threshold": 0.775,
+      "coverage": 0.3220338983050847,
+      "accepted_accuracy": 0.8947368421052632,
+      "accepted_count": 38
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 0.2711864406779661,
+      "accepted_accuracy": 0.9375,
+      "accepted_count": 32
+    },
+    {
+      "threshold": 0.825,
+      "coverage": 0.23728813559322035,
+      "accepted_accuracy": 0.9285714285714286,
+      "accepted_count": 28
+    },
+    {
+      "threshold": 0.85,
+      "coverage": 0.1864406779661017,
+      "accepted_accuracy": 0.9090909090909091,
+      "accepted_count": 22
+    },
+    {
+      "threshold": 0.875,
+      "coverage": 0.1694915254237288,
+      "accepted_accuracy": 0.9,
+      "accepted_count": 20
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.1271186440677966,
+      "accepted_accuracy": 0.8666666666666667,
+      "accepted_count": 15
+    },
+    {
+      "threshold": 0.925,
+      "coverage": 0.07627118644067797,
+      "accepted_accuracy": 1.0,
+      "accepted_count": 9
+    },
+    {
+      "threshold": 0.95,
+      "coverage": 0.05084745762711865,
+      "accepted_accuracy": 1.0,
+      "accepted_count": 6
+    }
+  ],
+  "fitted_on": "validation_only"
+}

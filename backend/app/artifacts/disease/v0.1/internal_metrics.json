@@ -1,0 +1,113 @@
+{
+  "accuracy": 0.6637931034482759,
+  "macro_precision": 0.6471061832903938,
+  "macro_recall": 0.6523412698412697,
+  "macro_f1": 0.6443310782078898,
+  "per_class": {
+    "healthy": {
+      "precision": 0.75,
+      "recall": 0.9,
+      "f1": 0.8181818181818182,
+      "support": 20
+    },
+    "early_blight": {
+      "precision": 0.375,
+      "recall": 0.375,
+      "f1": 0.375,
+      "support": 16
+    },
+    "late_blight": {
+      "precision": 0.5,
+      "recall": 0.6666666666666666,
+      "f1": 0.5714285714285714,
+      "support": 15
+    },
+    "leaf_mold": {
+      "precision": 0.8461538461538461,
+      "recall": 0.7857142857142857,
+      "f1": 0.8148148148148148,
+      "support": 28
+    },
+    "septoria_leaf_spot": {
+      "precision": 0.6842105263157895,
+      "recall": 0.52,
+      "f1": 0.5909090909090909,
+      "support": 25
+    },
+    "yellow_leaf_curl_virus": {
+      "precision": 0.7272727272727273,
+      "recall": 0.6666666666666666,
+      "f1": 0.6956521739130435,
+      "support": 12
+    }
+  },
+  "confusion_matrix": [
+    [
+      18,
+      0,
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      6,
+      3,
+      2,
+      4,
+      1
+    ],
+    [
+      2,
+      1,
+      10,
+      1,
+      1,
+      0
+    ],
+    [
+      0,
+      4,
+      2,
+      22,
+      0,
+      0
+    ],
+    [
+      3,
+      4,
+      2,
+      1,
+      13,
+      2
+    ],
+    [
+      1,
+      1,
+      1,
+      0,
+      1,
+      8
+    ]
+  ],
+  "ece_before": 0.10240621273887568,
+  "ece_after": 0.12613347635186953,
+  "confidence": {
+    "mean": 0.6008992195129395,
+    "median": 0.5672975778579712,
+    "min": 0.2397204041481018,
+    "max": 0.980726957321167
+  },
+  "confidence_threshold": 0.7,
+  "acceptance_coverage": 0.3103448275862069,
+  "low_confidence_ratio": 0.6896551724137931,
+  "accepted_accuracy": 0.8888888888888888,
+  "sample_count": 116,
+  "deployment_gate": {
+    "passed": false,
+    "macro_f1_requirement": 0.75,
+    "per_class_recall_requirement": 0.5,
+    "recall_passed": false
+  }
+}

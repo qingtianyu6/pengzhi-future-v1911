@@ -1,0 +1,55 @@
+{
+  "seed": 20260822,
+  "threads": 4,
+  "device": "cpu",
+  "training_input_mode": "packaged_processed_snapshot",
+  "input_hours": 24,
+  "horizon_hours": 6,
+  "split": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "gru": {
+    "hidden_size": 32,
+    "dropout": 0.15,
+    "batch_size": 64,
+    "max_epochs": 30,
+    "patience": 6
+  },
+  "lstm": {
+    "hidden_size": 32,
+    "dropout": 0.15,
+    "batch_size": 64,
+    "max_epochs": 30,
+    "patience": 6
+  },
+  "xgboost": {
+    "search": [
+      {
+        "params": {
+          "max_depth": 4,
+          "learning_rate": 0.05,
+          "n_estimators": 160,
+          "min_child_weight": 3
+        },
+        "representative_validation_normalized_mae": 0.24008341179284157
+      },
+      {
+        "params": {
+          "max_depth": 6,
+          "learning_rate": 0.04,
+          "n_estimators": 200,
+          "min_child_weight": 5
+        },
+        "representative_validation_normalized_mae": 0.23692815243449003
+      }
+    ],
+    "best_params": {
+      "max_depth": 6,
+      "learning_rate": 0.04,
+      "n_estimators": 200,
+      "min_child_weight": 5
+    }
+  }
+}

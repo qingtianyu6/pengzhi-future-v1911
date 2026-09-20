@@ -1,0 +1,39 @@
+{
+  "output": "backend/app/ml/data/processed/v0.2/agc2_enriched_hourly.csv.gz",
+  "raw_data_modified": false,
+  "weather_semantics": "historical measured weather only; no future observations used",
+  "heating_state": null,
+  "heating_note": "AGC2 provides pipe temperatures, not an explicit heating state; excluded rather than guessed",
+  "groups": [
+    {
+      "greenhouse_id": "AICU",
+      "raw_rows": 47809,
+      "hourly_rows": 3985
+    },
+    {
+      "greenhouse_id": "Automatoes",
+      "raw_rows": 47809,
+      "hourly_rows": 3985
+    },
+    {
+      "greenhouse_id": "Digilog",
+      "raw_rows": 47809,
+      "hourly_rows": 3985
+    },
+    {
+      "greenhouse_id": "IUACAAS",
+      "raw_rows": 47809,
+      "hourly_rows": 3985
+    },
+    {
+      "greenhouse_id": "Reference",
+      "raw_rows": 47809,
+      "hourly_rows": 3985
+    },
+    {
+      "greenhouse_id": "TheAutomators",
+      "raw_rows": 47809,
+      "hourly_rows": 3985
+    }
+  ]
+}

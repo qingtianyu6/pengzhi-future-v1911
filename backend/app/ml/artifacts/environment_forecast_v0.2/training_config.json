@@ -1,0 +1,40 @@
+{
+  "seed": 20260822,
+  "device": "cpu",
+  "threads": 4,
+  "input_hours": 24,
+  "horizon_hours": 6,
+  "rolling_folds": [
+    {
+      "train_fraction": 0.45,
+      "validation_end_fraction": 0.6
+    },
+    {
+      "train_fraction": 0.6,
+      "validation_end_fraction": 0.75
+    },
+    {
+      "train_fraction": 0.75,
+      "validation_end_fraction": 0.9
+    }
+  ],
+  "selection": {
+    "primary": "MAE",
+    "secondary": "RMSE",
+    "tertiary": "fold stability",
+    "simple_method_tolerance_pct": 1
+  },
+  "prediction_interval": "rolling validation residual 5th/95th percentiles",
+  "xgboost": {
+    "n_estimators": 140,
+    "max_depth": 5,
+    "learning_rate": 0.045
+  },
+  "recurrent": {
+    "hidden_size": 32,
+    "dropout": 0.15,
+    "max_epochs": 18,
+    "patience": 4,
+    "batch_size": 128
+  }
+}

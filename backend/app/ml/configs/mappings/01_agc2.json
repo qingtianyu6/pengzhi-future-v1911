@@ -1,0 +1,24 @@
+{
+  "dataset_id": "agc2_2019",
+  "time_column": "%time",
+  "time_parser": "excel_serial_1899_12_30",
+  "greenhouse_from": "parent_directory",
+  "crop": "cherry_tomato",
+  "timezone": "Europe/Amsterdam",
+  "source_type": "public_real_dataset",
+  "fields": {
+    "Tair": {"target": "air_temperature_c", "unit": "degree_Celsius", "aggregation": ["mean", "min", "max"]},
+    "Rhair": {"target": "air_humidity_pct", "unit": "percent", "aggregation": ["mean", "min", "max"]},
+    "Tot_PAR": {"target": "light_intensity", "unit": "micromole_per_m2_second", "aggregation": ["mean"]},
+    "CO2air": {"target": "co2_ppm", "unit": "ppm", "aggregation": ["mean", "max"]},
+    "VentLee": {"target": "window_state", "unit": "percent", "aggregation": ["mean", "last"]},
+    "Ventwind": {"target": "ventilation_state", "unit": "percent", "aggregation": ["mean", "last"]},
+    "AssimLight": {"target": null, "unit": "percent", "aggregation": ["mean", "last"], "note": "HPS lamp state; no lamp_state field exists in the unified schema, so it is excluded rather than mislabeled as heater"},
+    "Cum_irr": {"target": "irrigation_amount", "unit": "liter_per_m2_day_cumulative", "aggregation": ["last"]}
+  },
+  "weather_fields": {
+    "Tout": {"target": "outside_temperature_c", "unit": "degree_Celsius"},
+    "Rhout": {"target": "outside_humidity_pct", "unit": "percent"},
+    "Windsp": {"target": "wind_speed", "unit": "meter_per_second"}
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "database": {
+    "light_intensity": {
+      "unit": "kilolux",
+      "purpose": "monitoring_and_rule_engine",
+      "accepted_by_par_model": false
+    }
+  },
+  "forecast_outputs": {
+    "temperature_c": "degree_Celsius",
+    "air_humidity_pct": "percent",
+    "par_umol_m2_s": "micromole_per_m2_second"
+  },
+  "deployment_inputs": {
+    "temperature": "degree_Celsius",
+    "air_humidity": "percent",
+    "recorded_at": "ISO_8601"
+  },
+  "par_inference": {
+    "required_input_unit": "micromole_per_m2_second",
+    "database_klx_conversion": null,
+    "reason": "No spectrum-independent exact conversion; guessing is prohibited."
+  }
+}

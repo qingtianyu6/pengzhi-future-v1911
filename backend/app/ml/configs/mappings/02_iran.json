@@ -1,0 +1,17 @@
+{
+  "dataset_id": "iran_shirvan_v2",
+  "time_column": "DateTime",
+  "time_parser": "datetime",
+  "greenhouse_from": null,
+  "crop": null,
+  "timezone": null,
+  "source_type": "public_real_dataset",
+  "fields": {
+    "MeanInsideTemp": {"target": "air_temperature_c", "unit": null, "note": "Unit absent from supplied CSV/README; excluded until verified"},
+    "AVGHumidityInside": {"target": "air_humidity_pct", "unit": null, "note": "Unit absent from supplied CSV/README; excluded until verified"},
+    "L1": {"target": "light_intensity", "unit": "lux"},
+    "OutsideTemp": {"target": "outside_temperature_c", "unit": null},
+    "HumidityOutside": {"target": "outside_humidity_pct", "unit": null},
+    "WS1": {"target": "wind_speed", "unit": null}
+  }
+}

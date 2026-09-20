@@ -1,0 +1,320 @@
+{
+  "model_version": "v0.2",
+  "selection_source": "three expanding rolling-validation folds only",
+  "forecast_service_status": "ready",
+  "model_status": "ready",
+  "ml_candidate_status": "ready",
+  "targets": {
+    "air_temperature_c": {
+      "h1": {
+        "method": "seasonal_residual_xgboost",
+        "rolling_validation_mae": 0.5675084988276163,
+        "rolling_validation_rmse": 0.8224445813831814,
+        "rolling_validation_nmae": 0.05426774562625733,
+        "mean_relative_seasonal_improvement_pct": 27.47589535825864,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h2": {
+        "method": "seasonal_residual_xgboost",
+        "rolling_validation_mae": 0.7176008025805155,
+        "rolling_validation_rmse": 1.0263989846837631,
+        "rolling_validation_nmae": 0.06848234063971075,
+        "mean_relative_seasonal_improvement_pct": 8.688597400956752,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h3": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 0.7865017851193746,
+        "rolling_validation_rmse": 1.2208540244216737,
+        "rolling_validation_nmae": 0.07517513410673973,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h4": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 0.7873649597167969,
+        "rolling_validation_rmse": 1.2223513925384408,
+        "rolling_validation_nmae": 0.07525848734079908,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h5": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 0.7881496151288351,
+        "rolling_validation_rmse": 1.2234802075070588,
+        "rolling_validation_nmae": 0.07533420599173614,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h6": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 0.7883795499801636,
+        "rolling_validation_rmse": 1.2237380774702562,
+        "rolling_validation_nmae": 0.07535623830399818,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      }
+    },
+    "air_humidity_pct": {
+      "h1": {
+        "method": "seasonal_residual_xgboost",
+        "rolling_validation_mae": 2.444205323855082,
+        "rolling_validation_rmse": 3.5843704114934156,
+        "rolling_validation_nmae": 0.09981501478118797,
+        "mean_relative_seasonal_improvement_pct": 35.39429780827982,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h2": {
+        "method": "validation_weighted_ensemble",
+        "rolling_validation_mae": 3.385556697845459,
+        "rolling_validation_rmse": 4.972360320380719,
+        "rolling_validation_nmae": 0.13799582430580226,
+        "mean_relative_seasonal_improvement_pct": 11.22033053222745,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h3": {
+        "method": "seasonal_residual_gru",
+        "rolling_validation_mae": 3.738536834716797,
+        "rolling_validation_rmse": 5.873502301580939,
+        "rolling_validation_nmae": 0.15259032680832907,
+        "mean_relative_seasonal_improvement_pct": 0.4130865091249736,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h4": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 3.764765659968058,
+        "rolling_validation_rmse": 5.936481694931353,
+        "rolling_validation_nmae": 0.1536536264236015,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h5": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 3.7716921170552573,
+        "rolling_validation_rmse": 5.95083408726894,
+        "rolling_validation_nmae": 0.15395247138265503,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h6": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 3.7773821353912354,
+        "rolling_validation_rmse": 5.962769654631419,
+        "rolling_validation_nmae": 0.1541970838429484,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      }
+    },
+    "par_umol_m2_s": {
+      "h1": {
+        "method": "seasonal_residual_xgboost",
+        "rolling_validation_mae": 48.52881113688151,
+        "rolling_validation_rmse": 84.8744535757969,
+        "rolling_validation_nmae": 0.10593185909387397,
+        "mean_relative_seasonal_improvement_pct": 17.270867357744205,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h2": {
+        "method": "seasonal_residual_gru",
+        "rolling_validation_mae": 51.294141133626304,
+        "rolling_validation_rmse": 98.86904181562079,
+        "rolling_validation_nmae": 0.1154326208097336,
+        "mean_relative_seasonal_improvement_pct": 9.282108646355994,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h3": {
+        "method": "seasonal_residual_gru",
+        "rolling_validation_mae": 54.78940200805664,
+        "rolling_validation_rmse": 103.67314867058583,
+        "rolling_validation_nmae": 0.1230993790961662,
+        "mean_relative_seasonal_improvement_pct": 3.996386400150269,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h4": {
+        "method": "seasonal_residual_gru",
+        "rolling_validation_mae": 57.196563720703125,
+        "rolling_validation_rmse": 106.95665999175169,
+        "rolling_validation_nmae": 0.1280763205868819,
+        "mean_relative_seasonal_improvement_pct": 0.42943253343154275,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h5": {
+        "method": "seasonal_residual_gru",
+        "rolling_validation_mae": 57.66799545288086,
+        "rolling_validation_rmse": 108.88873658471068,
+        "rolling_validation_nmae": 0.12892524422627447,
+        "mean_relative_seasonal_improvement_pct": 0.4859586215630631,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      },
+      "h6": {
+        "method": "seasonal_24",
+        "rolling_validation_mae": 58.45730845133463,
+        "rolling_validation_rmse": 120.06218593917367,
+        "rolling_validation_nmae": 0.12957258348928613,
+        "mean_relative_seasonal_improvement_pct": 0.0,
+        "selection_rule": "MAE primary; within 1% prefer simpler, then RMSE and fold stability"
+      }
+    }
+  },
+  "ensembles": {
+    "deployment_compatible": {
+      "weights": [
+        [
+          1.0,
+          1.0
+        ],
+        [
+          0.8500000238418579,
+          0.6000000238418579
+        ],
+        [
+          0.3499999940395355,
+          0.6499999761581421
+        ],
+        [
+          0.3499999940395355,
+          0.44999998807907104
+        ],
+        [
+          0.5,
+          0.4000000059604645
+        ],
+        [
+          0.25,
+          0.3499999940395355
+        ]
+      ],
+      "base_ml_methods": {
+        "air_temperature_c": {
+          "h1": "seasonal_residual_xgboost",
+          "h2": "seasonal_residual_xgboost",
+          "h3": "seasonal_residual_gru",
+          "h4": "seasonal_residual_gru",
+          "h5": "seasonal_residual_gru",
+          "h6": "seasonal_residual_gru"
+        },
+        "air_humidity_pct": {
+          "h1": "seasonal_residual_xgboost",
+          "h2": "seasonal_residual_xgboost",
+          "h3": "seasonal_residual_lstm",
+          "h4": "seasonal_residual_gru",
+          "h5": "seasonal_residual_gru",
+          "h6": "seasonal_residual_gru"
+        }
+      }
+    },
+    "par_research": {
+      "weights": [
+        [
+          0.8999999761581421
+        ],
+        [
+          1.0
+        ],
+        [
+          0.8999999761581421
+        ],
+        [
+          0.6000000238418579
+        ],
+        [
+          0.550000011920929
+        ],
+        [
+          0.25
+        ]
+      ],
+      "base_ml_methods": {
+        "par_umol_m2_s": {
+          "h1": "seasonal_residual_xgboost",
+          "h2": "seasonal_residual_gru",
+          "h3": "seasonal_residual_gru",
+          "h4": "seasonal_residual_gru",
+          "h5": "seasonal_residual_gru",
+          "h6": "seasonal_residual_gru"
+        }
+      }
+    }
+  },
+  "prediction_interval_residual_quantiles": {
+    "air_temperature_c": {
+      "h1": {
+        "lower_residual": -1.2444686889648438,
+        "upper_residual": 1.3740580081939697
+      },
+      "h2": {
+        "lower_residual": -1.3958990573883057,
+        "upper_residual": 1.8179270029067993
+      },
+      "h3": {
+        "lower_residual": -1.890909194946289,
+        "upper_residual": 1.9818187952041626
+      },
+      "h4": {
+        "lower_residual": -1.8916664123535156,
+        "upper_residual": 1.9828026294708252
+      },
+      "h5": {
+        "lower_residual": -1.8923072814941406,
+        "upper_residual": 1.9828026294708252
+      },
+      "h6": {
+        "lower_residual": -1.8923072814941406,
+        "upper_residual": 1.9818187952041626
+      }
+    },
+    "air_humidity_pct": {
+      "h1": {
+        "lower_residual": -7.360569000244141,
+        "upper_residual": 3.884922981262207
+      },
+      "h2": {
+        "lower_residual": -10.255182266235352,
+        "upper_residual": 5.705514430999756
+      },
+      "h3": {
+        "lower_residual": -9.376252174377441,
+        "upper_residual": 9.140907287597656
+      },
+      "h4": {
+        "lower_residual": -9.681248664855957,
+        "upper_residual": 9.078408241271973
+      },
+      "h5": {
+        "lower_residual": -9.681248664855957,
+        "upper_residual": 9.115386962890625
+      },
+      "h6": {
+        "lower_residual": -9.681248664855957,
+        "upper_residual": 9.175002098083496
+      }
+    },
+    "par_umol_m2_s": {
+      "h1": {
+        "lower_residual": -91.70453643798828,
+        "upper_residual": 175.8077392578125
+      },
+      "h2": {
+        "lower_residual": -170.17100524902344,
+        "upper_residual": 162.6303253173828
+      },
+      "h3": {
+        "lower_residual": -172.9639129638672,
+        "upper_residual": 180.0717315673828
+      },
+      "h4": {
+        "lower_residual": -177.9413299560547,
+        "upper_residual": 181.75326538085938
+      },
+      "h5": {
+        "lower_residual": -184.51499938964844,
+        "upper_residual": 184.28273010253906
+      },
+      "h6": {
+        "lower_residual": -197.9166717529297,
+        "upper_residual": 204.24998474121094
+      }
+    }
+  },
+  "par_availability": "research_only; current SQLite klx is not accepted as PAR"
+}

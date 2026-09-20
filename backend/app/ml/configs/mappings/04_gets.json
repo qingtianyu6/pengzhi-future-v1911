@@ -1,0 +1,14 @@
+{
+  "dataset_id": "gets_greenhouse_2025",
+  "time_column": "date",
+  "time_parser": "iso_datetime_utc",
+  "greenhouse_from": null,
+  "crop": null,
+  "timezone": "UTC",
+  "source_type": "public_real_dataset",
+  "fields": {
+    "co2_ppm": {"target": "co2_ppm", "unit": "ppm"},
+    "humidity_pct": {"target": "air_humidity_pct", "unit": "percent"},
+    "soil_temp_F": {"target": "soil_temperature_c", "unit": "degree_Fahrenheit", "conversion": "(F-32)*5/9"}
+  }
+}

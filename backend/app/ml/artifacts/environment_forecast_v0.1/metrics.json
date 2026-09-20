@@ -1,0 +1,1278 @@
+{
+  "core": [
+    {
+      "model": "persistence",
+      "target": "air_temperature_c",
+      "horizon": 1,
+      "mae": 0.8963044881820679,
+      "rmse": 1.2759315079869022,
+      "r2": 0.9232479333877563,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_temperature_c",
+      "horizon": 2,
+      "mae": 1.6658769845962524,
+      "rmse": 2.345733312052065,
+      "r2": 0.7400515675544739,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_temperature_c",
+      "horizon": 3,
+      "mae": 2.386082887649536,
+      "rmse": 3.263454756486113,
+      "r2": 0.4962332844734192,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_temperature_c",
+      "horizon": 4,
+      "mae": 3.0724661350250244,
+      "rmse": 4.066113786687965,
+      "r2": 0.21805918216705322,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_temperature_c",
+      "horizon": 5,
+      "mae": 3.7418928146362305,
+      "rmse": 4.776393044073593,
+      "r2": -0.07771265506744385,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_temperature_c",
+      "horizon": 6,
+      "mae": 4.377744197845459,
+      "rmse": 5.406419872635994,
+      "r2": -0.3786141872406006,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_humidity_pct",
+      "horizon": 1,
+      "mae": 3.304394006729126,
+      "rmse": 4.878154223279399,
+      "r2": 0.8633188009262085,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_humidity_pct",
+      "horizon": 2,
+      "mae": 5.728155136108398,
+      "rmse": 8.267151545588987,
+      "r2": 0.6119866371154785,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_humidity_pct",
+      "horizon": 3,
+      "mae": 7.646327495574951,
+      "rmse": 10.877188276042686,
+      "r2": 0.3340529799461365,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_humidity_pct",
+      "horizon": 4,
+      "mae": 9.428033828735352,
+      "rmse": 13.082052828251836,
+      "r2": 0.03825867176055908,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_humidity_pct",
+      "horizon": 5,
+      "mae": 11.091912269592285,
+      "rmse": 14.929771307326261,
+      "r2": -0.25347352027893066,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "air_humidity_pct",
+      "horizon": 6,
+      "mae": 12.627067565917969,
+      "rmse": 16.566878290698828,
+      "r2": -0.5446069240570068,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "light_intensity",
+      "horizon": 1,
+      "mae": 75.55523681640625,
+      "rmse": 111.3224702511245,
+      "r2": 0.8631909489631653,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "light_intensity",
+      "horizon": 2,
+      "mae": 135.15182495117188,
+      "rmse": 190.44028960871174,
+      "r2": 0.5993129014968872,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "light_intensity",
+      "horizon": 3,
+      "mae": 189.9303436279297,
+      "rmse": 259.2435660966343,
+      "r2": 0.25730621814727783,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "light_intensity",
+      "horizon": 4,
+      "mae": 243.178955078125,
+      "rmse": 324.43984178503723,
+      "r2": -0.16265559196472168,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "light_intensity",
+      "horizon": 5,
+      "mae": 294.288330078125,
+      "rmse": 381.64203204704796,
+      "r2": -0.6076995134353638,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "persistence",
+      "target": "light_intensity",
+      "horizon": 6,
+      "mae": 343.1284484863281,
+      "rmse": 431.697467128312,
+      "r2": -1.0548524856567383,
+      "relative_persistence_improvement_pct": null
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_temperature_c",
+      "horizon": 1,
+      "mae": 1.0781826972961426,
+      "rmse": 1.7817206179327951,
+      "r2": 0.8503369688987732,
+      "relative_persistence_improvement_pct": -20.29201142158394
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_temperature_c",
+      "horizon": 2,
+      "mae": 1.0860216617584229,
+      "rmse": 1.799049057372739,
+      "r2": 0.8470970392227173,
+      "relative_persistence_improvement_pct": 34.807811633124
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_temperature_c",
+      "horizon": 3,
+      "mae": 1.0929551124572754,
+      "rmse": 1.8109947399608575,
+      "r2": 0.8448654413223267,
+      "relative_persistence_improvement_pct": 54.194587366832216
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_temperature_c",
+      "horizon": 4,
+      "mae": 1.100576639175415,
+      "rmse": 1.8234122411029352,
+      "r2": 0.84275221824646,
+      "relative_persistence_improvement_pct": 64.17937282923214
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_temperature_c",
+      "horizon": 5,
+      "mae": 1.1085113286972046,
+      "rmse": 1.8372034780810336,
+      "r2": 0.8405526280403137,
+      "relative_persistence_improvement_pct": 70.37565254778767
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_temperature_c",
+      "horizon": 6,
+      "mae": 1.1151560544967651,
+      "rmse": 1.8485430470480126,
+      "r2": 0.8388307094573975,
+      "relative_persistence_improvement_pct": 74.52669676209958
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_humidity_pct",
+      "horizon": 1,
+      "mae": 5.278059959411621,
+      "rmse": 8.314337735207637,
+      "r2": 0.602942943572998,
+      "relative_persistence_improvement_pct": -59.728529608251534
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_humidity_pct",
+      "horizon": 2,
+      "mae": 5.307879447937012,
+      "rmse": 8.370901898612324,
+      "r2": 0.6021866798400879,
+      "relative_persistence_improvement_pct": 7.337016512037314
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_humidity_pct",
+      "horizon": 3,
+      "mae": 5.348429203033447,
+      "rmse": 8.452926887263711,
+      "r2": 0.5978198647499084,
+      "relative_persistence_improvement_pct": 30.0523132689691
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_humidity_pct",
+      "horizon": 4,
+      "mae": 5.376250267028809,
+      "rmse": 8.491275124200326,
+      "r2": 0.5948159694671631,
+      "relative_persistence_improvement_pct": 42.97591242574102
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_humidity_pct",
+      "horizon": 5,
+      "mae": 5.395284175872803,
+      "rmse": 8.509378532551828,
+      "r2": 0.5928030014038086,
+      "relative_persistence_improvement_pct": 51.35839479488489
+    },
+    {
+      "model": "seasonal_24",
+      "target": "air_humidity_pct",
+      "horizon": 6,
+      "mae": 5.402795314788818,
+      "rmse": 8.514203042116321,
+      "r2": 0.5920333862304688,
+      "relative_persistence_improvement_pct": 57.212588856563684
+    },
+    {
+      "model": "seasonal_24",
+      "target": "light_intensity",
+      "horizon": 1,
+      "mae": 74.36846923828125,
+      "rmse": 157.1549668122201,
+      "r2": 0.7273499965667725,
+      "relative_persistence_improvement_pct": 1.5707284208621557
+    },
+    {
+      "model": "seasonal_24",
+      "target": "light_intensity",
+      "horizon": 2,
+      "mae": 74.40245819091797,
+      "rmse": 157.15760774418462,
+      "r2": 0.727128267288208,
+      "relative_persistence_improvement_pct": 44.948979995054934
+    },
+    {
+      "model": "seasonal_24",
+      "target": "light_intensity",
+      "horizon": 3,
+      "mae": 74.49382019042969,
+      "rmse": 157.17288078140263,
+      "r2": 0.727008581161499,
+      "relative_persistence_improvement_pct": 60.778347067932536
+    },
+    {
+      "model": "seasonal_24",
+      "target": "light_intensity",
+      "horizon": 4,
+      "mae": 74.5106201171875,
+      "rmse": 157.17355802980984,
+      "r2": 0.727138876914978,
+      "relative_persistence_improvement_pct": 69.3597580871051
+    },
+    {
+      "model": "seasonal_24",
+      "target": "light_intensity",
+      "horizon": 5,
+      "mae": 74.47977447509766,
+      "rmse": 157.16900363342958,
+      "r2": 0.7273370027542114,
+      "relative_persistence_improvement_pct": 74.69156372754385
+    },
+    {
+      "model": "seasonal_24",
+      "target": "light_intensity",
+      "horizon": 6,
+      "mae": 74.41875457763672,
+      "rmse": 157.15138750182894,
+      "r2": 0.7276934385299683,
+      "relative_persistence_improvement_pct": 78.3116920482908
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_temperature_c",
+      "horizon": 1,
+      "mae": 2.5745253562927246,
+      "rmse": 3.29507758875538,
+      "r2": 0.4881218671798706,
+      "relative_persistence_improvement_pct": -187.23780704417902
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_temperature_c",
+      "horizon": 2,
+      "mae": 3.235584259033203,
+      "rmse": 4.048447940272625,
+      "r2": 0.22570395469665527,
+      "relative_persistence_improvement_pct": -94.22708212859968
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_temperature_c",
+      "horizon": 3,
+      "mae": 3.856456995010376,
+      "rmse": 4.716553637944181,
+      "r2": -0.0522618293762207,
+      "relative_persistence_improvement_pct": -61.62292663727472
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_temperature_c",
+      "horizon": 4,
+      "mae": 4.437276363372803,
+      "rmse": 5.303631369805702,
+      "r2": -0.33033645153045654,
+      "relative_persistence_improvement_pct": -44.42067604226539
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_temperature_c",
+      "horizon": 5,
+      "mae": 4.9629082679748535,
+      "rmse": 5.809339422862921,
+      "r2": -0.5942496061325073,
+      "relative_persistence_improvement_pct": -32.6309574812694
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_temperature_c",
+      "horizon": 6,
+      "mae": 5.418288707733154,
+      "rmse": 6.228239094578682,
+      "r2": -0.8295899629592896,
+      "relative_persistence_improvement_pct": -23.768965541655163
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_humidity_pct",
+      "horizon": 1,
+      "mae": 7.832396507263184,
+      "rmse": 10.433118802953553,
+      "r2": 0.3747900128364563,
+      "relative_persistence_improvement_pct": -137.0297395320641
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_humidity_pct",
+      "horizon": 2,
+      "mae": 9.611039161682129,
+      "rmse": 12.58772016103548,
+      "r2": 0.10044229030609131,
+      "relative_persistence_improvement_pct": -67.78594387392394
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_humidity_pct",
+      "horizon": 3,
+      "mae": 11.196417808532715,
+      "rmse": 14.421420568578545,
+      "r2": -0.1706376075744629,
+      "relative_persistence_improvement_pct": -46.42869815623587
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_humidity_pct",
+      "horizon": 4,
+      "mae": 12.614087104797363,
+      "rmse": 15.996050824118228,
+      "r2": -0.4379110336303711,
+      "relative_persistence_improvement_pct": -33.79340097774532
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_humidity_pct",
+      "horizon": 5,
+      "mae": 13.867874145507812,
+      "rmse": 17.352749635774586,
+      "r2": -0.6933450698852539,
+      "relative_persistence_improvement_pct": -25.026900758362792
+    },
+    {
+      "model": "moving_average_6",
+      "target": "air_humidity_pct",
+      "horizon": 6,
+      "mae": 14.957052230834961,
+      "rmse": 18.506810764627556,
+      "r2": -0.9275238513946533,
+      "relative_persistence_improvement_pct": -18.452302189353222
+    },
+    {
+      "model": "moving_average_6",
+      "target": "light_intensity",
+      "horizon": 1,
+      "mae": 203.82723999023438,
+      "rmse": 264.43824598098513,
+      "r2": 0.22803473472595215,
+      "relative_persistence_improvement_pct": -169.7724851098274
+    },
+    {
+      "model": "moving_average_6",
+      "target": "light_intensity",
+      "horizon": 2,
+      "mae": 254.4123077392578,
+      "rmse": 323.9065258681893,
+      "r2": -0.15911650657653809,
+      "relative_persistence_improvement_pct": -88.241858984274
+    },
+    {
+      "model": "moving_average_6",
+      "target": "light_intensity",
+      "horizon": 3,
+      "mae": 301.57843017578125,
+      "rmse": 376.2122904690914,
+      "r2": -0.5640829801559448,
+      "relative_persistence_improvement_pct": -58.78370165357478
+    },
+    {
+      "model": "moving_average_6",
+      "target": "light_intensity",
+      "horizon": 4,
+      "mae": 346.1205139160156,
+      "rmse": 421.37537080968553,
+      "r2": -0.9611959457397461,
+      "relative_persistence_improvement_pct": -42.33160669878652
+    },
+    {
+      "model": "moving_average_6",
+      "target": "light_intensity",
+      "horizon": 5,
+      "mae": 384.994873046875,
+      "rmse": 458.8902884949735,
+      "r2": -1.3243963718414307,
+      "relative_persistence_improvement_pct": -30.82233772051717
+    },
+    {
+      "model": "moving_average_6",
+      "target": "light_intensity",
+      "horizon": 6,
+      "mae": 419.21044921875,
+      "rmse": 488.76587250441287,
+      "r2": -1.6340460777282715,
+      "relative_persistence_improvement_pct": -22.173037842839587
+    },
+    {
+      "model": "xgboost",
+      "target": "air_temperature_c",
+      "horizon": 1,
+      "mae": 1.083174467086792,
+      "rmse": 1.6945415097282623,
+      "r2": 0.8646246194839478,
+      "relative_persistence_improvement_pct": -20.848939324597566
+    },
+    {
+      "model": "xgboost",
+      "target": "air_temperature_c",
+      "horizon": 2,
+      "mae": 2.020963191986084,
+      "rmse": 2.8788766018338516,
+      "r2": 0.6084600687026978,
+      "relative_persistence_improvement_pct": -21.315271816177436
+    },
+    {
+      "model": "xgboost",
+      "target": "air_temperature_c",
+      "horizon": 3,
+      "mae": 2.41083025932312,
+      "rmse": 3.2401733024778676,
+      "r2": 0.5033953785896301,
+      "relative_persistence_improvement_pct": -1.0371547359765834
+    },
+    {
+      "model": "xgboost",
+      "target": "air_temperature_c",
+      "horizon": 4,
+      "mae": 2.720285654067993,
+      "rmse": 3.6426639986526452,
+      "r2": 0.37244319915771484,
+      "relative_persistence_improvement_pct": 11.462469087691437
+    },
+    {
+      "model": "xgboost",
+      "target": "air_temperature_c",
+      "horizon": 5,
+      "mae": 3.0885255336761475,
+      "rmse": 4.102043777567004,
+      "r2": 0.20511656999588013,
+      "relative_persistence_improvement_pct": 17.460876442116913
+    },
+    {
+      "model": "xgboost",
+      "target": "air_temperature_c",
+      "horizon": 6,
+      "mae": 3.2396528720855713,
+      "rmse": 4.303836468379998,
+      "r2": 0.12635546922683716,
+      "relative_persistence_improvement_pct": 25.9972093919971
+    },
+    {
+      "model": "xgboost",
+      "target": "air_humidity_pct",
+      "horizon": 1,
+      "mae": 3.3941404819488525,
+      "rmse": 5.086507317049821,
+      "r2": 0.8513938188552856,
+      "relative_persistence_improvement_pct": -2.715973792379639
+    },
+    {
+      "model": "xgboost",
+      "target": "air_humidity_pct",
+      "horizon": 2,
+      "mae": 5.642261981964111,
+      "rmse": 7.913800038450806,
+      "r2": 0.6444464921951294,
+      "relative_persistence_improvement_pct": 1.499490710418177
+    },
+    {
+      "model": "xgboost",
+      "target": "air_humidity_pct",
+      "horizon": 3,
+      "mae": 6.831917762756348,
+      "rmse": 9.553947663379251,
+      "r2": 0.48622608184814453,
+      "relative_persistence_improvement_pct": 10.65099203885676
+    },
+    {
+      "model": "xgboost",
+      "target": "air_humidity_pct",
+      "horizon": 4,
+      "mae": 7.413874626159668,
+      "rmse": 10.264991032317305,
+      "r2": 0.40786105394363403,
+      "relative_persistence_improvement_pct": 21.363512681051304
+    },
+    {
+      "model": "xgboost",
+      "target": "air_humidity_pct",
+      "horizon": 5,
+      "mae": 7.516960144042969,
+      "rmse": 10.360565071160453,
+      "r2": 0.39636313915252686,
+      "relative_persistence_improvement_pct": 32.2302596581998
+    },
+    {
+      "model": "xgboost",
+      "target": "air_humidity_pct",
+      "horizon": 6,
+      "mae": 7.642289638519287,
+      "rmse": 10.514441232241946,
+      "r2": 0.3778300881385803,
+      "relative_persistence_improvement_pct": 39.47692448287217
+    },
+    {
+      "model": "xgboost",
+      "target": "light_intensity",
+      "horizon": 1,
+      "mae": 155.30699157714844,
+      "rmse": 196.6906577439559,
+      "r2": 0.5729126930236816,
+      "relative_persistence_improvement_pct": -105.5542383574724
+    },
+    {
+      "model": "xgboost",
+      "target": "light_intensity",
+      "horizon": 2,
+      "mae": 164.14344787597656,
+      "rmse": 206.61516915512277,
+      "r2": 0.5283583998680115,
+      "relative_persistence_improvement_pct": -21.451151647622133
+    },
+    {
+      "model": "xgboost",
+      "target": "light_intensity",
+      "horizon": 3,
+      "mae": 164.20407104492188,
+      "rmse": 207.3833444674379,
+      "r2": 0.5247287750244141,
+      "relative_persistence_improvement_pct": 13.545109270904677
+    },
+    {
+      "model": "xgboost",
+      "target": "light_intensity",
+      "horizon": 4,
+      "mae": 163.4892120361328,
+      "rmse": 212.53299376214508,
+      "r2": 0.5010747909545898,
+      "relative_persistence_improvement_pct": 32.769999779129996
+    },
+    {
+      "model": "xgboost",
+      "target": "light_intensity",
+      "horizon": 5,
+      "mae": 167.17356872558594,
+      "rmse": 221.01477608974474,
+      "r2": 0.46081840991973877,
+      "relative_persistence_improvement_pct": 43.19395244751764
+    },
+    {
+      "model": "xgboost",
+      "target": "light_intensity",
+      "horizon": 6,
+      "mae": 161.47998046875,
+      "rmse": 213.5144352555583,
+      "r2": 0.4973379373550415,
+      "relative_persistence_improvement_pct": 52.9389121825659
+    },
+    {
+      "model": "gru",
+      "target": "air_temperature_c",
+      "horizon": 1,
+      "mae": 1.4973918199539185,
+      "rmse": 1.988158876141848,
+      "r2": 0.8136465549468994,
+      "relative_persistence_improvement_pct": -67.06284970088767
+    },
+    {
+      "model": "gru",
+      "target": "air_temperature_c",
+      "horizon": 2,
+      "mae": 1.8411402702331543,
+      "rmse": 2.46710043736036,
+      "r2": 0.712456464767456,
+      "relative_persistence_improvement_pct": -10.520781981952842
+    },
+    {
+      "model": "gru",
+      "target": "air_temperature_c",
+      "horizon": 3,
+      "mae": 2.1173441410064697,
+      "rmse": 2.8541736092216166,
+      "r2": 0.6146680116653442,
+      "relative_persistence_improvement_pct": 11.262758223281736
+    },
+    {
+      "model": "gru",
+      "target": "air_temperature_c",
+      "horizon": 4,
+      "mae": 2.2517378330230713,
+      "rmse": 3.0432638042427995,
+      "r2": 0.5619798898696899,
+      "relative_persistence_improvement_pct": 26.712362836027438
+    },
+    {
+      "model": "gru",
+      "target": "air_temperature_c",
+      "horizon": 5,
+      "mae": 2.300553560256958,
+      "rmse": 3.1049326691875283,
+      "r2": 0.544585108757019,
+      "relative_persistence_improvement_pct": 38.51898827089714
+    },
+    {
+      "model": "gru",
+      "target": "air_temperature_c",
+      "horizon": 6,
+      "mae": 2.267853021621704,
+      "rmse": 3.0425898226641546,
+      "r2": 0.5633735656738281,
+      "relative_persistence_improvement_pct": 48.195853409209114
+    },
+    {
+      "model": "gru",
+      "target": "air_humidity_pct",
+      "horizon": 1,
+      "mae": 4.274936676025391,
+      "rmse": 6.067764356188081,
+      "r2": 0.7885269522666931,
+      "relative_persistence_improvement_pct": -29.37127555974967
+    },
+    {
+      "model": "gru",
+      "target": "air_humidity_pct",
+      "horizon": 2,
+      "mae": 5.558965682983398,
+      "rmse": 7.773949565028037,
+      "r2": 0.6569019556045532,
+      "relative_persistence_improvement_pct": 2.953646490097406
+    },
+    {
+      "model": "gru",
+      "target": "air_humidity_pct",
+      "horizon": 3,
+      "mae": 6.32987642288208,
+      "rmse": 8.806736569739614,
+      "r2": 0.5634475946426392,
+      "relative_persistence_improvement_pct": 17.21677594184557
+    },
+    {
+      "model": "gru",
+      "target": "air_humidity_pct",
+      "horizon": 4,
+      "mae": 6.743904113769531,
+      "rmse": 9.358459937399013,
+      "r2": 0.5078299045562744,
+      "relative_persistence_improvement_pct": 28.469665719537
+    },
+    {
+      "model": "gru",
+      "target": "air_humidity_pct",
+      "horizon": 5,
+      "mae": 6.867220878601074,
+      "rmse": 9.50467085202697,
+      "r2": 0.49197739362716675,
+      "relative_persistence_improvement_pct": 38.088034671649105
+    },
+    {
+      "model": "gru",
+      "target": "air_humidity_pct",
+      "horizon": 6,
+      "mae": 6.799521446228027,
+      "rmse": 9.341602703854416,
+      "r2": 0.5088893175125122,
+      "relative_persistence_improvement_pct": 46.15122307113661
+    },
+    {
+      "model": "gru",
+      "target": "light_intensity",
+      "horizon": 1,
+      "mae": 108.59696960449219,
+      "rmse": 138.9085102459529,
+      "r2": 0.7869865894317627,
+      "relative_persistence_improvement_pct": -43.731889648331
+    },
+    {
+      "model": "gru",
+      "target": "light_intensity",
+      "horizon": 2,
+      "mae": 102.44998168945312,
+      "rmse": 139.00492487903082,
+      "r2": 0.7865244746208191,
+      "relative_persistence_improvement_pct": 24.19637564904017
+    },
+    {
+      "model": "gru",
+      "target": "light_intensity",
+      "horizon": 3,
+      "mae": 100.14949035644531,
+      "rmse": 139.42284072426943,
+      "r2": 0.7851864695549011,
+      "relative_persistence_improvement_pct": 47.270410591876534
+    },
+    {
+      "model": "gru",
+      "target": "light_intensity",
+      "horizon": 4,
+      "mae": 100.73719787597656,
+      "rmse": 140.10924866867282,
+      "r2": 0.783171534538269,
+      "relative_persistence_improvement_pct": 58.574870163574325
+    },
+    {
+      "model": "gru",
+      "target": "light_intensity",
+      "horizon": 5,
+      "mae": 105.30477905273438,
+      "rmse": 142.594006820939,
+      "r2": 0.7755627036094666,
+      "relative_persistence_improvement_pct": 64.21714071204285
+    },
+    {
+      "model": "gru",
+      "target": "light_intensity",
+      "horizon": 6,
+      "mae": 116.65125274658203,
+      "rmse": 148.5952517011395,
+      "r2": 0.7565377950668335,
+      "relative_persistence_improvement_pct": 66.00361955962099
+    },
+    {
+      "model": "lstm",
+      "target": "air_temperature_c",
+      "horizon": 1,
+      "mae": 1.3407658338546753,
+      "rmse": 1.7346182987605716,
+      "r2": 0.8581454753875732,
+      "relative_persistence_improvement_pct": -49.58820931200372
+    },
+    {
+      "model": "lstm",
+      "target": "air_temperature_c",
+      "horizon": 2,
+      "mae": 1.672277569770813,
+      "rmse": 2.185712792692556,
+      "r2": 0.7743080258369446,
+      "relative_persistence_improvement_pct": -0.3842171561132297
+    },
+    {
+      "model": "lstm",
+      "target": "air_temperature_c",
+      "horizon": 3,
+      "mae": 2.010648488998413,
+      "rmse": 2.660847443844777,
+      "r2": 0.6651006937026978,
+      "relative_persistence_improvement_pct": 15.734340185514387
+    },
+    {
+      "model": "lstm",
+      "target": "air_temperature_c",
+      "horizon": 4,
+      "mae": 2.311401844024658,
+      "rmse": 3.091791631292932,
+      "r2": 0.5478992462158203,
+      "relative_persistence_improvement_pct": 24.770469634294848
+    },
+    {
+      "model": "lstm",
+      "target": "air_temperature_c",
+      "horizon": 5,
+      "mae": 2.492093563079834,
+      "rmse": 3.342478858121946,
+      "r2": 0.4722355008125305,
+      "relative_persistence_improvement_pct": 33.400188446549514
+    },
+    {
+      "model": "lstm",
+      "target": "air_temperature_c",
+      "horizon": 6,
+      "mae": 2.460439682006836,
+      "rmse": 3.2720896420032837,
+      "r2": 0.49502068758010864,
+      "relative_persistence_improvement_pct": 43.796631991020384
+    },
+    {
+      "model": "lstm",
+      "target": "air_humidity_pct",
+      "horizon": 1,
+      "mae": 4.772421360015869,
+      "rmse": 6.217096923720551,
+      "r2": 0.7779898643493652,
+      "relative_persistence_improvement_pct": -44.426522693638425
+    },
+    {
+      "model": "lstm",
+      "target": "air_humidity_pct",
+      "horizon": 2,
+      "mae": 5.8627848625183105,
+      "rmse": 7.654100762590385,
+      "r2": 0.6673992872238159,
+      "relative_persistence_improvement_pct": -2.35031564632827
+    },
+    {
+      "model": "lstm",
+      "target": "air_humidity_pct",
+      "horizon": 3,
+      "mae": 6.4556427001953125,
+      "rmse": 8.440481153757386,
+      "r2": 0.5990033149719238,
+      "relative_persistence_improvement_pct": 15.571982707629337
+    },
+    {
+      "model": "lstm",
+      "target": "air_humidity_pct",
+      "horizon": 4,
+      "mae": 6.763168811798096,
+      "rmse": 8.813696381001808,
+      "r2": 0.563461422920227,
+      "relative_persistence_improvement_pct": 28.265331513927254
+    },
+    {
+      "model": "lstm",
+      "target": "air_humidity_pct",
+      "horizon": 5,
+      "mae": 6.999784469604492,
+      "rmse": 9.099467469447816,
+      "r2": 0.5343701839447021,
+      "relative_persistence_improvement_pct": 36.89289727981423
+    },
+    {
+      "model": "lstm",
+      "target": "air_humidity_pct",
+      "horizon": 6,
+      "mae": 7.374021053314209,
+      "rmse": 9.478078747594655,
+      "r2": 0.49443477392196655,
+      "relative_persistence_improvement_pct": 41.60147623492875
+    },
+    {
+      "model": "lstm",
+      "target": "light_intensity",
+      "horizon": 1,
+      "mae": 136.9263458251953,
+      "rmse": 165.74153918827955,
+      "r2": 0.6967421770095825,
+      "relative_persistence_improvement_pct": -81.22681046969174
+    },
+    {
+      "model": "lstm",
+      "target": "light_intensity",
+      "horizon": 2,
+      "mae": 140.04261779785156,
+      "rmse": 172.77964764585266,
+      "r2": 0.6701831221580505,
+      "relative_persistence_improvement_pct": -3.618739775394561
+    },
+    {
+      "model": "lstm",
+      "target": "light_intensity",
+      "horizon": 3,
+      "mae": 144.94329833984375,
+      "rmse": 181.46235405036495,
+      "r2": 0.6361126899719238,
+      "relative_persistence_improvement_pct": 23.686075868011272
+    },
+    {
+      "model": "lstm",
+      "target": "light_intensity",
+      "horizon": 4,
+      "mae": 148.78684997558594,
+      "rmse": 187.05599512579116,
+      "r2": 0.6135209202766418,
+      "relative_persistence_improvement_pct": 38.81590208832591
+    },
+    {
+      "model": "lstm",
+      "target": "light_intensity",
+      "horizon": 5,
+      "mae": 155.25425720214844,
+      "rmse": 190.91530149191814,
+      "r2": 0.5976778268814087,
+      "relative_persistence_improvement_pct": 47.244167935258275
+    },
+    {
+      "model": "lstm",
+      "target": "light_intensity",
+      "horizon": 6,
+      "mae": 164.16082763671875,
+      "rmse": 196.126394195172,
+      "r2": 0.5758751630783081,
+      "relative_persistence_improvement_pct": 52.157616670697095
+    }
+  ],
+  "aggregate_formal_models": [
+    {
+      "model": "gru",
+      "mean": 20.39694046771749,
+      "wins": 14
+    },
+    {
+      "model": "lstm",
+      "mean": 12.24123697237785,
+      "wins": 12
+    },
+    {
+      "model": "xgboost",
+      "mean": 7.203721027727561,
+      "wins": 12
+    }
+  ],
+  "external_agc4": [
+    {
+      "model": "gru_external_agc4",
+      "target": "air_temperature_c",
+      "horizon": 1,
+      "mae": 0.971073567867279,
+      "rmse": 1.3131760264037,
+      "r2": 0.7369104027748108,
+      "relative_persistence_improvement_pct": -31.76921109669108
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_temperature_c",
+      "horizon": 2,
+      "mae": 1.3865230083465576,
+      "rmse": 1.8102119078329961,
+      "r2": 0.5003551244735718,
+      "relative_persistence_improvement_pct": -10.47913434344835
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_temperature_c",
+      "horizon": 3,
+      "mae": 1.7370338439941406,
+      "rmse": 2.2060346935999116,
+      "r2": 0.25818508863449097,
+      "relative_persistence_improvement_pct": -4.502674980333084
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_temperature_c",
+      "horizon": 4,
+      "mae": 2.005340337753296,
+      "rmse": 2.4907237570602594,
+      "r2": 0.05486994981765747,
+      "relative_persistence_improvement_pct": -0.16547355805186353
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_temperature_c",
+      "horizon": 5,
+      "mae": 2.211803913116455,
+      "rmse": 2.708268932652787,
+      "r2": -0.11629319190979004,
+      "relative_persistence_improvement_pct": 3.2402040252462627
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_temperature_c",
+      "horizon": 6,
+      "mae": 2.279352903366089,
+      "rmse": 2.7953653363628543,
+      "r2": -0.18808603286743164,
+      "relative_persistence_improvement_pct": 9.220600619882365
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_humidity_pct",
+      "horizon": 1,
+      "mae": 2.9914660453796387,
+      "rmse": 3.850025915083425,
+      "r2": 0.7889126539230347,
+      "relative_persistence_improvement_pct": -27.902152256870206
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_humidity_pct",
+      "horizon": 2,
+      "mae": 4.400851726531982,
+      "rmse": 5.489816427861782,
+      "r2": 0.5705350041389465,
+      "relative_persistence_improvement_pct": -13.234563475273825
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_humidity_pct",
+      "horizon": 3,
+      "mae": 5.178746700286865,
+      "rmse": 6.407129143659069,
+      "r2": 0.41462355852127075,
+      "relative_persistence_improvement_pct": -1.635013905703617
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_humidity_pct",
+      "horizon": 4,
+      "mae": 5.488348960876465,
+      "rmse": 6.80638674203705,
+      "r2": 0.3389156460762024,
+      "relative_persistence_improvement_pct": 9.830579538919327
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_humidity_pct",
+      "horizon": 5,
+      "mae": 5.6845383644104,
+      "rmse": 7.0646464369113655,
+      "r2": 0.28743642568588257,
+      "relative_persistence_improvement_pct": 18.11603863856302
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "air_humidity_pct",
+      "horizon": 6,
+      "mae": 5.837007999420166,
+      "rmse": 7.24462796832343,
+      "r2": 0.25025874376296997,
+      "relative_persistence_improvement_pct": 23.544585016576352
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "light_intensity",
+      "horizon": 1,
+      "mae": 71.06564331054688,
+      "rmse": 88.6574836889842,
+      "r2": 0.357616126537323,
+      "relative_persistence_improvement_pct": -77.21688145474857
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "light_intensity",
+      "horizon": 2,
+      "mae": 77.73580932617188,
+      "rmse": 97.6289011704526,
+      "r2": 0.22070497274398804,
+      "relative_persistence_improvement_pct": -24.172430117279042
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "light_intensity",
+      "horizon": 3,
+      "mae": 86.6519546508789,
+      "rmse": 106.77982787317556,
+      "r2": 0.06733274459838867,
+      "relative_persistence_improvement_pct": -3.9434112112668736
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "light_intensity",
+      "horizon": 4,
+      "mae": 86.07576751708984,
+      "rmse": 107.30147457193912,
+      "r2": 0.057968854904174805,
+      "relative_persistence_improvement_pct": 14.967353758934095
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "light_intensity",
+      "horizon": 5,
+      "mae": 83.5543212890625,
+      "rmse": 105.1500694691877,
+      "r2": 0.09512174129486084,
+      "relative_persistence_improvement_pct": 28.686179735098545
+    },
+    {
+      "model": "gru_external_agc4",
+      "target": "light_intensity",
+      "horizon": 6,
+      "mae": 83.34947967529297,
+      "rmse": 103.95082220694553,
+      "r2": 0.11543160676956177,
+      "relative_persistence_improvement_pct": 35.624473863252945
+    }
+  ],
+  "group_and_condition": {
+    "greenhouse": [
+      {
+        "greenhouse_id": "AICU",
+        "target": "air_temperature_c",
+        "mae": 1.2460932731628418
+      },
+      {
+        "greenhouse_id": "AICU",
+        "target": "air_humidity_pct",
+        "mae": 5.5660552978515625
+      },
+      {
+        "greenhouse_id": "AICU",
+        "target": "light_intensity",
+        "mae": 80.22039794921875
+      },
+      {
+        "greenhouse_id": "Automatoes",
+        "target": "air_temperature_c",
+        "mae": 3.737149953842163
+      },
+      {
+        "greenhouse_id": "Automatoes",
+        "target": "air_humidity_pct",
+        "mae": 5.665897369384766
+      },
+      {
+        "greenhouse_id": "Automatoes",
+        "target": "light_intensity",
+        "mae": 114.86460876464844
+      },
+      {
+        "greenhouse_id": "Digilog",
+        "target": "air_temperature_c",
+        "mae": 2.6351122856140137
+      },
+      {
+        "greenhouse_id": "Digilog",
+        "target": "air_humidity_pct",
+        "mae": 4.964266300201416
+      },
+      {
+        "greenhouse_id": "Digilog",
+        "target": "light_intensity",
+        "mae": 115.21421813964844
+      },
+      {
+        "greenhouse_id": "IUACAAS",
+        "target": "air_temperature_c",
+        "mae": 1.6331615447998047
+      },
+      {
+        "greenhouse_id": "IUACAAS",
+        "target": "air_humidity_pct",
+        "mae": 6.547921657562256
+      },
+      {
+        "greenhouse_id": "IUACAAS",
+        "target": "light_intensity",
+        "mae": 95.64044952392578
+      },
+      {
+        "greenhouse_id": "Reference",
+        "target": "air_temperature_c",
+        "mae": 1.478928804397583
+      },
+      {
+        "greenhouse_id": "Reference",
+        "target": "air_humidity_pct",
+        "mae": 6.6265668869018555
+      },
+      {
+        "greenhouse_id": "Reference",
+        "target": "light_intensity",
+        "mae": 104.49563598632812
+      },
+      {
+        "greenhouse_id": "TheAutomators",
+        "target": "air_temperature_c",
+        "mae": 1.5455745458602905
+      },
+      {
+        "greenhouse_id": "TheAutomators",
+        "target": "air_humidity_pct",
+        "mae": 7.203716278076172
+      },
+      {
+        "greenhouse_id": "TheAutomators",
+        "target": "light_intensity",
+        "mae": 123.45435333251953
+      }
+    ],
+    "conditions": {
+      "day": {
+        "air_temperature_c": 1.9459667205810547,
+        "air_humidity_pct": 6.648983955383301,
+        "light_intensity": 146.86410522460938
+      },
+      "night": {
+        "air_temperature_c": 2.148536443710327,
+        "air_humidity_pct": 5.528684139251709,
+        "light_intensity": 63.403892517089844
+      },
+      "statistical_extreme": {
+        "air_temperature_c": 3.274322271347046,
+        "air_humidity_pct": 10.266340255737305,
+        "light_intensity": 163.13641357421875
+      },
+      "normal": {
+        "air_temperature_c": 1.5343385934829712,
+        "air_humidity_pct": 4.301836013793945,
+        "light_intensity": 86.30521392822266
+      }
+    },
+    "extreme_definition": "outside training-set 5th/95th percentiles; statistical, not crop-risk thresholds"
+  },
+  "auxiliary": {
+    "status": "not_trained",
+    "reason": "Optional auxiliary public datasets are not included in this release package."
+  }
+}

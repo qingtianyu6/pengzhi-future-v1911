@@ -1,0 +1,316 @@
+.marketing-reveal{opacity:0;transform:translateY(28px);transition:opacity .72s cubic-bezier(.2,.7,.2,1),transform .72s cubic-bezier(.2,.7,.2,1)}
+.marketing-reveal.is-shown{opacity:1;transform:none}
+.marketing-page{--green:#087b5d;--green-deep:#0d3e31;--green-mid:#168565;--green-soft:#eaf6f0;--ink:#123a2f;--muted:#6d8179;--line:#dceae3;background:#fff;color:var(--ink);font-family:Inter,'MiSans','HarmonyOS Sans SC','PingFang SC','Microsoft YaHei',sans-serif;overflow:hidden}
+.marketing-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(480px,1.08fr);min-height:560px;overflow:hidden;background:linear-gradient(90deg,#fff 0%,#fbfdfb 43%,#eaf3ef 100%)}
+.marketing-hero-copy{z-index:2;padding:72px 5vw 54px max(5vw,70px);align-self:center}
+.marketing-kicker{margin:0 0 16px;color:#657d74;font-size:15px;letter-spacing:.08em}
+.marketing-kicker::after{display:inline-block;width:28px;height:1px;margin-left:10px;vertical-align:middle;background:#87ad9e;content:''}
+.marketing-hero h1{margin:0;color:#102f29;font-size:clamp(44px,4vw,66px);line-height:1.18;letter-spacing:-.045em;font-weight:800}
+.marketing-hero h1 em{color:var(--green);font-style:normal}
+.marketing-hero-lead{max-width:660px;margin:24px 0 0;color:#536f65;font-size:17px;line-height:1.9}
+.marketing-hero-media{position:relative;min-height:560px;overflow:hidden}
+.marketing-hero-media::after{position:absolute;inset:0 0 0 -1px;background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.76) 12%,transparent 38%);content:'';pointer-events:none}
+.marketing-hero-media img{width:100%;height:100%;object-fit:cover;transform:none;animation:none;will-change:auto}
+@keyframes heroBreath{to{transform:none}}
+.marketing-icon-strip{display:flex;gap:22px;margin-top:32px;flex-wrap:wrap}
+.marketing-icon-item{display:flex;align-items:center;gap:10px;min-width:130px;color:#698078;font-size:12px}.marketing-icon-item .anticon{display:grid;width:38px;height:38px;place-items:center;border-radius:50%;color:var(--green);background:rgba(8,123,93,.08);font-size:20px}.marketing-icon-item strong{display:block;color:#154b3b;font-size:14px;margin-bottom:2px}
+.marketing-section{padding:48px max(4.5vw,48px);border-top:1px solid #edf2ef;background:#fff}
+.marketing-section:nth-of-type(even){background:#fbfdfc}
+.marketing-section-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:26px}.marketing-section-head .num{font-size:44px;line-height:1;color:var(--green);font-weight:800;letter-spacing:-.04em}.marketing-section-head .leaf{width:26px;height:26px;margin-top:5px;border-radius:100% 0 100% 0;background:var(--green);transform:rotate(-18deg)}.marketing-section-head h2{margin:0 0 7px;color:#102f29;font-size:30px;line-height:1.25}.marketing-section-head p{margin:0;color:#75877f;font-size:14px;line-height:1.75}
+.soft-card{border:1px solid #dfebe5;border-radius:14px;background:rgba(255,255,255,.94);box-shadow:0 8px 24px rgba(22,80,58,.055)}
+.hand-note{color:#314e45;font-family:'KaiTi','STKaiti','Microsoft YaHei',sans-serif;font-size:18px;font-style:italic;transform:rotate(-5deg)}
+.marketing-footer-banner{position:relative;min-height:220px;overflow:hidden;background:#174f3e}.marketing-footer-banner img{width:100%;height:250px;object-fit:cover;opacity:.93;transition:none;transform:none}.marketing-footer-banner.is-shown img{transform:none}.marketing-footer-banner>div{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;background:linear-gradient(90deg,rgba(255,255,255,.1),rgba(255,255,255,0),rgba(255,255,255,.08))}.marketing-footer-banner h2{margin:0;color:#14392f;font-size:38px;line-height:1.35;text-shadow:0 1px 0 rgba(255,255,255,.7)}.marketing-footer-banner span{margin-top:14px;color:#2e6556;font-size:14px}
+@media(max-width:980px){.marketing-hero{grid-template-columns:1fr}.marketing-hero-copy{padding:55px 6vw 35px}.marketing-hero-media{min-height:390px}.marketing-section{padding:44px 5vw}}
+@media(max-width:620px){.marketing-hero h1{font-size:42px}.marketing-hero-lead{font-size:15px}.marketing-icon-strip{gap:12px}.marketing-icon-item{min-width:calc(50% - 8px)}.marketing-section{padding:40px 20px}.marketing-section-head .num{font-size:36px}.marketing-section-head h2{font-size:25px}.marketing-footer-banner h2{font-size:30px}}
+
+/* ===== 2026-09 visual deep-refinement pass ===== */
+.marketing-page{
+  font-family:'Noto Sans CJK SC','HarmonyOS Sans SC','PingFang SC','Microsoft YaHei UI','Microsoft YaHei',sans-serif;
+  --green:#087b5d;--green-deep:#0b3b2f;--green-mid:#168565;--green-soft:#edf7f2;--ink:#12372e;--muted:#687d75;--line:#dfeae4;
+}
+.marketing-hero{
+  grid-template-columns:minmax(0,.94fr) minmax(500px,1.06fr);
+  min-height:500px;
+  background:linear-gradient(90deg,#fff 0%,#fbfdfb 42%,#eef6f2 100%);
+}
+.marketing-hero-copy{padding:50px 4.9vw 40px max(4.7vw,58px)}
+.marketing-kicker{margin-bottom:12px;font-size:14px;letter-spacing:.06em}
+.marketing-hero h1{
+  font-family:'STKaiti','KaiTi','AR PL KaitiM GB','Noto Serif CJK SC',serif;
+  font-size:clamp(45px,3.9vw,60px);font-weight:600;line-height:1.15;letter-spacing:-.045em;
+}
+.marketing-hero-lead{max-width:620px;margin-top:18px;font-size:16px;line-height:1.75}
+.marketing-hero-media{min-height:500px}
+.marketing-icon-strip{gap:18px;margin-top:22px}.marketing-icon-item{min-width:120px}.marketing-icon-item .anticon{width:34px;height:34px;font-size:18px}.marketing-icon-item strong{font-size:13px}.marketing-icon-item{font-size:11px}
+.marketing-section{padding:30px max(4.25vw,42px)}
+.marketing-section-head{gap:11px;margin-bottom:18px}.marketing-section-head .num{font-size:38px}.marketing-section-head .leaf{width:22px;height:22px;margin-top:4px}.marketing-section-head h2{margin-bottom:5px;font-size:27px;line-height:1.22}.marketing-section-head p{max-width:900px;font-size:13px;line-height:1.65}
+.soft-card{border-color:#e2ece6;border-radius:12px;box-shadow:0 5px 18px rgba(22,80,58,.045)}
+.hand-note{font-family:'STKaiti','KaiTi','AR PL KaitiM GB',serif;font-size:17px}
+.marketing-footer-banner{min-height:185px;height:185px}.marketing-footer-banner img{height:185px;opacity:1;object-fit:cover}.marketing-footer-banner>div{pointer-events:none}
+@media(max-width:980px){.marketing-hero{grid-template-columns:1fr;min-height:auto}.marketing-hero-copy{padding:46px 6vw 30px}.marketing-hero-media{min-height:360px}.marketing-section{padding:34px 5vw}}
+@media(max-width:620px){.marketing-hero h1{font-size:40px}.marketing-hero-lead{font-size:14px}.marketing-section{padding:34px 20px}.marketing-section-head h2{font-size:24px}.marketing-section-head .num{font-size:32px}}
+
+/* ===== final unified font / spacing / photo quality system ===== */
+.marketing-page{font-family:var(--font-sans);--green:var(--site-green);--green-deep:var(--site-deep);--ink:var(--site-ink);--muted:var(--site-muted);--line:var(--site-line)}
+.marketing-hero h1{font-family:var(--font-display);font-weight:600}.marketing-hero-copy{padding-left:var(--site-pad);padding-right:var(--space-lg)}
+.marketing-section{padding-left:var(--site-pad);padding-right:var(--site-pad)}.marketing-section-head h2{font-family:var(--font-sans);font-weight:750}.hand-note{font-family:var(--font-display);font-style:normal}
+.marketing-hero-media img,.marketing-footer-banner img,.scenario-photo,.knowledge-photo,.impact-photo img{image-rendering:auto;backface-visibility:hidden}
+.marketing-hero-media::after{background:linear-gradient(90deg,#fff 0%,rgba(255,255,255,.72) 11%,transparent 34%)}
+.soft-card{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}.soft-card:hover{transform:translateY(-2px);border-color:#cfe2d8;box-shadow:0 11px 28px rgba(22,80,58,.08)}
+@media(prefers-reduced-motion:reduce){.marketing-hero-media img,.soft-card{animation:none!important;transition:none!important}}
+
+/* ===== next-layer responsive marketing system ===== */
+@media(max-width:980px){
+  .marketing-hero{grid-template-columns:1fr;min-height:auto}.marketing-hero-copy{padding:46px 5.5% 30px}.marketing-hero h1{font-size:clamp(42px,8vw,56px);line-height:1.17}.marketing-hero-lead{margin-top:18px;font-size:14px;line-height:1.72}.marketing-hero-media{min-height:360px}.marketing-hero-media::after{background:linear-gradient(180deg,rgba(255,255,255,.56),transparent 28%)}.marketing-hero-media img{object-position:center}
+  .marketing-icon-strip{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.marketing-icon-item{min-width:0;padding:14px 10px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.marketing-icon-item:nth-child(2n){border-right:0}.marketing-icon-item:nth-child(n+3){border-bottom:0}
+  .marketing-section{padding:38px 5.5%}.marketing-section-head{margin-bottom:20px}.marketing-section-head .num{font-size:34px}.marketing-section-head h2{font-size:27px}.marketing-section-head p{font-size:12px}
+  .marketing-footer-banner,.marketing-footer-banner img{height:230px;min-height:230px}.marketing-footer-banner h2{font-size:32px}.marketing-footer-banner span{font-size:12px}
+}
+@media(max-width:620px){
+  .marketing-hero-copy{padding:40px 18px 26px}.marketing-hero h1{font-size:39px}.marketing-kicker{font-size:12px}.marketing-hero-lead{font-size:13px}.marketing-hero-media{min-height:310px}
+  .marketing-icon-item{padding:12px 7px;gap:8px}.marketing-icon-item .anticon{width:34px;height:34px;font-size:18px}.marketing-icon-item strong{font-size:12px}.marketing-icon-item{font-size:10px}
+  .marketing-section{padding:34px 18px}.marketing-section-head{gap:9px}.marketing-section-head .leaf{width:19px;height:19px}.marketing-section-head .num{font-size:30px}.marketing-section-head h2{font-size:24px;line-height:1.28}.marketing-section-head p{font-size:11px;line-height:1.65}
+  .marketing-footer-banner,.marketing-footer-banner img{height:210px;min-height:210px}.marketing-footer-banner h2{font-size:28px}
+}
+
+/* ===== v1.9.3 shared first-reference photographic hero =====
+   Desktop marketing pages now use the same visual language as the preferred
+   Core Functions reference: a 560-ish px photographic banner, left copy over
+   a white-to-transparent mask, and live DOM content floating on the right. */
+@media (min-width: 981px){
+  .marketing-hero{
+    position:relative;
+    display:block;
+    height:clamp(520px,59.5vh,575px);
+    min-height:520px;
+    overflow:hidden;
+    isolation:isolate;
+    background:#eaf4ef;
+  }
+  .marketing-hero-media{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    min-height:0!important;
+    height:100%;
+    overflow:hidden;
+    background:#eaf4ef;
+  }
+  .marketing-hero-media::after{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    background:linear-gradient(90deg,
+      rgba(250,252,251,.995) 0%,
+      rgba(250,252,251,.985) 19%,
+      rgba(250,252,251,.93) 31%,
+      rgba(250,252,251,.68) 42%,
+      rgba(250,252,251,.26) 54%,
+      rgba(250,252,251,.05) 68%,
+      rgba(250,252,251,0) 82%);
+    content:'';
+    pointer-events:none;
+  }
+  .marketing-hero-media img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    max-width:none;
+    object-fit:cover;
+    object-position:58% 48%;
+    filter:none!important;
+    transform:none!important;
+    animation:none!important;
+  }
+  .marketing-hero-copy{
+    position:relative;
+    z-index:3;
+    width:min(690px,48vw);
+    height:100%;
+    padding:0 0 0 var(--site-pad);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .marketing-kicker{
+    margin-bottom:12px;
+    color:#147c5e;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.14em;
+  }
+  .marketing-kicker::after{display:none}
+  .marketing-hero h1{
+    font-size:clamp(46px,3.65vw,62px);
+    line-height:1.10;
+    letter-spacing:-.045em;
+  }
+  .marketing-hero-lead{
+    width:min(610px,94%);
+    max-width:none;
+    margin-top:18px;
+    font-size:15px;
+    line-height:1.78;
+  }
+  .marketing-icon-strip{
+    width:min(660px,100%);
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:0;
+    margin-top:24px;
+  }
+  .marketing-icon-item{
+    min-width:0;
+    gap:8px;
+    padding:0 12px;
+    border-left:1px solid rgba(20,120,93,.18);
+    background:transparent;
+  }
+  .marketing-icon-item:first-child{padding-left:0;border-left:0}
+  .marketing-icon-item .anticon{
+    width:29px;height:29px;
+    background:rgba(8,123,93,.07);
+    font-size:15px;
+  }
+  .marketing-icon-item strong{font-size:12px}
+  .marketing-icon-item{font-size:9px;line-height:1.4}
+  .marketing-section:first-of-type{padding-top:38px}
+}
+@media (min-width: 1500px){
+  .marketing-hero{height:575px;min-height:575px}
+}
+
+/* ===== v1.9.6 reference-locked hero system =====
+   Mirrors the preferred Core Functions composition across marketing pages. */
+@media (min-width: 981px){
+  .marketing-hero.reference-hero{
+    position:relative;
+    isolation:isolate;
+    display:block!important;
+    width:100%;
+    height:556px!important;
+    min-height:556px!important;
+    max-height:556px!important;
+    overflow:hidden;
+    background:#eaf4ef;
+  }
+  .reference-hero .marketing-hero-media{
+    position:absolute!important;
+    inset:0!important;
+    z-index:0!important;
+    width:100%!important;
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden;
+    background:#eaf4ef;
+  }
+  .reference-hero .marketing-hero-media picture{
+    position:absolute;inset:0;display:block;width:100%;height:100%;
+  }
+  .reference-hero .marketing-hero-media::after{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    content:'';
+    pointer-events:none;
+    background:linear-gradient(90deg,
+      rgba(250,253,251,.998) 0%,
+      rgba(250,253,251,.992) 14%,
+      rgba(250,253,251,.965) 23%,
+      rgba(250,253,251,.89) 31%,
+      rgba(250,253,251,.69) 39%,
+      rgba(250,253,251,.38) 47%,
+      rgba(250,253,251,.13) 56%,
+      rgba(250,253,251,.02) 66%,
+      rgba(250,253,251,0) 74%);
+  }
+  .reference-hero .marketing-hero-media img{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    max-width:none!important;
+    object-fit:cover!important;
+    object-position:57.5% 49%!important;
+    filter:none!important;
+    transform:none!important;
+    animation:none!important;
+    will-change:auto!important;
+    image-rendering:auto;
+  }
+  .reference-hero .marketing-hero-copy{
+    position:relative;
+    z-index:4;
+    width:700px;
+    height:100%;
+    margin-left:max(64px,calc((100% - 1452px)/2));
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    transform:translateY(-2px);
+  }
+  .reference-hero .marketing-kicker{
+    margin:0 0 15px;
+    color:#087b5d;
+    font-size:11px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:.14em;
+  }
+  .reference-hero .marketing-kicker::after{display:none}
+  .reference-hero h1{
+    margin:0;
+    color:#0e4537;
+    font-family:var(--font-sans)!important;
+    font-size:57px!important;
+    font-weight:760!important;
+    line-height:1.12!important;
+    letter-spacing:-.045em!important;
+  }
+  .reference-hero h1 em{color:#078664;font-weight:760}
+  .reference-hero .marketing-hero-lead{
+    width:585px;
+    max-width:none;
+    margin:21px 0 24px;
+    color:#506b62;
+    font-size:15px;
+    line-height:1.75;
+  }
+  .reference-hero .marketing-icon-strip{
+    width:640px;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:0;
+    margin:0;
+  }
+  .reference-hero .marketing-icon-item{
+    min-width:0;
+    min-height:58px;
+    padding:0 13px;
+    border-left:1px solid rgba(20,120,93,.22);
+    background:transparent;
+    display:grid;
+    grid-template-columns:28px 1fr;
+    align-items:center;
+    gap:7px;
+  }
+  .reference-hero .marketing-icon-item:first-child{padding-left:0;border-left:0}
+  .reference-hero .marketing-icon-item .anticon{
+    width:26px;height:26px;border-radius:8px;
+    background:rgba(8,123,93,.06);font-size:14px;
+  }
+  .reference-hero .marketing-icon-item span{font-size:9px;line-height:1.35;color:#758980}
+  .reference-hero .marketing-icon-item strong{font-size:12px;line-height:1.25;color:#164f3e;margin-bottom:4px}
+  .reference-hero + .marketing-section{padding-top:38px}
+}
+
+/* Keep photography crisp: no browser filter/compositing on real photos. */
+.marketing-page img,
+.intro-page img,
+.home-design-visual img{
+  image-rendering:auto;
+  filter:none!important;
+  backface-visibility:hidden;
+}

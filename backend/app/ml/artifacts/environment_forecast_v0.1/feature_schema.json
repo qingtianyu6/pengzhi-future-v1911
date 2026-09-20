@@ -1,0 +1,32 @@
+{
+  "input_window_hours": 24,
+  "sampling_interval": "1 hour",
+  "required_database_fields": [
+    "temperature",
+    "air_humidity"
+  ],
+  "training_features": [
+    "air_temperature_c",
+    "air_humidity_pct",
+    "hour_sin",
+    "hour_cos",
+    "day_of_year_sin",
+    "day_of_year_cos"
+  ],
+  "targets": [
+    {
+      "name": "air_temperature_c",
+      "unit": "degree_Celsius"
+    },
+    {
+      "name": "air_humidity_pct",
+      "unit": "percent"
+    },
+    {
+      "name": "light_intensity",
+      "unit": "micromole_per_m2_second"
+    }
+  ],
+  "light_history_policy": "Database light is klx and is intentionally not used as AGC PAR input; no guessed conversion.",
+  "missing_policy": "No imputation at inference; require 24 contiguous complete hourly temperature/humidity points."
+}

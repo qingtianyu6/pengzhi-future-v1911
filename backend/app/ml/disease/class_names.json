@@ -1,0 +1,12 @@
+{
+  "target_crop": "tomato",
+  "model_version": "tomato-disease-v0.1",
+  "classes": [
+    {"index": 0, "key": "healthy", "name_zh": "健康叶片"},
+    {"index": 1, "key": "early_blight", "name_zh": "早疫病"},
+    {"index": 2, "key": "late_blight", "name_zh": "晚疫病"},
+    {"index": 3, "key": "leaf_mold", "name_zh": "叶霉病"},
+    {"index": 4, "key": "septoria_leaf_spot", "name_zh": "斑枯病"},
+    {"index": 5, "key": "yellow_leaf_curl_virus", "name_zh": "番茄黄化曲叶病毒病"}
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "model_name": "environment-forecast-v0.2",
+  "model_version": "v0.2",
+  "forecast_service_status": "ready",
+  "model_status": "ready",
+  "ml_candidate_status": "ready",
+  "training_device": "cpu",
+  "random_seed": 20260822,
+  "dataset_name": "Autonomous Greenhouse Challenge, Second Edition (2019)",
+  "dataset_doi": "10.4121/uuid:88d22c60-21b3-4ea8-90db-20249a5be2a7",
+  "dataset_license": "CC0 1.0",
+  "crop": "cherry_tomato",
+  "region": "Bleiswijk, Netherlands",
+  "training_domain": "public_real_greenhouse_tomato",
+  "time_range": [
+    "2019-12-16 00:00:00",
+    "2020-05-30 00:00:00"
+  ],
+  "rolling_validation_folds": 3,
+  "greenhouse_holdouts": [
+    "AICU",
+    "Automatoes",
+    "Digilog",
+    "IUACAAS",
+    "Reference",
+    "TheAutomators"
+  ],
+  "samples": {
+    "deployment": 23550,
+    "par": 23550,
+    "research_rich": 23550
+  },
+  "ml_gate": {
+    "wins_at_least_2pct": 21,
+    "comparisons": 36,
+    "rmse_within_5pct_of_seasonal": 36,
+    "logo_min_mean_improvement_pct": 14.461482648393002
+  },
+  "created_at": "2026-08-29T05:42:08.447244+00:00",
+  "elapsed_seconds": 443.89466695600004,
+  "limitations": [
+    "V0.1 test and AGC4 external results were previously viewed; external benchmark is repeated, not unseen",
+    "Public Dutch cherry-tomato domain, not Shenxian melon calibration",
+    "Current service provides temperature/humidity only; PAR is null because SQLite light is klx",
+    "No direct hardware control or tomato risk rule"
+  ]
+}
