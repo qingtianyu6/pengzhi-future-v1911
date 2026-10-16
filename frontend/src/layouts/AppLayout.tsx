@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import {
+  AppstoreOutlined,
   BellOutlined,
   CheckCircleOutlined,
   DatabaseOutlined,
@@ -15,28 +16,33 @@ import {
   SettingOutlined,
   SunOutlined,
 } from '@ant-design/icons'
-import { Avatar, Badge, Button, Divider, Dropdown, Layout, Menu, Tooltip, type MenuProps } from 'antd'
+import { Avatar, Badge, Button, ConfigProvider, Divider, Drawer, Dropdown, Layout, Menu, Select, Switch, Tooltip, type MenuProps } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { FloatingAIAssistant } from '../components/FloatingAIAssistant'
+import { WorkbenchAssistantRail } from '../components/WorkbenchAssistantRail'
+import { isGuestMode } from '../api/guestMode'
 import { ServiceStatus } from '../components/ServiceStatus'
 import { getGreenhouses } from '../api/greenhouseApi'
+import { getWarningSummary } from '../api/warningApi'
 import type { Greenhouse } from '../types/greenhouse'
 import { useSystemStore } from '../store/system'
 import { getStoredUser, logoutAccount, type AuthUser } from '../api/authApi'
+import './workbench-refresh.css'
 
+const AccountSettings = lazy(() => import('../components/AccountSettings'))
 const { Header, Sider, Content } = Layout
 
 const navigationItems = [
-  { key: '/platform', icon: <HomeOutlined />, label: '种植总览' },
-  { key: '/platform/data', icon: <DatabaseOutlined />, label: '大棚管理' },
-  { key: '/platform/environment', icon: <LineChartOutlined />, label: '环境分析' },
-  { key: '/platform/diagnosis', icon: <FileSearchOutlined />, label: '病害检测' },
-  { key: '/platform/production', icon: <CheckCircleOutlined />, label: '农事任务' },
+  { key: '/platform', icon: <HomeOutlined />, label: '生产总览' },
+  { key: '/platform/environment', icon: <LineChartOutlined />, label: '监测与预警' },
+  { key: '/platform/diagnosis', icon: <FileSearchOutlined />, label: '病害诊断' },
+  { key: '/platform/production', icon: <CheckCircleOutlined />, label: '农事执行' },
+  { key: '/platform/3d', icon: <AppstoreOutlined />, label: '三维大棚' },
+  { key: '/platform/data', icon: <DatabaseOutlined />, label: '数据与管理' },
 ]
 
 const menuItems: MenuProps['items'] = [
-  { type: 'group', label: '工作台', children: [navigationItems[0]] },
-  { type: 'group', label: '生产管理', children: navigationItems.slice(1) },
+  { type: 'group', label: '日常生产', children: navigationItems.slice(0, 4) },
+  { type: 'group', label: '资产与场景', children: navigationItems.slice(4) },
 ]
 
 function formatHeaderTime(value: Date) {
@@ -47,16 +53,27 @@ function formatHeaderTime(value: Date) {
 }
 
 export function AppLayout() {
-  const [collapsed, setCollapsed] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 620px)').matches)
+  const [collapsed, setCollapsed] = useState(() => window.matchMedia('(max-width: 620px)').matches)
+  const [wide, setWide] = useState(() => window.matchMedia('(min-width: 1280px)').matches)
   const [workspaceGreenhouse, setWorkspaceGreenhouse] = useState<Greenhouse | null>(null)
   const [greenhouses, setGreenhouses] = useState<Greenhouse[]>([])
   const [now, setNow] = useState(() => new Date())
   const [authUser, setAuthUser] = useState<AuthUser | null>(() => getStoredUser())
+  const [warningCount, setWarningCount] = useState<number | null>(null)
+  const [accountSettingsOpen, setAccountSettingsOpen] = useState(false)
+  const [utilityPanel, setUtilityPanel] = useState<'help' | 'settings' | null>(null)
+  const [autoRefreshWarnings, setAutoRefreshWarnings] = useState(() => localStorage.getItem('pengzhi_auto_refresh_warnings') !== '0')
+  const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('pengzhi_reduced_motion') === '1')
   const navigate = useNavigate()
   const location = useLocation()
   const checkHealth = useSystemStore((state) => state.checkHealth)
   const systemStatus = useSystemStore((state) => state.status)
-  const currentPageName = navigationItems.find((item) => (
+  const is3DPage = location.pathname === '/platform/3d' || location.pathname.startsWith('/platform/3d/')
+  const isTimeMachine = location.pathname.startsWith('/platform/disease-time-machine')
+  const diseaseSection = isTimeMachine || location.pathname.startsWith('/platform/diagnosis')
+  const docked = wide && !is3DPage
+  const currentPageName = isTimeMachine ? '病害时间机' : navigationItems.find((item) => (
     item.key === '/platform'
       ? location.pathname === '/platform'
       : location.pathname === item.key || location.pathname.startsWith(`${item.key}/`)
@@ -66,37 +83,90 @@ export function AppLayout() {
 
   useEffect(() => { void checkHealth() }, [checkHealth])
   useEffect(() => {
+    let active = true
+    const refreshWarnings = () => {
+      void getWarningSummary()
+        .then((summary) => { if (active) setWarningCount(summary.open_total) })
+        .catch(() => { if (active) setWarningCount(null) })
+    }
+    refreshWarnings()
+    const timer = autoRefreshWarnings ? window.setInterval(refreshWarnings, 60000) : null
+    return () => { active = false; if (timer !== null) window.clearInterval(timer) }
+  }, [autoRefreshWarnings])
+  useEffect(() => { localStorage.setItem('pengzhi_auto_refresh_warnings', autoRefreshWarnings ? '1' : '0') }, [autoRefreshWarnings])
+  useEffect(() => {
+    localStorage.setItem('pengzhi_reduced_motion', reducedMotion ? '1' : '0')
+    document.documentElement.classList.toggle('pengzhi-reduced-motion', reducedMotion)
+    return () => document.documentElement.classList.remove('pengzhi-reduced-motion')
+  }, [reducedMotion])
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 620px)')
+    const syncSidebar = () => {
+      setIsMobile(media.matches)
+      setCollapsed(media.matches)
+    }
+    media.addEventListener('change', syncSidebar)
+    return () => media.removeEventListener('change', syncSidebar)
+  }, [])
+  useEffect(() => { if (isMobile) setCollapsed(true) }, [location.pathname, isMobile])
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 1280px)')
+    const update = () => setWide(media.matches)
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
+  useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 60000)
     return () => window.clearInterval(timer)
   }, [])
 
   useEffect(() => {
-    void getGreenhouses({ page: 1, page_size: 100, status: 'active' })
+    let active = true
+    const refresh = () => { void getGreenhouses({ page: 1, page_size: 100, status: 'active' })
       .then((result) => {
+        if (!active) return
         setGreenhouses(result.items)
         const selected = greenhouseFromUrl ? result.items.find((item) => item.id === greenhouseFromUrl) : undefined
-        setWorkspaceGreenhouse(selected ?? result.items[0] ?? null)
+        const workspace = selected ?? result.items[0] ?? null
+        setWorkspaceGreenhouse(workspace)
+        if (workspace && !selected) {
+          const params = new URLSearchParams(window.location.search)
+          params.set('greenhouse_id', String(workspace.id))
+          navigate(`${window.location.pathname}?${params.toString()}`, { replace: true })
+        }
       })
-      .catch(() => { setGreenhouses([]); setWorkspaceGreenhouse(null) })
-  }, [greenhouseFromUrl])
+      .catch(() => { if (active) { setGreenhouses([]); setWorkspaceGreenhouse(null) } }) }
+    refresh()
+    window.addEventListener('greenhouses-changed', refresh)
+    return () => { active = false; window.removeEventListener('greenhouses-changed', refresh) }
+  }, [greenhouseFromUrl, navigate])
 
   useEffect(() => { document.title = `${currentPageName} - 棚智未来` }, [currentPageName])
 
   const switchWorkspace = (greenhouse: Greenhouse) => {
     setWorkspaceGreenhouse(greenhouse)
     const params = new URLSearchParams(location.search)
+    params.delete('task_id'); params.delete('batch_id'); params.delete('create')
     params.set('greenhouse_id', String(greenhouse.id))
     navigate(`${location.pathname}?${params.toString()}`)
   }
 
+  const openWarnings = () => {
+    const params = new URLSearchParams({ tab: 'alerts' })
+    const greenhouseId = workspaceGreenhouse?.id ?? greenhouseFromUrl
+    if (greenhouseId) params.set('greenhouse_id', String(greenhouseId))
+    navigate(`/platform/environment?${params.toString()}`)
+  }
+
   const handleLogout = async () => {
-    await logoutAccount()
+    try { await logoutAccount() } catch { /* Local logout still completes if the service is unavailable. */ }
     setAuthUser(null)
     navigate('/login', { replace: true })
   }
 
   const accountMenu: MenuProps['items'] = authUser ? [
     { key: 'identity', disabled: true, label: authUser.phone },
+    { key: 'settings', icon: <SettingOutlined />, label: '账户与团队', onClick: () => setAccountSettingsOpen(true) },
     { type: 'divider' as const },
     { key: 'logout', icon: <LogoutOutlined />, danger: true, label: '退出登录', onClick: () => void handleLogout() },
   ] : [
@@ -119,10 +189,11 @@ export function AppLayout() {
     : location.pathname === item.key || location.pathname.startsWith(`${item.key}/`))?.key ?? location.pathname
 
   return (
-    <Layout className="app-shell commercial-app-shell exact-shell">
+    <ConfigProvider theme={{ token: { colorPrimary: '#24694e', colorInfo: '#24694e', colorText: '#223e34', colorTextSecondary: '#718176', colorBgLayout: '#f5f5ef', colorBorderSecondary: '#e3e8de', borderRadius: 10, borderRadiusLG: 15 } }}>
+    <Layout className={`app-shell commercial-app-shell exact-shell wb-shell${docked ? ' has-assistant-rail' : ''}`}>
       <Sider
         className={`app-sider commercial-sider exact-sider ${collapsed ? 'is-collapsed' : ''}`}
-        width={254}
+        width={208}
         collapsedWidth={72}
         collapsed={collapsed}
         trigger={null}
@@ -132,21 +203,11 @@ export function AppLayout() {
           {!collapsed && <div className="commercial-brand-copy exact-brand-copy"><strong>棚智未来</strong><span>Smart Greenhouse</span></div>}
         </div>
 
-        {!collapsed ? <Dropdown menu={{ items: workspaceMenu }} trigger={['click']} placement="bottomLeft" overlayClassName="workspace-dropdown">
-          <button className="workspace-switcher exact-workspace-switcher" type="button" aria-label="切换当前大棚">
-            <span>当前大棚</span>
-            <div className="workspace-switcher-main"><div><strong>{workspaceGreenhouse ? `${workspaceGreenhouse.name} · ${workspaceGreenhouse.code}` : '尚未选择大棚'}</strong><small>🌱 {workspaceGreenhouse?.active_batch?.variety ? `${workspaceGreenhouse.active_batch.variety} · 生长中` : '自动跟随当前工作区'}</small></div><DownOutlined /></div>
-          </button>
-        </Dropdown> : <Tooltip title={workspaceGreenhouse ? `${workspaceGreenhouse.name} · ${workspaceGreenhouse.code}` : '当前大棚'} placement="right">
-          <button className="workspace-switcher-collapsed" type="button" onClick={() => setCollapsed(false)}><span>{workspaceGreenhouse?.name?.slice(0, 1) || '棚'}</span></button>
-        </Tooltip>}
-
-        <Menu className="side-menu commercial-side-menu exact-side-menu" mode="inline" inlineCollapsed={collapsed} selectedKeys={[selectedKey]} items={menuItems} onClick={({ key }) => navigate(key)} />
+        <Menu className="side-menu commercial-side-menu exact-side-menu" mode="inline" inlineCollapsed={collapsed} selectedKeys={[isTimeMachine ? '/platform/diagnosis' : selectedKey]} items={menuItems} onClick={({ key }) => navigate(`${key}${workspaceGreenhouse ? `?greenhouse_id=${workspaceGreenhouse.id}` : ''}`)} />
 
         <div className={`sider-bottom exact-sider-bottom ${collapsed ? 'is-collapsed' : ''}`}>
-          {!collapsed && <div className="sider-system-state exact-system-state"><i className={systemStatus === 'online' ? 'online' : systemStatus === 'offline' ? 'offline' : ''} /><strong>{systemStatus === 'online' ? '系统正常' : systemStatus === 'offline' ? '服务异常' : '正在检查'}</strong></div>}
-          <Tooltip title="帮助中心" placement="right"><Button type="text" icon={<QuestionCircleOutlined />}>{!collapsed && '帮助中心'}</Button></Tooltip>
-          <Tooltip title="系统设置" placement="right"><Button type="text" icon={<SettingOutlined />}>{!collapsed && '系统设置'}</Button></Tooltip>
+          <Tooltip title="帮助中心" placement="right"><Button type="text" icon={<QuestionCircleOutlined />} onClick={() => setUtilityPanel('help')}>{!collapsed && '帮助中心'}</Button></Tooltip>
+          <Tooltip title="系统设置" placement="right"><Button type="text" icon={<SettingOutlined />} onClick={() => setUtilityPanel('settings')}>{!collapsed && '系统设置'}</Button></Tooltip>
           {!collapsed && <Divider className="exact-sider-divider" />}
           {!collapsed ? <Dropdown menu={{ items: accountMenu }} trigger={['click']} placement="topLeft"><button className="sider-account exact-sider-account" type="button"><Avatar size={38} className="sider-account-avatar">{authUser?.display_name.slice(0, 1) || '游'}</Avatar><span><strong>{authUser?.display_name || '游客'}</strong><small>{authUser?.organization || (authUser ? '平台用户' : '体验模式')}</small></span><DownOutlined className="sider-account-arrow" /></button></Dropdown>
           : <Tooltip title={authUser ? `${authUser.display_name} · ${authUser.organization || '平台用户'}` : '游客 · 体验模式'} placement="right"><Dropdown menu={{ items: accountMenu }} trigger={['click']} placement="topLeft"><button className="sider-account sider-account-collapsed" type="button"><Avatar size={34} className="sider-account-avatar">{authUser?.display_name.slice(0, 1) || '游'}</Avatar></button></Dropdown></Tooltip>}
@@ -154,22 +215,51 @@ export function AppLayout() {
         </div>
       </Sider>
 
+      {isMobile && !collapsed && <button className="mobile-sider-backdrop" type="button" aria-label="关闭导航" onClick={() => setCollapsed(true)} />}
+
       <Layout className="commercial-main-layout exact-main-layout">
         <Header className="app-header commercial-header exact-header">
           <Button type="text" className="sider-toggle exact-sider-toggle" aria-label={collapsed ? '展开侧边栏' : '收起侧边栏'} icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} onClick={() => setCollapsed((current) => !current)} />
-          <div className="header-context commercial-header-context exact-header-context"><span>大棚</span><b>/</b><span>{workspaceGreenhouse?.name || '小Q'}</span><b>/</b><strong>{currentPageName}</strong></div>
+          <Dropdown menu={{ items: workspaceMenu }} trigger={['click']} placement="bottomLeft" overlayClassName="workspace-dropdown">
+            <button type="button" className="wb-workspace-selector" aria-label="切换当前大棚"><strong>{workspaceGreenhouse?.name || '选择大棚'}</strong><small>{workspaceGreenhouse?.code}</small><DownOutlined /></button>
+          </Dropdown>
+          <div className="wb-current-page">{currentPageName}</div>
           <div className="header-spacer" />
-          <div className="exact-header-clock"><SunOutlined /><span>{formatHeaderTime(now)} 更新</span></div>
+          {isGuestMode() && <span className="wb-demo-label">游客体验 · 示例数据</span>}
+          <div className="exact-header-clock"><SunOutlined /><span>{formatHeaderTime(now)} 当前时间</span></div>
           <Divider type="vertical" className="header-divider exact-header-divider" />
           <ServiceStatus />
           <Divider type="vertical" className="header-divider exact-header-divider" />
-          <Badge count={3} size="small" offset={[-3, 4]}><Button type="text" className="header-icon-button exact-header-icon" icon={<BellOutlined />} /></Badge>
-          <Avatar className="header-avatar exact-header-avatar">{authUser?.display_name.slice(0, 1) || '游'}</Avatar>
-          <DownOutlined className="exact-header-chevron" />
+          <Tooltip title="查看环境预警"><Badge count={warningCount ?? 0} size="small" offset={[-3, 4]}><Button type="text" className="header-icon-button exact-header-icon" aria-label="查看环境预警" icon={<BellOutlined />} onClick={openWarnings} /></Badge></Tooltip>
+          <Dropdown menu={{ items: accountMenu }} trigger={['click']}><button className="header-account-button" type="button" aria-label="账户菜单"><Avatar className="header-avatar exact-header-avatar">{authUser?.display_name.slice(0, 1) || '游'}</Avatar><DownOutlined /></button></Dropdown>
         </Header>
-        <Content className="app-content commercial-content exact-content"><Outlet /></Content>
+        <Content className={`app-content commercial-content exact-content wb-content${is3DPage ? ' is-3d-content' : ''}`}>
+          <div className="wb-route-body">
+            {diseaseSection && <nav className="wb-section-tabs" aria-label="病害诊断功能">{[
+              { key: 'identify', name: '叶片识别', path: '/platform/diagnosis' },
+              { key: 'time', name: '病害时间机', path: '/platform/disease-time-machine' },
+              { key: 'history', name: '识别与复核记录', path: '/platform/diagnosis', view: 'history' },
+            ].map(item => <button key={item.key} type="button" aria-current={(isTimeMachine ? item.key === 'time' : new URLSearchParams(location.search).get('view') === 'history' ? item.key === 'history' : item.key === 'identify') ? 'page' : undefined} onClick={() => navigate(`${item.path}?${new URLSearchParams({ ...(greenhouseFromUrl ? { greenhouse_id: String(greenhouseFromUrl) } : {}), ...(item.view ? { view: item.view } : {}) })}`)}>{item.name}</button>)}</nav>}
+            <Outlet key={greenhouseFromUrl ?? 'empty'} />
+          </div>
+          <aside className={docked ? 'wb-assistant-rail' : 'wb-floating-host'} aria-label="棚小智与今日待办"><WorkbenchAssistantRail greenhouseId={greenhouseFromUrl ?? undefined} docked={docked} /></aside>
+        </Content>
       </Layout>
-      <FloatingAIAssistant />
+      {accountSettingsOpen && <Suspense fallback={null}><AccountSettings open={accountSettingsOpen} onClose={() => setAccountSettingsOpen(false)} /></Suspense>}
+      <Drawer title={utilityPanel === 'help' ? '帮助中心' : '系统设置'} open={utilityPanel !== null} onClose={() => setUtilityPanel(null)} width={360} destroyOnHidden>
+        {utilityPanel === 'help' ? <div className="app-utility-panel">
+          <section><h3>服务状态</h3><div className="app-utility-row"><span>{systemStatus === 'online' ? '连接正常' : systemStatus === 'offline' ? '服务未连接' : '正在检查'}</span><Button size="small" onClick={() => void checkHealth()}>重新检查</Button></div></section>
+          <section><h3>常用入口</h3><div className="app-utility-actions">
+            <Button block onClick={() => { setUtilityPanel(null); navigate('/platform/data') }}>管理大棚</Button>
+            <Button block onClick={() => { setUtilityPanel(null); openWarnings() }}>查看环境预警</Button>
+            <Button block onClick={() => { setUtilityPanel(null); navigate('/platform/production') }}>查看农事任务</Button>
+          </div></section>
+        </div> : utilityPanel === 'settings' ? <div className="app-utility-panel">
+          <section><h3>工作区</h3><Select className="app-utility-workspace" value={workspaceGreenhouse?.id} placeholder="选择当前大棚" options={greenhouses.map((item) => ({ value: item.id, label: `${item.name} · ${item.code}` }))} onChange={(id: number) => { const greenhouse = greenhouses.find((item) => item.id === id); if (greenhouse) switchWorkspace(greenhouse) }} /></section>
+          <section><h3>界面偏好</h3><div className="app-utility-row"><span>自动刷新预警</span><Switch checked={autoRefreshWarnings} onChange={setAutoRefreshWarnings} /></div><div className="app-utility-row"><span>减少界面动效</span><Switch checked={reducedMotion} onChange={setReducedMotion} /></div></section>
+        </div> : null}
+      </Drawer>
     </Layout>
+    </ConfigProvider>
   )
 }

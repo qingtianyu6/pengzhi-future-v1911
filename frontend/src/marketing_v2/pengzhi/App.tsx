@@ -150,7 +150,7 @@ export default function App() {
             </div>
             <div className="glass-card ai-card">
               <b>AI智能分析</b>
-              <div className="ai-row"><img src={resultLeaf} alt="AI识别叶片"/><div><strong>健康</strong><small>置信度：95%</small><i><em/></i></div></div>
+              <div className="ai-row"><img src={resultLeaf} alt="AI识别叶片"/><div><strong>健康</strong><small>界面示意</small><i><em/></i></div></div>
             </div>
             <div className="glass-card advice-card">
               <b><Icon name="spark" size={17}/>智能决策建议</b>
@@ -182,14 +182,14 @@ export default function App() {
         <section className="tech-section disease-section reveal">
           <div className="section-shell">
             <SectionTitle no="02" title="作物病害智能识别技术" tagline="让识别更准确"/>
-            <p className="section-desc disease-desc">基于计算机视觉与深度学习算法，识别多种常见作物病害，提供可信度与防治建议，帮助种植户及早发现、及时处理。</p>
+            <p className="section-desc disease-desc">当前模型用于番茄叶片，覆盖健康、早疫病、晚疫病、叶霉病、斑枯病和番茄黄化曲叶病毒病。模型仍在评估中，结果需人工复核。下方图片为巡检场景示意，不代表模型支持类别或准确率。</p>
             <div className="disease-layout">
               <div className="disease-options">
                 {diseaseItems.map((item, index) => <button className={selected === index ? 'disease-thumb active' : 'disease-thumb'} onClick={() => setSelected(index)} key={item.name}><img src={item.img} alt={item.name}/><span>{item.name}</span></button>)}
               </div>
               <article className="result-card">
-                <h3>识别结果</h3>
-                <div className="result-content"><img src={disease.img} alt={`${disease.name}识别结果`}/><div><div className="disease-name">{disease.name}<span className={disease.risk === '高风险' ? 'risk high' : 'risk'}>{disease.risk}</span></div><p>置信度：<b>{disease.confidence}%</b></p><strong>防治建议：</strong><ul>{disease.advice.map((a) => <li key={a}>{a}</li>)}</ul></div></div>
+                <h3>病害巡检示意</h3>
+                <div className="result-content"><img src={disease.img} alt={`${disease.name}识别结果`}/><div><div className="disease-name">{disease.name}<span className={disease.risk === '高风险' ? 'risk high' : 'risk'}>{disease.risk}</span></div><p>场景示意，非模型输出</p><strong>防治建议：</strong><ul>{disease.advice.map((a) => <li key={a}>{a}</li>)}</ul></div></div>
               </article>
               <HandNote className="disease-note">看得更清，<br/>才能防得更早</HandNote>
             </div>
@@ -244,7 +244,7 @@ export default function App() {
                 ].map(([icon,title,text], i) => <div className={`flow-step s${i+1}`} key={title}><span><Icon name={icon as IconName} size={22}/></span><strong>{title}</strong><small>{text}</small></div>)}
                 <span className="flow-arrow"><Icon name="arrow" size={28}/></span>
               </div>
-              <div className="growth-card"><div className="growth-label">随着数据积累<br/>识别准确率持续提升</div><b>92%</b><svg viewBox="0 0 340 170" className="growth-svg"><path className="trend-line" d="M20 135 C80 130 110 115 150 105 S230 78 315 28"/><path className="trend-arrow" d="m304 31 12-4-4 12"/><g className="bars">{[45,62,78,104,132,158].map((h,i) => <rect key={i} x={32+i*49} y={166-h} width="22" height={h} rx="6"/>)}</g></svg><div className="months">{['1月','2月','3月','4月','5月','6月'].map((m)=><span key={m}>{m}</span>)}</div></div>
+              <div className="growth-card"><div className="growth-label">模型持续评估<br/>结果由人工复核</div><b>评估中</b><svg viewBox="0 0 340 170" className="growth-svg"><path className="trend-line" d="M20 135 C80 130 110 115 150 105 S230 78 315 28"/><path className="trend-arrow" d="m304 31 12-4-4 12"/><g className="bars">{[45,62,78,104,132,158].map((h,i) => <rect key={i} x={32+i*49} y={166-h} width="22" height={h} rx="6"/>)}</g></svg><div className="months">{['1月','2月','3月','4月','5月','6月'].map((m)=><span key={m}>{m}</span>)}</div></div>
             </div>
           </div>
         </section>

@@ -26,9 +26,9 @@ class TaskEvent(Base):
     from_status: Mapped[str | None] = mapped_column(String(20))
     to_status: Mapped[str | None] = mapped_column(String(20))
     operator: Mapped[str] = mapped_column(String(60), nullable=False)
+    operator_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     note: Mapped[str | None] = mapped_column(Text)
     payload_json: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
 
     task = relationship("FarmTask", back_populates="events")
-

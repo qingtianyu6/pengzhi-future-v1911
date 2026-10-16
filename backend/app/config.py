@@ -13,7 +13,7 @@ load_dotenv(BACKEND_DIR / ".env")
 @dataclass(frozen=True)
 class Settings:
     app_name: str = "棚智未来后端服务"
-    app_version: str = "1.2.0"
+    app_version: str = "2.0.0"
     api_prefix: str = "/api"
     database_url: str = os.getenv(
         "DATABASE_URL", f"sqlite:///{BACKEND_DIR / 'data' / 'pengzhi_future.db'}"
@@ -29,6 +29,7 @@ class Settings:
     ai_base_url: str = os.getenv("AI_BASE_URL", "").strip()
     ai_model: str = os.getenv("AI_MODEL", "").strip()
     sensor_ingest_key: str = os.getenv("SENSOR_INGEST_KEY", "").strip()
+    agent_software_approval: bool = os.getenv("AGENT_SOFTWARE_APPROVAL", "false").lower() == "true"
 
 
 @lru_cache

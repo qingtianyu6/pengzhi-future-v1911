@@ -10,7 +10,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.user import AuthSession, User
-from app.schemas.auth import AuthData, LoginRequest, RegisterRequest, UserData
+from app.models.organization import Organization
+from app.schemas.auth import AuthData, LoginRequest, MemberCreateRequest, RegisterRequest, UserData
 from app.services.errors import ServiceError
 
 
@@ -55,10 +56,15 @@ def _issue_session(db: Session, user: User, remember_me: bool) -> AuthData:
 def register(db: Session, payload: RegisterRequest) -> AuthData:
     if db.scalar(select(User.id).where(User.phone == payload.phone)) is not None:
         raise ServiceError(409, "该手机号已注册，请直接登录")
+    organization = Organization(name=payload.organization or f"{payload.display_name}的空间")
+    db.add(organization)
+    db.flush()
     user = User(
         display_name=payload.display_name,
         phone=payload.phone,
         organization=payload.organization or None,
+        organization_id=organization.id,
+        role="admin",
         password_hash=_password_hash(payload.password),
     )
     db.add(user)
@@ -108,3 +114,21 @@ def logout(db: Session, authorization: str | None) -> None:
     _, session = authenticate(db, authorization)
     db.delete(session)
     db.commit()
+
+
+def create_member(db: Session, payload: MemberCreateRequest, organization_id: int) -> UserData:
+    if db.scalar(select(User.id).where(User.phone == payload.phone)) is not None:
+        raise ServiceError(409, "该手机号已注册")
+    organization = db.get(Organization, organization_id)
+    member = User(display_name=payload.display_name, phone=payload.phone,
+                  password_hash=_password_hash(payload.password),
+                  organization=organization.name if organization else None,
+                  organization_id=organization_id, role=payload.role)
+    db.add(member)
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise ServiceError(409, "该手机号已注册") from exc
+    db.refresh(member)
+    return UserData.model_validate(member)

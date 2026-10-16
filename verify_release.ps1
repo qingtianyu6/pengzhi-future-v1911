@@ -1,3 +1,4 @@
+﻿param([switch]$WithBrowser)
 $ErrorActionPreference = "Stop"
 
 $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -13,6 +14,7 @@ Write-Host "[1/4] 后端测试" -ForegroundColor Cyan
 Push-Location $BackendDir
 try {
     & $PythonExe -m pytest -q
+    if ($LASTEXITCODE -ne 0) { throw "后端测试失败，退出码：$LASTEXITCODE" }
 } finally {
     Pop-Location
 }
@@ -21,8 +23,10 @@ Write-Host "[2/4] 前端 Lint" -ForegroundColor Cyan
 Push-Location $FrontendDir
 try {
     npm.cmd run lint
+    if ($LASTEXITCODE -ne 0) { throw "前端 Lint 失败，退出码：$LASTEXITCODE" }
     Write-Host "[3/4] 前端生产构建" -ForegroundColor Cyan
     npm.cmd run build
+    if ($LASTEXITCODE -ne 0) { throw "前端生产构建失败，退出码：$LASTEXITCODE" }
 } finally {
     Pop-Location
 }
@@ -40,5 +44,10 @@ foreach ($RelativePath in $RequiredModels) {
     }
 }
 
-Write-Host "发布包验证通过。" -ForegroundColor Green
+if ($WithBrowser) {
+    Write-Host "浏览器操作检查（需要本机前端已运行）" -ForegroundColor Cyan
+    python (Join-Path $ProjectRoot "improvements_20261014\smoke_e2e.py")
+    if ($LASTEXITCODE -ne 0) { throw "浏览器操作检查失败" }
+}
 
+Write-Host "发布包验证通过。" -ForegroundColor Green

@@ -56,6 +56,7 @@ class DecisionRecommendationData(BaseModel):
     generated_at: datetime
     reviewed_at: datetime | None
     review_note: str | None
+    reviewed_by_user_id: int | None = None
     task_draft: TaskDraft | None = None
 
 

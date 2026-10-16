@@ -229,7 +229,7 @@ def test_model_artifact_checksums_are_unchanged() -> None:
 def test_health_and_model_status_expose_final_contract(client: TestClient) -> None:
     health = client.get("/api/health")
     assert health.status_code == 200
-    assert health.json()["data"]["version"] == "1.2.0"
+    assert health.json()["data"]["version"] == "2.0.0"
     model = client.get("/api/diseases/model-status").json()["data"]
     assert model["model_status"] == "under_evaluation"
     assert model["validation_status"] == "under_evaluation"

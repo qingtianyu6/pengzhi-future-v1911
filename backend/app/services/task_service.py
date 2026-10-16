@@ -14,7 +14,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 
 from app.config import BACKEND_DIR
-from app.models import (CropBatch, DecisionRecommendation, DiseaseRecognitionRecord, FarmTask,
+from app.models import (ActionCandidate, CropBatch, DecisionRecommendation, DiseaseRecognitionRecord, FarmTask,
+                        Intervention, OutcomeObservation,
                         Greenhouse, SensorData, TaskEvent, TaskFeedback, WarningEvent)
 from app.schemas.common import PaginatedData
 from app.schemas.task import (AddFeedbackRequest, AssignTaskRequest, CancelTaskRequest,
@@ -157,7 +158,8 @@ def _create(db: Session, *, greenhouse: Greenhouse, batch: CropBatch, source_typ
             title: str, description: str, action_type: str, priority: str,
             planned_start_at: datetime | None, due_at: datetime | None, created_by: str,
             safety_note: str, warning: WarningEvent | None = None,
-            disease: DiseaseRecognitionRecord | None = None) -> FarmTaskData:
+            disease: DiseaseRecognitionRecord | None = None,
+            commit: bool = True) -> FarmTaskData:
     _ensure_not_duplicate(db, source_type, source_id, action_type)
     task = FarmTask(
         task_code=_task_code(), greenhouse_id=greenhouse.id, crop_batch_id=batch.id,
@@ -176,12 +178,13 @@ def _create(db: Session, *, greenhouse: Greenhouse, batch: CropBatch, source_typ
     _event(db, task, "created", created_by, to_status="draft", note="任务草稿已创建",
            payload={"source_type": source_type, "source_id": source_id,
                     "requires_manual_confirmation": True})
-    try:
-        db.commit()
-    except IntegrityError as exc:
-        db.rollback()
-        raise ServiceError(409, "同一来源和动作已有活动任务") from exc
-    db.refresh(task)
+    if commit:
+        try:
+            db.commit()
+        except IntegrityError as exc:
+            db.rollback()
+            raise ServiceError(409, "同一来源和动作已有活动任务") from exc
+        db.refresh(task)
     return FarmTaskData.model_validate(task)
 
 
@@ -198,12 +201,17 @@ def create_manual_task(db: Session, payload: ManualTaskCreate) -> FarmTaskData:
     )
 
 
-def create_from_warning(db: Session, warning_id: int, payload: SourceTaskCreate) -> FarmTaskData:
+def create_from_warning(db: Session, warning_id: int, payload: SourceTaskCreate,
+                        *, commit: bool = True, candidate_id: int | None = None) -> FarmTaskData:
     warning = db.get(WarningEvent, warning_id)
     if warning is None:
         raise ServiceError(404, "预警不存在")
     if warning.status not in {"open", "acknowledged"}:
         raise ServiceError(422, "只有待处理或已确认预警可以生成任务草稿")
+    if warning.crop_type == "tomato" and warning.warning_type == "temperature_humidity_combination":
+        candidate = db.get(ActionCandidate, candidate_id) if candidate_id else None
+        if candidate is None or candidate.warning_event_id != warning.id:
+            raise ServiceError(409, "请先从高温高湿候选方案中人工选择并记录原因")
     recommendation = db.scalar(
         select(DecisionRecommendation).where(
             DecisionRecommendation.warning_event_id == warning.id,
@@ -223,7 +231,7 @@ def create_from_warning(db: Session, warning_id: int, payload: SourceTaskCreate)
         action_type=action, priority=payload.priority or recommendation.priority,
         planned_start_at=payload.planned_start_at, due_at=payload.due_at or recommendation.execute_before,
         created_by=payload.created_by, safety_note=recommendation.safety_note,
-        warning=warning,
+        warning=warning, commit=commit,
     )
 
 
@@ -382,8 +390,18 @@ def _transition(db: Session, task_id: int, payload: VersionedAction, *, expected
     previous = task.status
     task.status = target
     task.version += 1
+    intervention = db.scalar(select(Intervention).where(Intervention.task_id == task.id))
+    if target == "pending" and intervention is not None:
+        if intervention.status != "selected":
+            raise ServiceError(409, "处置状态与任务状态不一致")
+        intervention.status = "pending"
     if target == "in_progress":
         task.started_at = _now()
+        if intervention is not None:
+            if intervention.status != "pending":
+                raise ServiceError(409, "处置状态与任务状态不一致")
+            intervention.started_at = task.started_at
+            intervention.status = "in_progress"
     _event(db, task, event_type, payload.operator, from_status=previous, to_status=target,
            note=payload.note)
     db.commit()
@@ -501,6 +519,14 @@ def complete_task(db: Session, task_id: int, payload: CompleteTaskRequest) -> Fa
     previous = task.status
     task.status = "completed"
     task.completed_at = _now()
+    intervention = db.scalar(select(Intervention).where(Intervention.task_id == task.id))
+    if intervention is not None:
+        if intervention.status != "in_progress":
+            raise ServiceError(409, "处置状态与任务状态不一致")
+        intervention.finished_at = task.completed_at
+        observed_offsets = set(db.scalars(select(OutcomeObservation.offset_minutes).where(
+            OutcomeObservation.intervention_id == intervention.id)))
+        intervention.status = "completed" if {30, 60}.issubset(observed_offsets) else "awaiting_observation"
     task.result_snapshot_json = feedback.environment_snapshot_json
     task.version += 1
     _event(db, task, "feedback_added", payload.operator, from_status=previous, to_status=previous,
@@ -522,6 +548,14 @@ def cancel_task(db: Session, task_id: int, payload: CancelTaskRequest) -> FarmTa
     previous = task.status
     task.status = "cancelled"
     task.cancelled_at = _now()
+    intervention = db.scalar(select(Intervention).where(Intervention.task_id == task.id))
+    if intervention is not None:
+        if intervention.status not in {"pending", "in_progress"}:
+            raise ServiceError(409, "处置状态与任务状态不一致")
+        intervention.status = "cancelled"
+        for option in db.scalars(select(ActionCandidate).where(
+            ActionCandidate.warning_event_id == intervention.warning_event_id)):
+            option.status = "cancelled" if option.id == intervention.candidate_id else "available"
     task.cancellation_reason = payload.reason
     task.version += 1
     _event(db, task, "cancelled", payload.operator, from_status=previous, to_status="cancelled",
@@ -535,6 +569,8 @@ def reopen_task(db: Session, task_id: int, payload: ReopenTaskRequest) -> FarmTa
     _check_version(task, payload.version)
     if task.status != "completed":
         raise ServiceError(409, "只有已完成任务可以重新打开")
+    if db.scalar(select(Intervention.id).where(Intervention.task_id == task.id)) is not None:
+        raise ServiceError(409, "处置任务已形成复测时间轴，请创建新的跟进任务")
     task.status = "pending"
     task.completed_at = None
     task.version += 1
@@ -575,6 +611,8 @@ def get_task_trace(db: Session, task_id: int) -> TaskTraceData:
     warning = _source_warning_data(task.source_warning)
     recommendation = _source_recommendation_data(task.source_recommendation)
     disease = _source_disease_data(task.source_disease_record)
+    intervention = db.scalar(select(Intervention).where(Intervention.task_id == task.id))
+    chosen = db.get(ActionCandidate, intervention.candidate_id) if intervention else None
     nodes = [
         _trace_node("environment_record", sensor, title="环境记录",
                     status=(sensor or {}).get("quality_flag", "available") if sensor else "missing",
@@ -609,6 +647,20 @@ def get_task_trace(db: Session, task_id: int) -> TaskTraceData:
                       occurred_at=task.created_at, source=task.source_type, version=task.version,
                       summary=f"{task.task_code} · {task.action_type}"),
     ]
+    if snapshot.get("risk_event"):
+        nodes[3:3] = [
+            _trace_node("disease_risk_event", snapshot["risk_event"], title="病害规则风险事件", status="recorded", summary=snapshot["risk_event"].get("explanation")),
+            _trace_node("decision_plan", snapshot.get("decision_plan"), title="人工处置方案", status="selected", summary=(snapshot.get("decision_plan") or {}).get("plan_name")),
+        ]
+    if intervention and chosen:
+        nodes[6:6] = [
+            _trace_node("candidate_action", {"id": chosen.id, "created_at": chosen.created_at},
+                        title="候选方案人工选择", status="selected",
+                        summary=f"{chosen.title}；选择原因：{intervention.selection_reason}"),
+            _trace_node("intervention", {"id": intervention.id, "created_at": intervention.started_at or intervention.selected_at},
+                        title="处置执行", status=intervention.status,
+                        summary=f"动作：{intervention.action_type}"),
+        ]
     if task.feedbacks:
         nodes.extend(TaskTraceNode(
             type="execution_feedback", id=item.id, title="执行反馈", status=item.result_type,
@@ -617,5 +669,14 @@ def get_task_trace(db: Session, task_id: int) -> TaskTraceData:
         ) for item in task.feedbacks)
     else:
         nodes.append(_trace_node("execution_feedback", None, title="执行反馈"))
+    if intervention:
+        observations = db.scalars(select(OutcomeObservation).where(
+            OutcomeObservation.intervention_id == intervention.id).order_by(OutcomeObservation.offset_minutes))
+        nodes.extend(TaskTraceNode(
+            type="outcome_observation", id=item.id, title=f"{item.offset_minutes}分钟效果复测",
+            status="recorded" if item.sensor_record_id else "manual_only",
+            occurred_at=item.observed_at, source="sensor+manual" if item.sensor_record_id else "manual",
+            version=None,
+            summary=f"温度 {item.temperature if item.temperature is not None else '无数据'}℃，湿度 {item.humidity if item.humidity is not None else '无数据'}%；{item.manual_status or '无人工观察'}",
+        ) for item in observations)
     return TaskTraceData(task_id=task.id, nodes=nodes)
-

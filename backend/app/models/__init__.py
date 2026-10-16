@@ -9,8 +9,17 @@ from app.models.farm_task import FarmTask
 from app.models.task_event import TaskEvent
 from app.models.task_feedback import TaskFeedback
 from app.models.ai import AIConversation, AIMessage, AIToolCall
+from app.models.agent import AgentRun, AgentStep, AgentToolCall, AgentApproval, AgentRecheck
 from app.models.user import AuthSession, User
+from app.models.organization import Organization
+from app.models.intervention import ActionCandidate, Intervention, OutcomeObservation
+from app.models.forecast_audit import ForecastAudit
+from app.models.v2_decision import (DecisionPlan, GreenhouseProfile, RiskEvent, SimulationRecord,
+                                    TreatmentEvaluation)
 
 __all__ = ["AIConversation", "AIMessage", "AIToolCall", "CropBatch", "DecisionRecommendation",
            "DiseaseRecognitionRecord", "FarmTask", "Greenhouse", "SensorData", "TaskEvent",
-           "TaskFeedback", "WarningEvent", "AuthSession", "User"]
+           "TaskFeedback", "WarningEvent", "AuthSession", "User", "Organization",
+           "ActionCandidate", "Intervention", "OutcomeObservation", "ForecastAudit",
+           "DecisionPlan", "GreenhouseProfile", "RiskEvent", "SimulationRecord",
+           "TreatmentEvaluation"]

@@ -24,6 +24,7 @@ from app.schemas.ai import (
 )
 from app.schemas.common import ApiResponse
 from app.services import ai_service
+from app.services.access import CURRENT_USER, actor
 from app.services.errors import ServiceError
 from app.services.knowledge_service import knowledge_catalog, search_knowledge
 
@@ -145,22 +146,32 @@ async def chat(
     conversation_key = conversation.id
     user_message_key = user_message.id
     assistant_key = assistant.id
+    principal = actor()
 
     async def events() -> AsyncIterator[str]:
-        # 流式响应可能晚于请求依赖会话的生命周期，使用专属会话保证对象不脱管。
-        with SessionLocal() as stream_db:
-            stream_conversation = stream_db.get(AIConversation, conversation_key)
-            stream_user = stream_db.get(AIMessage, user_message_key)
-            stream_assistant = stream_db.get(AIMessage, assistant_key)
-            if stream_conversation is None or stream_user is None or stream_assistant is None:
-                yield _sse("error", {"message": "AI对话状态已失效，请刷新后重试"})
-                return
-            async for item in ai_service.stream_chat(
-                stream_db, stream_conversation, stream_user, stream_assistant
-            ):
-                if await request.is_disconnected():
-                    break
-                yield _sse(item["event"], item["data"])
+        token = CURRENT_USER.set(principal)
+        try:
+            # 流式响应晚于请求依赖的生命周期，需恢复认证上下文并使用独立数据库会话。
+            with SessionLocal() as stream_db:
+                stream_conversation = stream_db.get(AIConversation, conversation_key)
+                stream_user = stream_db.get(AIMessage, user_message_key)
+                stream_assistant = stream_db.get(AIMessage, assistant_key)
+                if stream_conversation is None or stream_user is None or stream_assistant is None:
+                    yield _sse("error", {"message": "AI对话状态已失效，请刷新后重试"})
+                    return
+                settings = ai_service.get_settings()
+                external = bool(settings.ai_api_key and settings.ai_base_url and settings.ai_model)
+                if external:
+                    from app.agent.chat import stream_agent_chat
+                    source = stream_agent_chat(stream_db, stream_conversation, stream_user, stream_assistant, require_confirmation=payload.require_confirmation)
+                else:
+                    source = ai_service.stream_chat(stream_db, stream_conversation, stream_user, stream_assistant)
+                async for item in source:
+                    if await request.is_disconnected():
+                        break
+                    yield _sse(item["event"], item["data"])
+        finally:
+            CURRENT_USER.reset(token)
 
     return StreamingResponse(
         events(),

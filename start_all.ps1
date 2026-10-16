@@ -48,7 +48,7 @@ $FrontendErr = Join-Path $RuntimeDir "frontend.err.log"
 
 $BackendProcess = Start-Process -FilePath $PythonExe `
     -ArgumentList @("-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8000") `
-    -WorkingDirectory $BackendDir -PassThru `
+    -WorkingDirectory $BackendDir -WindowStyle Hidden -PassThru `
     -RedirectStandardOutput $BackendOut -RedirectStandardError $BackendErr
 $BackendProcess.Id | Set-Content -Encoding ascii (Join-Path $RuntimeDir "backend.pid")
 
@@ -61,7 +61,7 @@ try {
 
 $FrontendProcess = Start-Process -FilePath "npm.cmd" `
     -ArgumentList @("run", "dev", "--", "--host", "127.0.0.1", "--port", "5173", "--strictPort") `
-    -WorkingDirectory $FrontendDir -PassThru `
+    -WorkingDirectory $FrontendDir -WindowStyle Hidden -PassThru `
     -RedirectStandardOutput $FrontendOut -RedirectStandardError $FrontendErr
 $FrontendProcess.Id | Set-Content -Encoding ascii (Join-Path $RuntimeDir "frontend.pid")
 

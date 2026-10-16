@@ -19,6 +19,7 @@ export interface AIConversation {
 export interface AIMessage {
   id: number
   conversation_id: number
+  pending_actions?: Array<{ greenhouse_id: number; title: string; description: string; action_type: string; priority: 'low' | 'medium' | 'high' | 'urgent'; due_at?: string | null }>
   role: 'user' | 'assistant'
   content: string
   status: 'streaming' | 'completed' | 'stopped' | 'error' | 'superseded'
@@ -28,12 +29,13 @@ export interface AIMessage {
 }
 
 export interface AIChatPayload {
+  require_confirmation?: boolean
   content?: string
   regenerate_message_id?: number
 }
 
 export interface AIStreamEvent {
-  event: 'meta' | 'tools' | 'delta' | 'done' | 'error'
+  event: 'meta' | 'tools' | 'delta' | 'done' | 'error' | 'run_started' | 'tool_started' | 'tool_finished' | 'approval_required' | 'recheck_scheduled' | 'run_resumed' | 'run_completed' | 'run_failed'
   data: Record<string, unknown>
 }
 

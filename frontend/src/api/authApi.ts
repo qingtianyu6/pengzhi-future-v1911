@@ -1,11 +1,15 @@
 import { apiClient } from './client'
 import type { ApiResponse } from '../types/api'
+import { leaveGuestMode } from './guestMode'
 
 export interface AuthUser {
   id: number
   display_name: string
   phone: string
   organization: string | null
+  organization_id: number | null
+  role: string
+  is_active?: boolean
   created_at: string
 }
 
@@ -20,6 +24,7 @@ const TOKEN_KEY = 'pengzhi_auth_token'
 const USER_KEY = 'pengzhi_auth_user'
 
 function persistAuth(data: AuthData) {
+  leaveGuestMode()
   localStorage.setItem(TOKEN_KEY, data.token)
   localStorage.setItem(USER_KEY, JSON.stringify(data.user))
 }
@@ -37,6 +42,12 @@ export function getStoredUser(): AuthUser | null {
 export function clearStoredAuth() {
   localStorage.removeItem(TOKEN_KEY)
   localStorage.removeItem(USER_KEY)
+  leaveGuestMode()
+}
+
+export async function changePassword(currentPassword: string, newPassword: string) {
+  const response = await apiClient.post<ApiResponse<AuthData>>('/auth/change-password', { current_password: currentPassword, new_password: newPassword })
+  persistAuth(response.data.data)
 }
 
 export async function registerAccount(payload: {

@@ -51,6 +51,7 @@ def _record_data(record: DiseaseRecognitionRecord) -> DiseaseRecordData:
                            else "not_validated"),
         local_calibration_status=record.local_calibration_status, review_status=record.review_status,
         reviewed_class=record.reviewed_class, review_note=record.review_note,
+        reviewed_by_user_id=record.reviewed_by_user_id,
         created_at=record.created_at, updated_at=record.updated_at,
     )
 

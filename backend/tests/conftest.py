@@ -17,6 +17,8 @@ from app.main import app  # noqa: E402
 
 @pytest.fixture(autouse=True)
 def isolated_database():
+    from app.api.auth import _attempts
+    _attempts.clear()
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     yield
@@ -25,6 +27,12 @@ def isolated_database():
 @pytest.fixture
 def client():
     with TestClient(app) as test_client:
+        registration = test_client.post("/api/auth/register", json={
+            "display_name": "测试管理员", "phone": "13900000000",
+            "organization": "测试组织", "password": "Greenhouse2026",
+        })
+        assert registration.status_code == 200
+        test_client.headers.update({"Authorization": f"Bearer {registration.json()['data']['token']}"})
         yield test_client
 
 

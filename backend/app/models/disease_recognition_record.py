@@ -38,6 +38,7 @@ class DiseaseRecognitionRecord(Base):
     review_status: Mapped[str] = mapped_column(String(20), nullable=False, default="unreviewed", index=True)
     reviewed_class: Mapped[str | None] = mapped_column(String(60))
     review_note: Mapped[str | None] = mapped_column(Text)
+    reviewed_by_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False)
 

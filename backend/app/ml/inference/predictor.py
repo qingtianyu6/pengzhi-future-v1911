@@ -12,6 +12,7 @@ import torch
 from app.ml.data.audit import PROJECT_ROOT
 from app.ml.data.preprocessing import SEQUENCE_FEATURES, TARGETS, add_cycles
 from app.ml.models.recurrent import RecurrentForecaster
+from app.ml.portable_scalers import load_scalers
 
 
 ARTIFACT_DIR = PROJECT_ROOT / "backend" / "app" / "ml" / "artifacts" / "environment_forecast_v0.1"
@@ -39,7 +40,7 @@ class EnvironmentPredictor:
             model_path = self.artifact_dir / "final_model.pt"
             if not model_path.exists(): self.status = "not_trained"; return
             self.bundle = torch.load(model_path, map_location="cpu", weights_only=False)
-            self.scalers = joblib.load(self.artifact_dir / "scaler.joblib")
+            self.scalers = load_scalers(self.artifact_dir / "scaler.joblib")
             self.model = RecurrentForecaster(self.bundle["input_size"], self.bundle["hidden_size"], self.bundle["forecast_horizon_hours"], self.bundle["target_count"], kind=model_type, dropout=0.0)
             self.model.load_state_dict(self.bundle["state_dict"]); self.model.eval()
         else:

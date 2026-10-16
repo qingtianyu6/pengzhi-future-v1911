@@ -1,0 +1,12 @@
+.v17-data-page .v17-connect-title-row p { font-size: 12px; white-space: normal; line-height: 1.5; }
+.v17-data-page .v17-dropzone strong { font-size: 14px; }
+.v17-data-page .v17-dropzone span { font-size: 11px; }
+.v17-data-page .v17-check-list li { font-size: 12px; line-height: 1.5; }
+.v17-data-page .v17-api-metrics span { font-size: 11px; }
+.v17-data-page .v17-api-metrics strong { font-size: 12px; overflow-wrap: anywhere; padding-right: 18px; }
+.v17-data-page .v17-api-links .ant-btn { font-size: 12px; }
+.v17-api-ok.is-unknown { background: #f2f4f3; color: #65756e; }
+.v17-api-ok.is-unknown i { background: #98a6a0; }
+.v17-ingest-guide { padding-left: 22px; line-height: 1.7; }
+.v17-ingest-guide li { margin: 0 0 12px; }
+.v17-ingest-guide code { overflow-wrap: anywhere; }

@@ -66,7 +66,7 @@ function Hero() {
         <p className="hero-desc">用数据感知作物，用智能守护生长。<br/>让农业管理更简单、更科学、更高效。</p>
         <div className="hero-cta">
           <button className="primary-pill" onClick={() => navigate('/login')}>进入管理平台 <ArrowRight size={18}/></button>
-          <button className="video-pill" onClick={() => navigate('/introduction')}><span className="play-circle"><Play size={15}/></span>观看介绍视频</button>
+          <button className="video-pill" onClick={() => navigate('/introduction')}><span className="play-circle"><Play size={15}/></span>了解平台</button>
         </div>
         <div className="hero-dots"><i/><i/><i/><span>科技赋能农业 智慧点亮未来</span></div>
       </div>
@@ -103,7 +103,7 @@ function CapabilityStrip() {
 const features = [
   { img: 'feature-monitor.jpg', title: '环境监测与预警', desc: '实时采集大棚内温湿度、光照、CO₂等关键数据，异常及时预警。', to: '/platform/environment' },
   { img: 'feature-dashboard.jpg', title: '数据分析与决策', desc: '基于历史与实时数据，提供生长趋势分析和智能决策建议。', to: '/platform/production' },
-  { img: 'feature-disease.jpg', title: '作物病害识别', desc: '融合图像识别与多源数据，精准识别病害类型并给出防治方案。', to: '/platform/diagnosis' },
+  { img: 'feature-disease.jpg', title: '番茄病害辅助识别', desc: '提供叶片候选结果，结合现场情况由人员复核。', to: '/platform/diagnosis' },
   { img: 'feature-tablet.jpg', title: '农事管理与执行', desc: '提供种植计划、灌溉施肥、采收管理等一站式农事服务。', to: '/platform/production?tab=tasks' },
 ]
 

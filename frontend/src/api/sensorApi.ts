@@ -19,7 +19,24 @@ export interface HistoryQuery {
 
 export async function getSensorHistory(query: HistoryQuery): Promise<SensorHistory> {
   const response = await apiClient.get<ApiResponse<SensorHistory>>('/sensors/history', { params: query })
-  return response.data.data
+  const first = response.data.data
+  if (first.total <= first.items.length || (query.page ?? 1) !== 1) return first
+  const remaining = Math.ceil(first.total / (query.page_size ?? 100))
+  const pages = await Promise.all(Array.from({ length: remaining - 1 }, (_, index) =>
+    apiClient.get<ApiResponse<SensorHistory>>('/sensors/history', { params: { ...query, page: index + 2 } })))
+  const complete = [...first.items, ...pages.flatMap(r => r.data.data.items)]
+  // Keep the full time coverage while limiting the number of points rendered.
+  if (complete.length <= 1000) return { ...first, items: complete }
+  const size = Math.ceil(complete.length / 1000)
+  const items = []
+  const metrics = ['temperature', 'air_humidity', 'soil_moisture', 'light_intensity', 'co2_concentration'] as const
+  for (let i = 0; i < complete.length; i += size) {
+    const bucket = complete.slice(i, i + size), item = { ...bucket[bucket.length - 1] }
+    for (const key of metrics) { const values = bucket.map(r => r[key]).filter((v): v is number => v !== null); item[key] = values.length ? values.reduce((a,b)=>a+b,0)/values.length : null }
+    if (bucket.some(r => r.quality_flag !== 'valid')) item.quality_flag = 'suspect'
+    items.push(item)
+  }
+  return { ...first, items, source_note: `完整覆盖${complete.length}条原始记录，按时间聚合显示${items.length}个点` }
 }
 
 

@@ -1,0 +1,115 @@
+{
+  "version": "disease-risk-rules-v2.0.0",
+  "default_crop_type": "melon",
+  "crops": {
+    "melon": {
+      "label": "莘县香瓜",
+      "growth_stages": {
+        "transplanting": "定植期",
+        "seedling_recovery": "缓苗期",
+        "vine_extension": "伸蔓期",
+        "flowering_fruiting": "开花坐果期",
+        "fruit_expansion": "膨果期",
+        "maturity": "成熟期"
+      }
+    }
+  },
+  "diseases": {
+    "gray_mold": {
+      "name": "灰霉病",
+      "suitable_temperature": [16, 24],
+      "high_risk_humidity": [82, 100],
+      "continuous_high_humidity_hours": 6,
+      "diurnal_temp_diff_sensitive": 8,
+      "weights": {
+        "temperature": 0.18,
+        "humidity": 0.24,
+        "high_humidity_duration": 0.20,
+        "diurnal_temp_diff": 0.12,
+        "environment_trend": 0.12,
+        "growth_stage": 0.08,
+        "history": 0.06
+      },
+      "stage_sensitivity": {
+        "transplanting": 0.8,
+        "seedling_recovery": 0.9,
+        "vine_extension": 1.0,
+        "flowering_fruiting": 1.25,
+        "fruit_expansion": 1.15,
+        "maturity": 1.05
+      }
+    },
+    "powdery_mildew": {
+      "name": "白粉病",
+      "suitable_temperature": [20, 28],
+      "high_risk_humidity": [60, 85],
+      "continuous_high_humidity_hours": 4,
+      "diurnal_temp_diff_sensitive": 10,
+      "weights": {
+        "temperature": 0.22,
+        "humidity": 0.18,
+        "high_humidity_duration": 0.12,
+        "diurnal_temp_diff": 0.12,
+        "environment_trend": 0.14,
+        "growth_stage": 0.12,
+        "history": 0.10
+      },
+      "stage_sensitivity": {
+        "transplanting": 0.7,
+        "seedling_recovery": 0.85,
+        "vine_extension": 1.15,
+        "flowering_fruiting": 1.25,
+        "fruit_expansion": 1.1,
+        "maturity": 1.0
+      }
+    },
+    "downy_mildew": {
+      "name": "霜霉病",
+      "suitable_temperature": [15, 23],
+      "high_risk_humidity": [80, 100],
+      "continuous_high_humidity_hours": 5,
+      "diurnal_temp_diff_sensitive": 7,
+      "weights": {
+        "temperature": 0.20,
+        "humidity": 0.24,
+        "high_humidity_duration": 0.18,
+        "diurnal_temp_diff": 0.12,
+        "environment_trend": 0.12,
+        "growth_stage": 0.08,
+        "history": 0.06
+      },
+      "stage_sensitivity": {
+        "transplanting": 0.75,
+        "seedling_recovery": 0.95,
+        "vine_extension": 1.1,
+        "flowering_fruiting": 1.2,
+        "fruit_expansion": 1.15,
+        "maturity": 1.0
+      }
+    },
+    "leaf_spot": {
+      "name": "叶斑病",
+      "suitable_temperature": [22, 30],
+      "high_risk_humidity": [75, 100],
+      "continuous_high_humidity_hours": 6,
+      "diurnal_temp_diff_sensitive": 9,
+      "weights": {
+        "temperature": 0.18,
+        "humidity": 0.20,
+        "high_humidity_duration": 0.16,
+        "diurnal_temp_diff": 0.10,
+        "environment_trend": 0.12,
+        "growth_stage": 0.10,
+        "history": 0.14
+      },
+      "stage_sensitivity": {
+        "transplanting": 0.75,
+        "seedling_recovery": 0.9,
+        "vine_extension": 1.05,
+        "flowering_fruiting": 1.1,
+        "fruit_expansion": 1.2,
+        "maturity": 1.15
+      }
+    }
+  }
+}

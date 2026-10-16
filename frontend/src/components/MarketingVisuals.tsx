@@ -67,5 +67,5 @@ export function MiniLayerStack() {
 }
 
 export function TrendMiniChart() {
-  return <div className="trend-mini-chart"><div className="trend-bars">{[32,42,48,62,76,92].map((h,i)=><i key={i} style={{height:`${h}%`}}/>)}</div><svg viewBox="0 0 300 120" preserveAspectRatio="none"><polyline points="5,94 55,82 105,86 155,58 205,48 295,18"/></svg><b>92%</b><small>识别准确率持续提升</small></div>
+  return <div className="trend-mini-chart"><div className="trend-bars">{[32,42,48,62,76,92].map((h,i)=><i key={i} style={{height:`${h}%`}}/>)}</div><svg viewBox="0 0 300 120" preserveAspectRatio="none"><polyline points="5,94 55,82 105,86 155,58 205,48 295,18"/></svg><b>人工复核</b><small>候选识别结果持续评估</small></div>
 }

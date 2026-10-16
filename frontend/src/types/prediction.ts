@@ -21,6 +21,23 @@ export interface PredictionPoint {
   units: Record<string, string>
 }
 
+export interface ModelHealthMetric {
+  sample_count: number
+  mae: number | null
+  rmse: number | null
+  bias: number | null
+  interval_coverage: number | null
+  drift_bias_shift: number | null
+}
+
+export interface ModelHealth {
+  status: 'no_verified_samples' | 'limited' | 'monitoring' | 'drift_attention'
+  model_version: string | null
+  temperature: ModelHealthMetric
+  humidity: ModelHealthMetric
+  explanation: string
+}
+
 export interface EnvironmentPrediction {
   greenhouse_id: number
   status: PredictionStatus
@@ -56,4 +73,5 @@ export interface EnvironmentPrediction {
   rules_status: 'tomato_rule_active' | 'rules_unavailable'
   warnings: string[]
   generated_at: string
+  health: ModelHealth | null
 }

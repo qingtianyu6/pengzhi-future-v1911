@@ -1,0 +1,9 @@
+export type CropType='tomato'|'cucumber'|'pepper'|'strawberry'|'lettuce'
+export type ZoneId='A'|'B'|'C'|'D'
+export type ZoneConfig={id:ZoneId;crop:CropType;bedCount:number}
+export type GreenhouseInteriorConfig={greenhouseId:string;layout:{mainAisleWidth:number;bedWidth:number;bedGap:number;edgeMargin:number;bedLengthMargin:number};zones:ZoneConfig[];devices:{sensorsPerZone:number;growLights:number;sprinklers:number;pumps:number}}
+export type BedLayout={id:string;zoneId:ZoneId;crop:CropType;position:[number,number,number];size:[number,number,number];xRange:[number,number];zRange:[number,number]}
+export type ZoneLayout={id:ZoneId;crop:CropType;bounds:[number,number,number,number];beds:string[];anchor:[number,number,number]}
+export type DeviceLayout={id:string;type:'sensor'|'light'|'sprinkler'|'pump';position:[number,number,number];zoneId?:ZoneId}
+export type Collider={id:string;min:[number,number,number];max:[number,number,number]}
+export type InteriorLayout={valid:boolean;errors:string[];beds:BedLayout[];zones:ZoneLayout[];devices:DeviceLayout[];colliders:Collider[];anchors:Record<string,[number,number,number]>}

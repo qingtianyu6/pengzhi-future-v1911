@@ -2,12 +2,16 @@ services:
   pengzhi-future:
     build: .
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     environment:
+      HOST: "0.0.0.0"
       PORT: "8000"
       AI_API_KEY: "${AI_API_KEY:-}"
       AI_BASE_URL: "${AI_BASE_URL:-}"
       AI_MODEL: "${AI_MODEL:-}"
+      SENSOR_INGEST_KEY: "${SENSOR_INGEST_KEY:-}"
+      AGENT_SOFTWARE_APPROVAL: "${AGENT_SOFTWARE_APPROVAL:-false}"
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost,http://127.0.0.1}"
     volumes:
       - pengzhi_data:/app/backend/data
       - pengzhi_uploads:/app/backend/uploads

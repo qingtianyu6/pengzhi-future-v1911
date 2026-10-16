@@ -33,3 +33,14 @@ Thumbs.db
 ~$*
 .idea/
 .vscode/
+
+# Local backups, downloaded references, and generated review artifacts
+*.zip
+*.mp4
+log/
+.workbuddy/
+audit_20261014/
+assistant_release_20261015/
+improvements_20261014/
+ui_review_20261015/
+knowledge_collection_20261015/已下载公开资料/

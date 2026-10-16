@@ -33,6 +33,7 @@ import {
   type ImportPreviewSample,
 } from '../../api/sensorApi'
 import type { Greenhouse } from '../../types/greenhouse'
+import { downloadEnvironmentTemplate } from './template'
 
 interface EnvironmentDataImportProps {
   open: boolean
@@ -125,16 +126,6 @@ export function EnvironmentDataImport({ open, defaultGreenhouseId, onClose, onIm
     }
   }
 
-  const downloadTemplate = () => {
-    const csv = 'recorded_at,temperature,air_humidity,soil_moisture,light_intensity,co2_concentration'
-    const url = URL.createObjectURL(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' }))
-    const anchor = document.createElement('a')
-    anchor.href = url
-    anchor.download = 'environment_data_template.csv'
-    anchor.click()
-    URL.revokeObjectURL(url)
-  }
-
   const columns = [
     { title: '时间', dataIndex: 'recorded_at', render: (value: string | null) => formatTime(value) },
     { title: '温度', dataIndex: 'temperature', render: (value: number | null) => value ?? '—' },
@@ -154,7 +145,7 @@ export function EnvironmentDataImport({ open, defaultGreenhouseId, onClose, onIm
       onCancel={onClose}
       destroyOnHidden
       footer={[
-        <Button key="template" icon={<DownloadOutlined />} onClick={downloadTemplate}>下载模板</Button>,
+        <Button key="template" icon={<DownloadOutlined />} onClick={downloadEnvironmentTemplate}>下载模板</Button>,
         <Button key="cancel" onClick={onClose}>取消</Button>,
         <Button key="check" icon={<FileSearchOutlined />} loading={checking} onClick={() => void runPreview()}>检查数据</Button>,
         <Button key="import" type="primary" icon={<CloudUploadOutlined />} disabled={!preview?.import_ready} loading={importing} onClick={() => void submit()}>确认导入</Button>,

@@ -10,8 +10,14 @@ import numpy as np
 import pandas as pd
 
 from app.ml.data.audit import PROJECT_ROOT
-from app.ml.v02.data import DEPLOY_FEATURES,DEPLOY_TARGETS,ForecastWindows,add_cycles
-from app.ml.v02.training import apply_ensemble,load_residual_rnn,predict_residual_rnn,predict_residual_xgb
+from app.ml.v02.data import DEPLOY_FEATURES,DEPLOY_TARGETS,ForecastWindows,add_cycles,xgb_matrix
+try:
+    from app.ml.v02.training import load_residual_rnn, predict_residual_rnn
+except ModuleNotFoundError as exc:  # Torch-backed RNNs are optional for API-only deployments.
+    _RNN_IMPORT_ERROR = exc
+    load_residual_rnn = predict_residual_rnn = None
+else:
+    _RNN_IMPORT_ERROR = None
 
 
 ARTIFACT_DIR=PROJECT_ROOT/"backend/app/ml/artifacts/environment_forecast_v0.2"
@@ -39,7 +45,23 @@ class EnvironmentPredictorV02:
         self.registry=json.loads(registry_path.read_text(encoding="utf-8"));self.metadata=json.loads(metadata_path.read_text(encoding="utf-8"));self.status=str(self.registry.get("forecast_service_status","not_trained"))
         model_path=self.artifact_dir/"deployment_compatible"/"residual_xgboost_final.joblib"
         if not model_path.exists():self.status="schema_mismatch";return
-        self.xgb_models=joblib.load(model_path)["models"]
+        portable_dir = model_path.parent / "portable_xgboost"
+        manifest_path = portable_dir / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+        if (manifest.get("format") == "xgboost-json" and manifest.get("source_size") == model_path.stat().st_size
+                and manifest.get("source_mtime") == model_path.stat().st_mtime and manifest.get("models")):
+            from xgboost import XGBRegressor
+            for filename in manifest["models"]:
+                model = XGBRegressor()
+                model.load_model(portable_dir / filename)
+                self.xgb_models.append(model)
+            self.metadata["artifact_format"] = "native_xgboost_json"
+        else:
+            self.xgb_models=joblib.load(model_path)["models"]
+            self.metadata["artifact_format"] = "legacy_joblib"
+        if _RNN_IMPORT_ERROR is not None or load_residual_rnn is None:
+            self.metadata["rnn_dependency_status"] = f"unavailable: {_RNN_IMPORT_ERROR}"
+            return
         for kind in ["gru","lstm"]:
             self.rnns[kind]=load_residual_rnn(self.artifact_dir/"deployment_compatible"/f"residual_{kind}_final.pt")
 
@@ -62,12 +84,17 @@ class EnvironmentPredictorV02:
         return ForecastWindows(history[DEPLOY_FEATURES].to_numpy(np.float32)[None,:,:],dummy,seasonal,np.array(["inference"]),np.array([end.to_datetime64()]),future_times.to_numpy(dtype="datetime64[ns]")[None,:],cycles[None,:,:],DEPLOY_FEATURES,DEPLOY_TARGETS)
 
     def _candidates(self,windows:ForecastWindows)->dict[str,np.ndarray]:
-        result={"seasonal_24":windows.seasonal,"seasonal_residual_xgboost":predict_residual_xgb(self.xgb_models,windows)}
-        for kind,(model,scalers) in self.rnns.items():result[f"seasonal_residual_{kind}"]=predict_residual_rnn(model,scalers,windows)
+        X,_=xgb_matrix(windows);residual=np.column_stack([model.predict(X) for model in self.xgb_models]).reshape(windows.y.shape)
+        result={"seasonal_24":windows.seasonal,"seasonal_residual_xgboost":windows.seasonal+residual}
+        if predict_residual_rnn is not None:
+            for kind,(model,scalers) in self.rnns.items():result[f"seasonal_residual_{kind}"]=predict_residual_rnn(model,scalers,windows)
         ensemble=self.registry["ensembles"]["deployment_compatible"];weights=np.asarray(ensemble["weights"],np.float32);ml=np.empty_like(windows.y)
         for h in range(6):
-            for ti,target in enumerate(DEPLOY_TARGETS):ml[:,h,ti]=result[ensemble["base_ml_methods"][target][f"h{h+1}"]][:,h,ti]
-        result["validation_weighted_ensemble"]=apply_ensemble(windows.seasonal,ml,weights);return result
+            for ti,target in enumerate(DEPLOY_TARGETS):
+                method=ensemble["base_ml_methods"][target][f"h{h+1}"]
+                if method not in result:method="seasonal_residual_xgboost"
+                ml[:,h,ti]=result[method][:,h,ti]
+        result["validation_weighted_ensemble"]=windows.seasonal*(1-weights[None,:,:])+ml*weights[None,:,:];return result
 
     def predict(self,records:list[dict[str,Any]],horizon_hours:int)->dict[str,Any]:
         if self.status!="ready":raise PredictionInputError(self.status,"V0.2预测注册表不可用")
@@ -75,7 +102,9 @@ class EnvironmentPredictorV02:
         for h in range(horizon_hours):
             values={};methods={};lower={};upper={}
             for ti,target in enumerate(DEPLOY_TARGETS):
-                method=self.registry["targets"][target][f"h{h+1}"]["method"];value=float(candidates[method][0,h,ti]);values[target]=value;methods[target]=method;q=quantiles[target][f"h{h+1}"];lower[target]=value+float(q["lower_residual"]);upper[target]=value+float(q["upper_residual"])
+                method=self.registry["targets"][target][f"h{h+1}"]["method"]
+                if method not in candidates:method="seasonal_residual_xgboost"
+                value=float(candidates[method][0,h,ti]);values[target]=value;methods[target]=method;q=quantiles[target][f"h{h+1}"];lower[target]=value+float(q["lower_residual"]);upper[target]=value+float(q["upper_residual"])
             method_text="; ".join(f"{target}={methods[target]}" for target in DEPLOY_TARGETS)
             points.append({"forecast_time":shanghai_naive_to_utc(windows.target_times[0,h]),"horizon":h+1,"temperature_c":values["air_temperature_c"],"air_humidity_pct":values["air_humidity_pct"],"par_umol_m2_s":None,"lower_bounds":lower,"upper_bounds":upper,"forecast_method":method_text,"method_version":"v0.2","methods":methods,"units":{"temperature_c":"degree_Celsius","air_humidity_pct":"percent","par_umol_m2_s":"micromole_per_m2_second"}})
         used=sorted({method for point in points for method in point["methods"].values()});return {"history":history,"source":source,"input_end_time":shanghai_naive_to_utc(history.timestamp.iloc[-1]),"predictions":points,"forecast_method":" + ".join(used),"forecast_method_labels":[METHOD_LABELS[method] for method in used]}

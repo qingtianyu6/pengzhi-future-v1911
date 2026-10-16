@@ -39,7 +39,7 @@ export function EnvironmentTrendChart({ data }: { data: SensorReading[] }) {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: data.map((item) => new Date(item.recorded_at).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false })),
+        data: data.map((item) => new Date(item.recorded_at).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false })),
         axisLine: { lineStyle: { color: '#d7e1dd' } },
         axisTick: { show: false },
         axisLabel: { color: '#7c8e87', fontSize: 9, margin: 10, interval: Math.max(0, Math.floor(data.length / 8) - 1) },
@@ -67,5 +67,5 @@ export function EnvironmentTrendChart({ data }: { data: SensorReading[] }) {
     return () => { observer.disconnect(); chart.dispose() }
   }, [data])
 
-  return <div ref={chartRef} className="environment-chart exact-environment-chart" aria-label="最近24小时温湿度与土壤湿度趋势图" />
+  return <div ref={chartRef} className="environment-chart exact-environment-chart" aria-label="所选24小时温湿度与土壤湿度趋势图" />
 }

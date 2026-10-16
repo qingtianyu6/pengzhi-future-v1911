@@ -1,0 +1,336 @@
+/* Layout and type rhythm for authenticated workbench pages only. */
+.exact-content:not(.is-3d-content) {
+  padding: 30px clamp(20px, 3vw, 48px) 56px !important;
+  background: #f5f8f7 !important;
+}
+
+.app-utility-panel { display: grid; gap: 24px; }
+.app-utility-panel section { display: grid; gap: 12px; }
+.app-utility-panel h3 { margin: 0; color: #214c3d; font-size: 14px; font-weight: 650; }
+.app-utility-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 42px; padding: 8px 0; border-bottom: 1px solid #edf1ee; color: #465a50; font-size: 13px; }
+.app-utility-actions { display: grid; gap: 8px; }
+.app-utility-actions .ant-btn { text-align: left; }
+.app-utility-workspace { width: 100%; }
+html.pengzhi-reduced-motion *, html.pengzhi-reduced-motion *::before, html.pengzhi-reduced-motion *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+body:has(.ant-drawer-open) .ai-floating-button { display: none !important; }
+
+.exact-content:not(.is-3d-content) > * {
+  width: min(100%, 1480px);
+}
+
+.exact-content:not(.is-3d-content) .business-page,
+.exact-content:not(.is-3d-content) .dashboard-page {
+  min-width: 0;
+}
+
+.exact-content:not(.is-3d-content) .commercial-page-intro,
+.exact-content:not(.is-3d-content) .v17-hero-line {
+  margin: 0 0 26px;
+  padding: 6px 0 2px;
+  min-height: auto;
+  background: transparent;
+}
+
+.exact-content:not(.is-3d-content) .v17-hero-line::after { display: none; }
+.exact-content:not(.is-3d-content) .commercial-page-intro h1,
+.exact-content:not(.is-3d-content) .v17-hero-line h1 {
+  font-size: 30px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+.exact-content:not(.is-3d-content) .commercial-page-intro p,
+.exact-content:not(.is-3d-content) .v17-hero-line p {
+  margin-top: 8px;
+  color: #63776e;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.exact-content:not(.is-3d-content) .eyebrow,
+.exact-content:not(.is-3d-content) .v17-kicker { font-size: 11px; letter-spacing: 0; }
+.exact-content:not(.is-3d-content) .saas-section-heading { margin-bottom: 18px; }
+.exact-content:not(.is-3d-content) .saas-section-heading h2,
+.exact-content:not(.is-3d-content) .v17-section-head h2 { font-size: 18px; line-height: 1.4; letter-spacing: 0; }
+.exact-content:not(.is-3d-content) .saas-section-heading p,
+.exact-content:not(.is-3d-content) .v17-section-head p { font-size: 12px; line-height: 1.55; }
+
+.exact-content:not(.is-3d-content) .ant-btn:not(.ant-btn-icon-only) { min-height: 36px; }
+.exact-content:not(.is-3d-content) .ant-input,
+.exact-content:not(.is-3d-content) .ant-select-selector { min-height: 36px; }
+.exact-content:not(.is-3d-content) .ant-table { font-size: 13px; }
+.exact-content:not(.is-3d-content) .ant-table-thead > tr > th {
+  padding: 13px 14px !important;
+  color: #52675d;
+  background: #f3f7f5 !important;
+  font-size: 12px !important;
+  font-weight: 700;
+}
+.exact-content:not(.is-3d-content) .ant-table-tbody > tr > td {
+  padding: 15px 14px !important;
+  line-height: 1.55;
+  vertical-align: middle;
+}
+.exact-content:not(.is-3d-content) .ant-table-wrapper { overflow-x: auto; }
+.exact-content:not(.is-3d-content) .ant-table-container { min-width: 650px; }
+
+/* Overview */
+.exact-content .exact-dashboard { max-width: 1480px; gap: 24px !important; }
+.exact-content .exact-welcome-banner { min-height: 154px; padding: 26px 32px; }
+.exact-content .exact-welcome-copy > span { font-size: 13px; }
+.exact-content .exact-welcome-title h1 { font-size: 29px; line-height: 1.3; letter-spacing: 0; }
+.exact-content .exact-welcome-copy p { font-size: 13px; line-height: 1.6; }
+.exact-content .exact-metric-grid,
+.exact-content .exact-primary-grid,
+.exact-content .exact-insight-grid { gap: 18px; }
+.exact-content .exact-metric-card { min-height: 148px; padding: 20px; }
+.exact-content .exact-metric-label { font-size: 12px; }
+.exact-content .exact-status-pill { font-size: 10px; }
+.exact-content .exact-metric-main { margin-top: 14px; margin-bottom: 9px; }
+.exact-content .exact-metric-main strong { font-size: 29px; }
+.exact-content .exact-metric-main small,
+.exact-content .exact-metric-bottom > span { font-size: 11px; }
+.exact-content .exact-chart-card,
+.exact-content .exact-todo-card { min-height: 350px; padding: 24px 26px; }
+.exact-content .exact-chart-card .exact-environment-chart { height: 260px; }
+.exact-content .exact-task-row { min-height: 76px; gap: 12px; }
+.exact-content .exact-task-copy strong { font-size: 13px; }
+.exact-content .exact-task-copy small,
+.exact-content .exact-task-row time { font-size: 11px; }
+.exact-content .exact-insight-card { min-height: 136px; padding: 20px; }
+.exact-content .exact-insight-card small { font-size: 12px; }
+.exact-content .exact-insight-card strong { margin-block: 6px; font-size: 18px; }
+.exact-content .exact-insight-card p { font-size: 11px; line-height: 1.5; }
+.exact-content .exact-activity-card { padding: 22px 26px; }
+.exact-content .exact-activity-row { min-height: 44px; }
+.exact-content .exact-activity-row time,
+.exact-content .exact-activity-row span { font-size: 11px; }
+.exact-content .exact-activity-row strong { font-size: 12px; }
+
+/* Data and farm work */
+.exact-content .v17-page { max-width: 1480px; }
+.exact-content .v17-connect-grid,
+.exact-content .v17-task-main-grid,
+.exact-content .v17-task-bottom-grid { gap: 22px; margin-bottom: 24px; }
+.exact-content .v17-connect-card { min-height: 350px; padding: 26px; }
+.exact-content .v17-connect-title-row p,
+.exact-content .v17-check-list li,
+.exact-content .v17-dropzone strong,
+.exact-content .v17-device-flow b,
+.exact-content .v17-api-metrics strong { font-size: 12px; }
+.exact-content .v17-dropzone span,
+.exact-content .v17-device-flow small,
+.exact-content .v17-api-metrics span { font-size: 11px; }
+.exact-content .v17-file-card-body { margin-top: 24px; }
+.exact-content .v17-dropzone { height: 150px; }
+.exact-content .v17-step-strip { min-height: 78px; height: auto; margin-bottom: 24px; }
+.exact-content .v17-step-strip b { font-size: 12px; }
+.exact-content .v17-step-strip small { font-size: 11px; }
+.exact-content .v17-asset-shell { padding: 24px; }
+.exact-content .v17-asset-head { margin-bottom: 22px; }
+.exact-content .v17-asset-head>div:first-child span,
+.exact-content .v17-greenhouse-summary small,
+.exact-content .v17-greenhouse-summary strong em { font-size: 11px; }
+.exact-content .v17-greenhouse-summary { gap: 14px; margin-bottom: 20px; }
+.exact-content .v17-greenhouse-summary > div { min-height: 92px; padding: 16px; }
+.exact-content .v17-gh-name strong,
+.exact-content .v17-sync-cell strong,
+.exact-content .v17-batch-cell strong { font-size: 12px; }
+.exact-content .v17-gh-name span,
+.exact-content .v17-sync-cell span,
+.exact-content .v17-batch-cell span,
+.exact-content .v17-device-status { font-size: 11px; }
+.exact-content .v17-task-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 24px; }
+.exact-content .v17-task-kpis > div { min-height: 105px; height: auto; padding: 18px; }
+.exact-content .v17-task-kpis small { font-size: 12px; }
+.exact-content .v17-task-kpis em { font-size: 11px; }
+.exact-content .v17-task-board-panel,
+.exact-content .v17-ai-task-panel,
+.exact-content .v17-task-bottom-grid > .v17-panel { padding: 24px; }
+.exact-content .v17-task-tabs { flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.exact-content .v17-task-tabs > button:not(.ant-btn) { height: 36px; padding-inline: 13px; font-size: 12px; }
+.exact-content .v17-task-title strong,
+.exact-content .v17-ai-rec-title strong,
+.exact-content .v17-related-block b { font-size: 12px; }
+.exact-content .v17-task-title span,
+.exact-content .v17-task-context,
+.exact-content .v17-plan-time,
+.exact-content .v17-assignee,
+.exact-content .v17-priority,
+.exact-content .v17-source-pill,
+.exact-content .v17-status-pill { font-size: 11px; }
+.exact-content .v17-ai-recommend-card { padding: 18px; }
+.exact-content .v17-ai-recommend-card > p,
+.exact-content .v17-ai-metrics span,
+.exact-content .v17-related-block small,
+.exact-content .v17-explain-item p,
+.exact-content .v17-path-panel small { font-size: 11px; }
+.exact-content .v17-ai-metrics strong,
+.exact-content .v17-explain-item b,
+.exact-content .v17-path-panel b { font-size: 12px; }
+.exact-content .v17-ai-actions .ant-btn { font-size: 12px; }
+
+/* Environment and diagnosis */
+.exact-content .v18-environment-page,
+.exact-content .v18-disease-page { max-width: 1480px; }
+.exact-content .analysis-control-strip { gap: 18px; padding: 20px 22px; margin-bottom: 24px; }
+.exact-content .analysis-control-strip .command-field > span { font-size: 12px; margin-bottom: 8px; }
+.exact-content .analysis-control-meta span { font-size: 11px; }
+.exact-content .analysis-control-meta b { font-size: 12px; }
+.exact-content .v18-environment-page .environment-overview-row,
+.exact-content .v18-environment-page .analysis-main-row,
+.exact-content .v18-environment-page .environment-bottom-row { row-gap: 22px !important; }
+.exact-content .current-environment-panel,
+.exact-content .environment-status-panel,
+.exact-content .commercial-trend-panel,
+.exact-content .environment-insight-panel,
+.exact-content .commercial-forecast-workspace,
+.exact-content .risk-event-panel { padding: 26px; }
+.exact-content .environment-primary-metrics span,
+.exact-content .environment-secondary-bars span,
+.exact-content .environment-status-head,
+.exact-content .environment-insight-list small { font-size: 12px; }
+.exact-content .environment-status-panel > p,
+.exact-content .analysis-summary-panel > p { font-size: 13px; }
+.exact-content .environment-status-metrics span,
+.exact-content .analysis-summary-numbers span { font-size: 11px; }
+.exact-content .environment-insight-list strong { font-size: 13px; }
+.exact-content .v18-environment-page .forecast-workspace,
+.exact-content .v18-environment-page .environment-bottom-row { margin-top: 24px; }
+.exact-content .disease-safety-note { padding: 16px 18px; margin-bottom: 22px; }
+.exact-content .disease-safety-note strong,
+.exact-content .disease-human-review strong,
+.exact-content .disease-top3 span,
+.exact-content .disease-top3 strong { font-size: 13px; }
+.exact-content .disease-safety-note small,
+.exact-content .disease-human-review small,
+.exact-content .commercial-disease-uploader .ant-upload-hint { font-size: 12px !important; }
+.exact-content .v18-disease-page .disease-upload-column,
+.exact-content .v18-disease-page .disease-result-column { padding: 28px; }
+.exact-content .commercial-disease-uploader { min-height: 325px !important; }
+.exact-content .disease-result-hero span,
+.exact-content .disease-result-hero small,
+.exact-content .result-label { font-size: 12px; }
+.exact-content .disease-top3 > div { padding: 14px; }
+.exact-content .v18-disease-page .disease-history-section { margin-top: 24px; padding: 24px; }
+
+/* Risk and decision time machine */
+.exact-content .disease-time-machine-page { padding: 0; }
+.exact-content .dtm-hero { padding: 22px 26px; }
+.exact-content .dtm-hero h1 { font-size: 28px; }
+.exact-content .dtm-hero p,
+.exact-content .dtm-focus p,
+.exact-content .dtm-plan p { font-size: 13px; line-height: 1.65; }
+.exact-content .dtm-focus,
+.exact-content .dtm-grid { margin-top: 24px; gap: 22px; }
+.exact-content .dtm-focus { padding: 26px; }
+.exact-content .dtm-risk-steps { grid-template-columns: repeat(4, minmax(76px, 1fr)); gap: 18px; }
+.exact-content .dtm-panel { padding: 24px; }
+.exact-content .dtm-panel,
+.exact-content .dtm-focus-main { min-width: 0; }
+.exact-content .dtm-plan-list { gap: 16px; }
+.exact-content .dtm-plan { padding: 20px; }
+
+@media (max-width: 1280px) {
+  .exact-content .exact-metric-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .exact-content .exact-primary-grid { grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr); }
+  .exact-content .v17-greenhouse-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1050px) {
+  .exact-content .exact-primary-grid,
+  .exact-content .exact-insight-grid,
+  .exact-content .v17-connect-grid,
+  .exact-content .v17-task-main-grid,
+  .exact-content .v17-task-bottom-grid,
+  .exact-content .dtm-grid { grid-template-columns: 1fr; }
+  .exact-content .v17-task-bottom-grid > .v17-panel:nth-child(2) { grid-column: auto; }
+  .exact-content .dtm-focus { grid-template-columns: 1fr; }
+  .exact-content .dtm-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 760px) {
+  .exact-content:not(.is-3d-content) { padding: 22px 16px 40px !important; }
+  .exact-content:not(.is-3d-content) .commercial-page-intro h1,
+  .exact-content:not(.is-3d-content) .v17-hero-line h1 { font-size: 25px; }
+  .exact-content .exact-dashboard { gap: 18px !important; }
+  .exact-content .exact-welcome-banner { grid-template-columns: 1fr; gap: 16px; padding: 22px; }
+  .exact-content .exact-model-button { justify-self: start; }
+  .exact-content .exact-metric-grid,
+  .exact-content .v17-task-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .exact-content .exact-metric-card { min-height: 132px; padding: 16px; }
+  .exact-content .exact-metric-card:last-child { grid-column: auto; }
+  .exact-content .exact-metric-main,
+  .exact-content .exact-metric-bottom { margin-left: 0; }
+  .exact-content .exact-chart-card,
+  .exact-content .exact-todo-card,
+  .exact-content .exact-activity-card,
+  .exact-content .v17-connect-card,
+  .exact-content .v17-asset-shell,
+  .exact-content .v17-task-board-panel,
+  .exact-content .v17-ai-task-panel,
+  .exact-content .v17-task-bottom-grid > .v17-panel,
+  .exact-content .current-environment-panel,
+  .exact-content .environment-status-panel,
+  .exact-content .commercial-trend-panel,
+  .exact-content .environment-insight-panel,
+  .exact-content .commercial-forecast-workspace,
+  .exact-content .risk-event-panel,
+  .exact-content .v18-disease-page .disease-upload-column,
+  .exact-content .v18-disease-page .disease-result-column,
+  .exact-content .dtm-panel { padding: 18px; }
+  .exact-content .exact-activity-row { grid-template-columns: 52px 9px minmax(0, 1fr); row-gap: 3px; }
+  .exact-content .exact-activity-row span { grid-column: 3; }
+  .exact-content .v17-step-strip { padding: 16px; }
+  .exact-content .v17-greenhouse-summary { grid-template-columns: 1fr; }
+  .exact-content .v17-file-card-body { grid-template-columns: 1fr; }
+  .exact-content .v18-disease-page .disease-ai-workspace { grid-template-columns: 1fr; }
+  .exact-content .dtm-hero { flex-direction: column; align-items: flex-start; }
+  .exact-content .dtm-risk-steps { grid-template-columns: repeat(2, minmax(76px, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .exact-content .exact-metric-grid,
+  .exact-content .v17-task-kpis { grid-template-columns: 1fr; }
+  .exact-content .exact-metric-card { min-height: 128px; }
+  .exact-content .exact-task-row { grid-template-columns: 8px 38px minmax(0, 1fr) 28px; }
+  .exact-content .exact-task-row time { grid-column: 3; grid-row: 2; }
+  .exact-content .exact-task-arrow { grid-column: 4; grid-row: 1 / 3; }
+  .exact-content .dtm-risk-steps { width: 100%; }
+}
+
+@media (max-width: 620px) {
+  .exact-sider.ant-layout-sider { transition: transform .2s ease; }
+  .exact-sider.is-collapsed { transform: translateX(-100%); }
+  .mobile-sider-backdrop {
+    position: fixed;
+    z-index: 9;
+    inset: 0;
+    border: 0;
+    background: rgba(12, 35, 28, .36);
+  }
+  .exact-header { padding: 0 12px !important; }
+  .exact-header-context { display: none !important; }
+  .exact-header-divider { display: none !important; }
+  .exact-content:not(.is-3d-content) { padding: 20px 16px 36px !important; }
+  .exact-content .v17-connect-grid { grid-template-columns: minmax(0, 1fr); }
+  .exact-content .v17-connect-card { min-width: 0; }
+  .exact-content .v17-connect-title-row {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 8px 12px;
+  }
+  .exact-content .v17-connect-title-row .v17-soft-badge,
+  .exact-content .v17-connect-title-row .v17-api-ok {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .exact-content .v17-file-card-body { min-width: 0; }
+  .exact-content .v17-device-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 10px;
+    overflow: visible;
+  }
+  .exact-content .v17-device-flow > .anticon { display: none; }
+  .exact-content .dtm-hero .ant-space,
+  .exact-content .dtm-hero .ant-space-item,
+  .exact-content .dtm-hero .ant-select,
+  .exact-content .dtm-hero .ant-btn { width: 100% !important; }
+}

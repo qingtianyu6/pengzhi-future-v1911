@@ -10,13 +10,14 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.algorithms.crop_rule_registry import get_operational_rule, get_rule_profile, thresholds_for
 from app.algorithms.warning_rules import WarningCandidate, build_forecast_warning_candidates, clamp_score, metric_risk, risk_level
-from app.models import CropBatch, DecisionRecommendation, Greenhouse, SensorData, WarningEvent
+from app.models import CropBatch, DecisionRecommendation, Greenhouse, Intervention, OutcomeObservation, SensorData, WarningEvent
 from app.schemas.warning import WarningDetailData, WarningEvaluationData, WarningEventData, WarningListData, WarningSummaryData
 from app.services.crop_batch_service import get_active_batch
 from app.services.decision_service import ensure_recommendation, to_recommendation_data
 from app.services.errors import ServiceError
 from app.services.forecast_risk_service import evaluate_future_risks, inspect_data_quality
 from app.services.risk_service import assess_current_risk
+from app.services.intervention_service import ensure_candidates
 from app.services.sensor_service import VALID_BUSINESS_SOURCES, to_sensor_view
 
 
@@ -92,6 +93,8 @@ def evaluate_greenhouse(db:Session,greenhouse_id:int,*,as_of:datetime|None=None)
     for candidate in candidates:
         record,result=_upsert(db,greenhouse_id,batch.id if batch else None,crop_type,crop_rule_version,crop_match_status,profile.expert_calibration_required if profile else True,candidate,latest_at=latest.recorded_at if latest else None,forecast_version=prediction.model_version,methods=methods,data_source=latest.source if latest else None);counts[result]+=1;records.append(record)
         if result!="skipped":recommendation,_=ensure_recommendation(db,record);recommendations.append(recommendation)
+        if result!="skipped" and record.crop_type=="tomato" and record.warning_type=="temperature_humidity_combination":
+            ensure_candidates(db,record.id,create=True)
     db.commit()
     for record in records:db.refresh(record)
     for item in recommendations:db.refresh(item)
@@ -122,6 +125,18 @@ def change_warning_status(db:Session,warning_id:int,target:str,operator:str,note
     record=db.scalar(select(WarningEvent).where(WarningEvent.id==warning_id,WarningEvent.data_source.in_(VALID_BUSINESS_SOURCES)))
     if record is None:raise ServiceError(404,"预警不存在")
     now=datetime.now(UTC)
+    if record.crop_type=="tomato" and record.warning_type=="temperature_humidity_combination" and target in {"resolved","dismissed"}:
+        interventions=list(db.scalars(select(Intervention).where(Intervention.warning_event_id==record.id).order_by(Intervention.id.desc())))
+        active=next((item for item in interventions if item.status!="cancelled"),None)
+        if target=="dismissed" and active is not None:
+            raise ServiceError(409,"已有处置记录，不能忽略该预警")
+        if target=="resolved":
+            if active is None or active.status!="completed":
+                raise ServiceError(409,"请完成处置任务及30/60分钟复测后再解除预警")
+            sixty=db.scalar(select(OutcomeObservation).where(
+                OutcomeObservation.intervention_id==active.id,OutcomeObservation.offset_minutes==60))
+            if sixty is None or sixty.risk_resolved is not True:
+                raise ServiceError(409,"60分钟复测尚未由人员确认风险解除")
     if target=="acknowledged":
         if record.status!="open":raise ServiceError(409,"只有待处理预警可以确认")
         record.status=target;record.acknowledged_at=now;record.acknowledged_by=operator;record.acknowledgement_note=note

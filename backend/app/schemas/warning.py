@@ -78,6 +78,7 @@ class WarningEventData(BaseModel):
     last_triggered_at: datetime
     acknowledged_at: datetime | None
     acknowledged_by: str | None
+    last_operator_user_id: int | None = None
     acknowledgement_note: str | None
     resolved_at: datetime | None
     resolved_by: str | None

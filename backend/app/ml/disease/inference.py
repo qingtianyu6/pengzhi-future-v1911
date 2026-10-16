@@ -6,19 +6,35 @@ from pathlib import Path
 from typing import Any
 
 from PIL import Image
-import torch
 
 from app.ml.disease.config import (ARTIFACT_DIR, CLASS_NAMES, CLASS_NAME_ZH, INPUT_SIZE,
                                    MODEL_VERSION, TARGET_CROP)
-from app.ml.disease.dataset import evaluation_transform
-from app.ml.disease.model import load_checkpoint
+try:
+    import torch
+    from app.ml.disease.dataset import evaluation_transform
+    from app.ml.disease.model import load_checkpoint
+except ModuleNotFoundError as exc:
+    torch = None
+    evaluation_transform = None
+    load_checkpoint = None
+    _ML_IMPORT_ERROR = exc
+else:
+    _ML_IMPORT_ERROR = None
+
+
+def _inference_mode():
+    if torch is None:
+        def decorator(function):
+            return function
+        return decorator
+    return torch.inference_mode()
 
 
 class DiseasePredictor:
     def __init__(self, artifact_dir: Path = ARTIFACT_DIR):
         self.artifact_dir = artifact_dir
         self.model_path = artifact_dir / "model.pt"
-        self.device = torch.device("cpu")
+        self.device = torch.device("cpu") if torch is not None else None
         self.model = None
         self.temperature = 1.0
         self.threshold = None
@@ -39,8 +55,13 @@ class DiseasePredictor:
         self.threshold = threshold.get("selected_threshold")
         if self.model_path.exists():
             self.model_status = "ready" if internal.get("deployment_gate", {}).get("passed") else "under_evaluation"
+        if _ML_IMPORT_ERROR is not None and self.model_path.exists():
+            self.model_status = "under_evaluation"
 
     def ensure_loaded(self) -> bool:
+        if _ML_IMPORT_ERROR is not None or load_checkpoint is None:
+            self.model_status = "dependency_unavailable"
+            return False
         if self.model is not None:
             return True
         if not self.model_path.exists():
@@ -56,9 +77,11 @@ class DiseasePredictor:
             self.model = None
             return False
 
-    @torch.inference_mode()
+    @_inference_mode()
     def predict(self, image: Image.Image) -> dict[str, Any]:
         if not self.ensure_loaded():
+            return {"recognition_status": "model_unavailable", "top3_predictions": []}
+        if torch is None or evaluation_transform is None:
             return {"recognition_status": "model_unavailable", "top3_predictions": []}
         tensor = evaluation_transform(INPUT_SIZE)(image.convert("RGB")).unsqueeze(0)
         probabilities = torch.softmax(self.model(tensor) / self.temperature, dim=1)[0]
@@ -80,7 +103,7 @@ class DiseasePredictor:
 
     def status(self) -> dict[str, Any]:
         return {
-            "service_status": "available" if self.model_path.exists() else "model_unavailable",
+            "service_status": "dependency_unavailable" if _ML_IMPORT_ERROR is not None else "available" if self.model_path.exists() else "model_unavailable",
             "model_status": self.model_status, "model_version": MODEL_VERSION, "target_crop": TARGET_CROP,
             "supported_classes": [{"key": key, "name": CLASS_NAME_ZH[key]} for key in CLASS_NAMES],
             "input_size": INPUT_SIZE, "confidence_threshold": self.threshold,

@@ -1,0 +1,19 @@
+{
+    default_sni 134.175.41.179
+}
+
+http://134.175.41.179 {
+    handle /.well-known/acme-challenge/* {
+        root * /var/lib/letsencrypt
+        file_server
+    }
+
+    handle {
+        redir https://134.175.41.179{uri} permanent
+    }
+}
+
+https://134.175.41.179 {
+    tls /etc/caddy/certs/fullchain.pem /etc/caddy/certs/privkey.pem
+    reverse_proxy 127.0.0.1:8000
+}

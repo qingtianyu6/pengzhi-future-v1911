@@ -19,7 +19,18 @@ FRONTEND_DIST = BACKEND_DIR.parent / "frontend" / "dist"
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     initialize_database()
-    yield
+    import asyncio
+    from app.agent.scheduler import worker, recover_interrupted
+    recover_interrupted()
+    scheduler_task = asyncio.create_task(worker())
+    try:
+        yield
+    finally:
+        scheduler_task.cancel()
+        try:
+            await scheduler_task
+        except asyncio.CancelledError:
+            pass
 
 
 app = FastAPI(
@@ -39,9 +50,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(api_router, prefix=settings.api_prefix)
-app.mount("/uploads", StaticFiles(directory=BACKEND_DIR / "uploads", check_dir=False), name="uploads")
 if (FRONTEND_DIST / "assets").is_dir():
     app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="frontend-assets")
+if (FRONTEND_DIST / "assistant").is_dir():
+    app.mount("/assistant", StaticFiles(directory=FRONTEND_DIST / "assistant"), name="assistant-assets")
 register_exception_handlers(app)
 
 

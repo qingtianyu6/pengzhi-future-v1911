@@ -217,6 +217,14 @@ def update_conversation(
 
 def delete_conversation(db: Session, conversation_id: int) -> None:
     item = _conversation(db, conversation_id)
+    from app.models import AgentRun, AgentApproval, AgentRecheck, AgentStep, AgentToolCall
+    runs = list(db.scalars(select(AgentRun).where(AgentRun.conversation_id == item.id)))
+    if any(run.status not in {"COMPLETED", "FAILED", "CANCELLED"} for run in runs):
+        raise ServiceError(409, "请先取消该对话的活动Agent运行")
+    run_ids = [run.id for run in runs]
+    for model in (AgentApproval, AgentRecheck, AgentStep, AgentToolCall):
+        db.execute(delete(model).where(model.run_id.in_(run_ids)))
+    db.execute(delete(AgentRun).where(AgentRun.id.in_(run_ids)))
     message_ids = select(AIMessage.id).where(AIMessage.conversation_id == item.id)
     db.execute(delete(AIToolCall).where(AIToolCall.conversation_id == item.id))
     db.execute(delete(AIMessage).where(AIMessage.id.in_(message_ids)))

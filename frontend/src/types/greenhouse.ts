@@ -13,6 +13,9 @@ export interface Greenhouse {
   created_at: string
   updated_at: string
   active_batch: CropBatch | null
+  last_recorded_at?: string | null
+  data_status?: string
+  device_count?: number
 }
 
 export interface GreenhouseInput {

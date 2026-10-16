@@ -59,3 +59,10 @@ export async function addTaskFeedback(id: number, input: AddFeedbackInput): Prom
   })
   return response.data.data
 }
+
+export async function openTaskAttachment(path: string) {
+  const response = await apiClient.get(`/files/${path}`, { responseType: 'blob' })
+  const url = URL.createObjectURL(response.data as Blob)
+  window.open(url, '_blank', 'noopener,noreferrer')
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000)
+}

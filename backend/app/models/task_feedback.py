@@ -23,6 +23,7 @@ class TaskFeedback(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     task_id: Mapped[int] = mapped_column(ForeignKey("farm_tasks.id"), nullable=False)
     operator: Mapped[str] = mapped_column(String(60), nullable=False)
+    operator_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     executed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     result_type: Mapped[str] = mapped_column(String(30), nullable=False)
     execution_note: Mapped[str] = mapped_column(Text, nullable=False)
@@ -37,4 +38,3 @@ class TaskFeedback(Base):
     )
 
     task = relationship("FarmTask", back_populates="feedbacks")
-

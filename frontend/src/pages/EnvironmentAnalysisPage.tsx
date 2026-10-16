@@ -1,3 +1,4 @@
+import { canManage } from '../utils/permissions'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   DatabaseOutlined,
@@ -39,6 +40,7 @@ import type { QualityFlag, SensorReading } from '../types/sensor'
 import type { RiskLevel, WarningEvent } from '../types/warning'
 import { SaasEmptyState, SectionHeading } from '../components/SaasUI'
 import { ProductSkeleton } from '../components/ProductStates'
+import { InterventionPanel } from '../components/InterventionPanel'
 
 const riskMeta: Record<RiskLevel | '数据不足', { label: string; color: string; className: string }> = {
   normal: { label: '正常', color: 'green', className: 'risk-normal' },
@@ -103,14 +105,15 @@ export default function EnvironmentAnalysisPage() {
   const [error, setError] = useState<string | null>(null)
   const [historyOpen, setHistoryOpen] = useState(false)
   const [messageApi, messageContext] = message.useMessage()
+  const activeTab = ['monitoring', 'history', 'prediction', 'alerts'].includes(searchParams.get('tab') || '') ? searchParams.get('tab')! : 'monitoring'
 
   const loadGreenhouses = useCallback(async () => {
     const result = await getGreenhouses({ page: 1, page_size: 100, status: 'active' })
     setGreenhouses(result.items)
     const fromUrl = Number(searchParams.get('greenhouse_id')) || null
     setGreenhouseId((current) => {
-      if (current && result.items.some((item) => item.id === current)) return current
       if (fromUrl && result.items.some((item) => item.id === fromUrl)) return fromUrl
+      if (current && result.items.some((item) => item.id === current)) return current
       return result.items[0]?.id ?? null
     })
   }, [searchParams])
@@ -128,16 +131,19 @@ export default function EnvironmentAnalysisPage() {
     const end = new Date()
     const start = new Date(end.getTime() - rangeHours * 60 * 60 * 1000)
     try {
-      const [summaryResult, historyResult, predictionResult, warningResult] = await Promise.all([
+      const results = await Promise.allSettled([
         getDashboardSummary(greenhouseId),
         getSensorHistory({ greenhouse_id: greenhouseId, start_time: start.toISOString(), end_time: end.toISOString(), page: 1, page_size: 1000 }),
         getEnvironmentPrediction(greenhouseId, 6),
         getWarnings({ greenhouse_id: greenhouseId, page: 1, page_size: 10 }),
       ])
-      setSummary(summaryResult)
-      setHistory(historyResult.items)
-      setPrediction(predictionResult)
-      setWarnings(warningResult.items)
+      const [summaryResult, historyResult, predictionResult, warningResult] = results
+      setSummary(summaryResult.status === 'fulfilled' ? summaryResult.value : null)
+      setHistory(historyResult.status === 'fulfilled' ? historyResult.value.items : [])
+      setPrediction(predictionResult.status === 'fulfilled' ? predictionResult.value : null)
+      setWarnings(warningResult.status === 'fulfilled' ? warningResult.value.items : [])
+      const failures = results.filter((r) => r.status === 'rejected')
+      if (failures.length) setError(failures.map(r => getApiErrorMessage(r.reason)).join('；'))
     } catch (requestError) {
       setError(getApiErrorMessage(requestError))
     } finally {
@@ -151,8 +157,6 @@ export default function EnvironmentAnalysisPage() {
   }, [loadGreenhouses])
 
   useEffect(() => { void loadWorkspace() }, [loadWorkspace])
-
-
   const createWarningTask = async (warning: WarningEvent) => {
     try {
       const task = await createTaskFromWarning(warning.id, '管理员')
@@ -207,16 +211,17 @@ export default function EnvironmentAnalysisPage() {
     <div className="page-intro workbench-intro commercial-page-intro">
       <div>
         <span className="eyebrow">ENVIRONMENT INTELLIGENCE</span>
-        <h1>环境分析</h1>
-        <p>把实时指标、趋势、数据健康和风险研判放在同一个环境工作台中。</p>
+        <h1>监测与预警</h1>
+        <p>及时发现环境变化，查看风险依据，再安排现场处理。</p>
       </div>
       <Space wrap>
         <Button icon={<FileTextOutlined />} onClick={() => setHistoryOpen(true)} disabled={!history.length}>数据明细</Button>
-        <Button icon={<ThunderboltOutlined />} loading={evaluating} onClick={() => void runRiskEvaluation()} disabled={!latest}>分析风险</Button>
+        <Button icon={<ThunderboltOutlined />} loading={evaluating} onClick={() => void runRiskEvaluation()} disabled={!latest || !canManage()}>分析风险</Button>
         <Button type="primary" icon={<ReloadOutlined />} onClick={() => void loadWorkspace()}>刷新</Button>
       </Space>
     </div>
 
+    <nav className="wb-section-tabs" aria-label="环境功能视图">{[{ key: 'monitoring', label: '实时监测' }, { key: 'history', label: '历史趋势' }, { key: 'prediction', label: '未来预测' }, { key: 'alerts', label: '预警与处置' }].map(tab => <button type="button" key={tab.key} aria-current={activeTab === tab.key ? 'page' : undefined} onClick={() => { const next = new URLSearchParams(searchParams); next.set('tab', tab.key); setSearchParams(next, { replace: true }) }}>{tab.label}</button>)}</nav>
     <div className="analysis-control-strip">
       <div className="command-field">
         <span>目标大棚</span>
@@ -245,9 +250,11 @@ export default function EnvironmentAnalysisPage() {
       </div>
     </div>
 
+    {summary?.data_updated_at && Date.now() - new Date(summary.data_updated_at).getTime() > 2 * 3600_000 && <Alert className="page-alert" type="warning" showIcon message="当前展示历史数据：最近采集已超过2小时，请检查设备同步。" />}
     {error && <Alert className="page-alert" type="error" showIcon message="环境分析数据加载失败" description={error} action={<Button size="small" onClick={() => void loadWorkspace()}>重试</Button>} />}
 
     {!greenhouseId ? <SaasEmptyState title="还没有运行中的大棚" description="创建大棚并接入环境数据后，这里会自动形成环境趋势、风险和预测。" /> : <Spin spinning={loading}>
+      {activeTab === 'monitoring' && <>
       <Row gutter={[20, 20]} className="environment-overview-row">
         <Col xs={24} xl={16}>
           <section className="current-environment-panel surface-card surface-card-major">
@@ -277,6 +284,8 @@ export default function EnvironmentAnalysisPage() {
         </Col>
       </Row>
 
+      </>}
+      {(activeTab === 'monitoring' || activeTab === 'history') && <>
       <Row gutter={[20, 20]} className="analysis-main-row commercial-analysis-main">
         <Col xs={24} xl={16}>
           <section className="surface-card surface-card-major chart-workspace-card commercial-trend-panel">
@@ -289,13 +298,15 @@ export default function EnvironmentAnalysisPage() {
             <SectionHeading title="今日洞察" description="从数据质量、风险和预测中提取重点" />
             <div className="environment-insight-list">
               <div><DatabaseOutlined /><span><strong>数据可用度 {history.length ? `${health.score}%` : '—'}</strong><small>完整性 {health.completeness}% · 连续性 {health.continuity}%</small></span></div>
-              <div><SafetyCertificateOutlined /><span><strong>{warnings.length ? `${warnings.filter((item) => ['open', 'acknowledged'].includes(item.status)).length} 个风险待处理` : '暂无风险事件'}</strong><small>{warnings[0]?.title ?? '当前环境状态稳定'}</small></span></div>
+              <div><SafetyCertificateOutlined /><span><strong>{warnings.length ? `${warnings.filter((item) => ['open', 'acknowledged'].includes(item.status)).length} 个风险待处理` : '暂无风险事件'}</strong><small>{warnings[0]?.title ?? (summary?.risk.data_status === 'sufficient' ? `当前风险判断：${summary.risk.level}` : '数据不足，尚不能判断环境是否稳定')}</small></span></div>
               <div><ThunderboltOutlined /><span><strong>{prediction?.status === 'ready' ? '预测服务已就绪' : '预测等待连续数据'}</strong><small>{prediction?.status === 'ready' ? `未来 ${prediction.horizon_hours} 小时趋势已生成` : '达到连续时长要求后自动开放预测'}</small></span></div>
             </div>
           </section>
         </Col>
       </Row>
 
+      </>}
+      {activeTab === 'prediction' && <>
       <section className="surface-card surface-card-major forecast-workspace commercial-forecast-workspace">
         <SectionHeading title="未来 1～6 小时趋势" description="用于提前安排通风、灌溉和巡棚优先级" action={prediction?.status === 'ready' ? <Tag color="green">预测服务正常</Tag> : <Tag>等待数据</Tag>} />
         {prediction?.status === 'ready' && prediction.predictions.length ? <>
@@ -315,9 +326,19 @@ export default function EnvironmentAnalysisPage() {
         </> : <SaasEmptyState title="还不能生成未来趋势" description={prediction?.status === 'insufficient_data' ? '至少需要连续24小时环境数据后才能生成预测。' : '暂无可用预测结果。'} />}
       </section>
 
+      <section className="surface-card" style={{ marginTop: 20, padding: 24 }}>
+        <SectionHeading title="本棚模型健康" description="用历史预测与到期实测比较，随新数据逐步更新" action={<Tag color={prediction?.health?.status === 'drift_attention' ? 'orange' : prediction?.health?.status === 'monitoring' ? 'green' : 'default'}>{prediction?.health?.status === 'monitoring' ? '持续监测' : prediction?.health?.status === 'drift_attention' ? '漂移需关注' : '样本不足'}</Tag>} />
+        <Row gutter={[16, 12]}>
+          {(['temperature', 'humidity'] as const).map((metric) => { const item = prediction?.health?.[metric]; return <Col xs={24} md={12} key={metric}><div className="case-evidence"><strong>{metric === 'temperature' ? '温度预测' : '湿度预测'} · 已验证 {item?.sample_count ?? 0} 次</strong><span>MAE {item?.mae ?? '—'} · RMSE {item?.rmse ?? '—'} · Bias {item?.bias ?? '—'}</span><small>区间覆盖率 {item?.interval_coverage === null || item?.interval_coverage === undefined ? '—' : `${(item.interval_coverage * 100).toFixed(1)}%`} · 偏差漂移 {item?.drift_bias_shift ?? '—'}</small></div></Col> })}
+        </Row>
+        <p style={{ color: '#68766e', marginBottom: 0 }}>{prediction?.health?.explanation ?? '生成预测并获得对应时刻的实测数据后，显示本棚指标。'}</p>
+      </section>
+
+      </>}
+      {activeTab === 'alerts' && <>
       <Row gutter={[20, 20]} className="environment-bottom-row">
         <Col xs={24} xl={15}>
-          <section className="surface-card risk-event-panel">
+          <section id="environment-alerts" className="surface-card risk-event-panel" style={{ scrollMarginTop: 88 }}>
             <SectionHeading title="风险事件" description="按照严重程度和最新触发时间排序" action={<Tag color={warnings.filter((item) => ['open', 'acknowledged'].includes(item.status)).length ? 'orange' : 'green'}>{warnings.filter((item) => ['open', 'acknowledged'].includes(item.status)).length} 个待处理</Tag>} />
             {warnings.length ? <div className="warning-list-compact">{warnings.slice(0, 6).map((item) => {
               const meta = riskMeta[item.severity]
@@ -343,6 +364,9 @@ export default function EnvironmentAnalysisPage() {
           </section>
         </Col>
       </Row>
+      <InterventionPanel key={greenhouseId} greenhouseId={greenhouseId} onOpenTasks={() => navigate(`/platform/production?greenhouse_id=${greenhouseId}`)} />
+
+      </>}
     </Spin>}
 
     <Drawer title="环境数据明细" width="min(1160px, 96vw)" open={historyOpen} onClose={() => setHistoryOpen(false)} destroyOnHidden>

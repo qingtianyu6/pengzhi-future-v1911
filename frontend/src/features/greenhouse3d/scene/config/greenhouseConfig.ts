@@ -1,0 +1,4 @@
+import type { GreenhouseInteriorConfig } from './types'
+export const configA:GreenhouseInteriorConfig={greenhouseId:'GH001',layout:{mainAisleWidth:1.4,bedWidth:1.0,bedGap:.38,edgeMargin:.75,bedLengthMargin:.85},zones:[{id:'A',crop:'tomato',bedCount:4},{id:'B',crop:'cucumber',bedCount:3},{id:'C',crop:'strawberry',bedCount:4},{id:'D',crop:'lettuce',bedCount:3}],devices:{sensorsPerZone:1,growLights:8,sprinklers:14,pumps:1}}
+export const configB:GreenhouseInteriorConfig={...configA,greenhouseId:'GH001-B',zones:[{id:'A',crop:'tomato',bedCount:2},{id:'B',crop:'tomato',bedCount:2},{id:'C',crop:'tomato',bedCount:2},{id:'D',crop:'tomato',bedCount:2}],devices:{...configA.devices,growLights:6,sprinklers:10}}
+export const configC:GreenhouseInteriorConfig={...configA,greenhouseId:'GH001-C',zones:[{id:'A',crop:'cucumber',bedCount:3},{id:'B',crop:'tomato',bedCount:3},{id:'C',crop:'cucumber',bedCount:3},{id:'D',crop:'tomato',bedCount:3}],devices:{...configA.devices,sprinklers:12}}

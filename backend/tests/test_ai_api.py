@@ -67,19 +67,20 @@ def test_ai_chat_stream_saves_messages_and_tool_evidence(
     ).json()["data"]["id"]
 
     class FakeProvider:
-        async def chat_stream(self, messages, tools):
+        async def chat(self, messages, tools):
             assert messages[0]["role"] == "system"
-            assert len([item for item in messages if item["role"] in {"user", "assistant"}]) <= 10
-            assert len(tools) == 5
-            yield "当前数据不足；"
-            yield "请人工确认现场情况。"
+            assert len(tools) >= 10
+            if messages[-1]["role"] != "tool":
+                from test_agent_runtime import calls
+                return calls(('get_current_environment', {'greenhouse_id': greenhouse_id}))
+            return {"role": "assistant", "content": "当前数据不足；请人工确认现场情况。"}
 
     monkeypatch.setattr(
         "app.services.ai_service.get_settings",
         lambda: SimpleNamespace(ai_api_key="test", ai_base_url="http://example.test", ai_model="fake-model"),
     )
     monkeypatch.setattr(
-        "app.services.ai_service.get_llm_provider", lambda: FakeProvider()
+        "app.agent.runtime.get_llm_provider", lambda: FakeProvider()
     )
     response = client.post(
         f"/api/v1/ai/conversations/{conversation_id}/chat",
@@ -99,7 +100,8 @@ def test_ai_chat_stream_saves_messages_and_tool_evidence(
 
     with SessionLocal() as db:
         assert db.scalar(select(func.count()).select_from(AIMessage)) == 2
-        assert db.scalar(select(func.count()).select_from(AIToolCall)) == 4
+        from app.models import AgentToolCall
+        assert db.scalar(select(func.count()).select_from(AgentToolCall)) == 1
 
 
 def test_ai_local_copilot_can_answer_without_external_key(
@@ -122,7 +124,7 @@ def test_ai_local_copilot_can_answer_without_external_key(
     assert "暂无可用环境数据" in response.text
 
 
-def test_ai_falls_back_to_local_knowledge_when_external_model_fails(
+def test_agent_reports_failure_when_external_model_fails(
     client: TestClient, monkeypatch
 ) -> None:
     conversation_id = client.post(
@@ -130,9 +132,7 @@ def test_ai_falls_back_to_local_knowledge_when_external_model_fails(
     ).json()["data"]["id"]
 
     class FailingProvider:
-        async def chat_stream(self, messages, tools):
-            if False:
-                yield ""
+        async def chat(self, messages, tools):
             raise LLMProviderError("upstream unavailable")
 
     monkeypatch.setattr(
@@ -144,7 +144,7 @@ def test_ai_falls_back_to_local_knowledge_when_external_model_fails(
         ),
     )
     monkeypatch.setattr(
-        "app.services.ai_service.get_llm_provider", lambda: FailingProvider()
+        "app.agent.runtime.get_llm_provider", lambda: FailingProvider()
     )
 
     response = client.post(
@@ -153,10 +153,10 @@ def test_ai_falls_back_to_local_knowledge_when_external_model_fails(
     )
 
     assert response.status_code == 200
-    assert '"fallback": "local_knowledge"' in response.text
-    assert "模型服务暂时不可用" not in response.text
+    assert 'event: run_failed' in response.text
+    assert 'upstream unavailable' in response.text
     messages = client.get(
         f"/api/v1/ai/conversations/{conversation_id}/messages"
     ).json()["data"]
-    assert messages[-1]["status"] == "completed"
+    assert messages[-1]["status"] == "error"
     assert messages[-1]["content"]

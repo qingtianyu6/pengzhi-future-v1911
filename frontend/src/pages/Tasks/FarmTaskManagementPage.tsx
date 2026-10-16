@@ -1,5 +1,9 @@
+import { getStoredUser } from '../../api/authApi'
+import { EvidenceSummary } from '../../components/EvidenceSummary'
+import { canOperate } from '../../utils/permissions'
+import { label } from '../../utils/labels'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { LinkOutlined, PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import { Alert, Avatar, Button, Card, Col, Descriptions, Drawer, Empty, Form, Input, List, Modal, Row, Select, Space, Table, Tag, Timeline, Upload, message } from 'antd'
 import type { UploadFile } from 'antd/es/upload/interface'
 import type { ColumnsType } from 'antd/es/table'
@@ -7,11 +11,12 @@ import { useSearchParams } from 'react-router-dom'
 import { getCropBatches } from '../../api/cropBatchApi'
 import { getApiErrorMessage } from '../../api/client'
 import { getGreenhouses } from '../../api/greenhouseApi'
-import { addTaskFeedback, assignTask, cancelTask, completeTask, createTask, getTask, getTaskSummary, getTaskTrace, getTasks, reopenTask, startTask, submitTask } from '../../api/taskApi'
+import { addTaskFeedback, assignTask, cancelTask, completeTask, createTask, getTask, getTaskSummary, getTaskTrace, getTasks, openTaskAttachment, reopenTask, startTask, submitTask } from '../../api/taskApi'
 import type { CropBatch } from '../../types/cropBatch'
 import type { Greenhouse } from '../../types/greenhouse'
 import type { FarmTask, FeedbackResult, ManualTaskInput, TaskDetail, TaskPriority, TaskStatus, TaskSummary, TaskTrace } from '../../types/task'
 import '../PlatformV17.css'
+import './task-function-refresh.css'
 
 const statusMeta: Record<TaskStatus, { label: string; color: string }> = {
   draft: { label: '待提交', color: 'default' }, pending: { label: '待执行', color: 'blue' },
@@ -37,7 +42,6 @@ const resultOptions: Array<{ value: FeedbackResult; label: string }> = [
 function time(value: string | null): string {
   return value ? new Date(value).toLocaleString('zh-CN', { hour12: false }) : '—'
 }
-function compact(value: unknown): string { return JSON.stringify(value ?? {}, null, 2) }
 
 type ActionKind = 'assign' | 'complete' | 'cancel' | 'feedback'
 interface ActionValues {
@@ -55,6 +59,7 @@ export default function FarmTaskManagementPage() {
   const [priority, setPriority] = useState<TaskPriority | undefined>()
   const [sourceType, setSourceType] = useState<string | undefined>()
   const [assignee, setAssignee] = useState('')
+  const [assigneeInput, setAssigneeInput] = useState('')
   const [startTime, setStartTime] = useState(''); const [endTime, setEndTime] = useState('')
   const [items, setItems] = useState<FarmTask[]>([]); const [total, setTotal] = useState(0); const [page, setPage] = useState(1)
   const [summary, setSummary] = useState<TaskSummary | null>(null)
@@ -72,8 +77,8 @@ export default function FarmTaskManagementPage() {
       const [list, counts] = await Promise.all([
         getTasks({ greenhouse_id: greenhouseId, crop_batch_id: batchId, status, priority,
           source_type: sourceType, assignee_name: assignee || undefined,
-          start_time: startTime ? new Date(startTime).toISOString() : undefined,
-          end_time: endTime && (!startTime || endTime >= startTime) ? new Date(endTime).toISOString() : undefined,
+          start_time: startTime ? new Date(`${startTime}T00:00:00.000`).toISOString() : undefined,
+          end_time: endTime && (!startTime || endTime >= startTime) ? new Date(`${endTime}T23:59:59.999`).toISOString() : undefined,
           page, page_size: 10 }),
         getTaskSummary(greenhouseId),
       ])
@@ -94,6 +99,11 @@ export default function FarmTaskManagementPage() {
   }, [greenhouseId, messageApi])
   useEffect(() => { void load() }, [load])
   useEffect(() => {
+    const refresh = () => { void load() }
+    window.addEventListener('guest-tasks-changed', refresh)
+    return () => window.removeEventListener('guest-tasks-changed', refresh)
+  }, [load])
+  useEffect(() => {
     if (searchParams.get('create') !== '1' || createOpen || !greenhouses.length) return
     const greenhouse = Number(searchParams.get('greenhouse_id')) || greenhouseId || greenhouses[0]?.id
     const batch = Number(searchParams.get('batch_id')) || batchId || batches.find((item) => item.status === 'growing')?.id
@@ -104,7 +114,7 @@ export default function FarmTaskManagementPage() {
       description: searchParams.get('description') || '来自跨模块联动的人工确认任务。',
       action_type: searchParams.get('action_type') || 'field_inspection',
       priority: (searchParams.get('priority') as TaskPriority) || 'high',
-      created_by: '管理员',
+      created_by: getStoredUser()?.display_name || '游客',
     })
     setCreateOpen(true)
     const next = new URLSearchParams(searchParams)
@@ -186,16 +196,20 @@ export default function FarmTaskManagementPage() {
     { title: '负责人', dataIndex: 'assignee_name', width: 126, render: (value: string | null) => <span className="v17-assignee"><Avatar size={26}>{(value ?? '待').slice(0, 1)}</Avatar>{value ?? '待分配'}</span> },
     { title: '计划时间', key: 'time', width: 150, render: (_, row) => <span className="v17-plan-time">{time(row.due_at)}</span> },
     { title: '状态', dataIndex: 'status', width: 104, render: (value: TaskStatus) => <span className={`v17-status-pill status-${value}`}>{statusMeta[value].label}</span> },
-    { title: '操作', key: 'action', width: 64, render: (_, row) => <Button type="text" onClick={() => void openDetail(row.id)}>•••</Button> },
+    { title: '操作', fixed: 'right', key: 'action', width: 64, render: (_, row) => <Button type="text" onClick={() => void openDetail(row.id)}>详情</Button> },
   ], [batches, greenhouses, openDetail])
 
-  const focusTask = items.find((item) => item.priority === 'urgent' || item.priority === 'high') ?? items[0]
+  const focusTask = items.find((item) => item.id === taskIdFromUrl) ?? items.find((item) => item.priority === 'urgent' || item.priority === 'high') ?? items[0]
   const urgentCount = summary?.urgent_total ?? 0
   const pendingCount = summary?.pending_total ?? 0
   const progressCount = summary?.in_progress_total ?? 0
   const completedToday = summary?.completed_today ?? 0
   const draftCount = summary?.draft_total ?? 0
   const overdueCount = summary?.overdue_total ?? 0
+  const openCreate = () => {
+    createForm.setFieldsValue({ greenhouse_id: greenhouseId, crop_batch_id: batchId ?? batches.find((item) => item.status === 'growing')?.id, priority: 'medium', action_type: 'manual_observation', created_by: getStoredUser()?.display_name || '游客' })
+    setCreateOpen(true)
+  }
 
   return <div className="business-page task-page v17-page v17-task-page v18-task-page">
     {messageContext}
@@ -210,47 +224,50 @@ export default function FarmTaskManagementPage() {
     </section>
 
     <section className="v17-task-kpis">
-      <div className="is-danger"><span className="v17-kpi-icon">⚡</span><span><small>紧急任务</small><strong>{urgentCount}</strong><em>较昨日 ↓ 1</em></span></div>
-      <div><span className="v17-kpi-icon">▣</span><span><small>待执行</small><strong>{pendingCount}</strong><em>较昨日 ↓ 1</em></span></div>
-      <div className="is-blue"><span className="v17-kpi-icon">▶</span><span><small>执行中</small><strong>{progressCount}</strong><em>较昨日 0</em></span></div>
-      <div><span className="v17-kpi-icon">✓</span><span><small>今日完成</small><strong>{completedToday}</strong><em>较昨日 ↑ 2</em></span></div>
+      <div className="is-danger"><span className="v17-kpi-icon">⚡</span><span><small>紧急任务</small><strong>{urgentCount}</strong><em>需优先处理</em></span></div>
+      <div><span className="v17-kpi-icon">▣</span><span><small>待执行</small><strong>{pendingCount}</strong><em>等待执行</em></span></div>
+      <div className="is-blue"><span className="v17-kpi-icon">▶</span><span><small>执行中</small><strong>{progressCount}</strong><em>现场处理中</em></span></div>
+      <div><span className="v17-kpi-icon">✓</span><span><small>今日完成</small><strong>{completedToday}</strong><em>今日记录</em></span></div>
       <div className="is-blue"><span className="v17-kpi-icon">▤</span><span><small>待提交</small><strong>{draftCount}</strong><em>等待确认</em></span></div>
       <div><span className="v17-kpi-icon">✦</span><span><small>已逾期</small><strong>{overdueCount}</strong><em>需关注</em></span></div>
     </section>
 
     <div className="v17-task-main-grid">
       <section className="v17-panel v17-task-board-panel">
-        <div className="v17-section-head"><div><h2>今日任务 <span>({total})</span></h2><p>按优先级排序，聚焦当前需要处理的农事任务</p></div><div className="v17-task-tabs"><button type="button" className={!status ? 'is-active' : ''} onClick={() => { setStatus(undefined); setPage(1) }}>全部 <b>{total}</b></button><button type="button" className={status === 'pending' ? 'is-active' : ''} onClick={() => { setStatus('pending'); setPage(1) }}>待处理</button><button type="button" className={status === 'in_progress' ? 'is-active' : ''} onClick={() => { setStatus('in_progress'); setPage(1) }}>执行中</button><button type="button" className={status === 'completed' ? 'is-active' : ''} onClick={() => { setStatus('completed'); setPage(1) }}>已完成</button><Button type="primary" icon={<PlusOutlined />} onClick={() => { createForm.setFieldsValue({ greenhouse_id: greenhouseId, crop_batch_id: batchId ?? batches.find((item) => item.status === 'growing')?.id, priority: 'medium', action_type: 'manual_observation', created_by: '管理员' }); setCreateOpen(true) }}>新建任务</Button></div></div>
-        {error && <Alert className="page-alert" type="error" showIcon message="任务数据加载失败" description={error} action={<Button size="small" onClick={() => void load()}>重试</Button>} />}
-        <Table<FarmTask> className="v17-task-table" rowKey="id" columns={columns} dataSource={items.slice(0, 6)} loading={loading} pagination={false} scroll={{ x: 1050 }} locale={{ emptyText: <Empty description="当前没有需要处理的任务" /> }} />
-        <div className="v17-hidden-filters" aria-hidden="true">
-          <Select value={priority} onChange={setPriority} /><Select value={sourceType} onChange={setSourceType} /><Input value={assignee} onChange={(event) => setAssignee(event.target.value)} /><Input value={startTime} onChange={(event) => setStartTime(event.target.value)} /><Input value={endTime} onChange={(event) => setEndTime(event.target.value)} />
+        <div className="v17-section-head"><div><h2>任务列表 <span>({total})</span></h2><p>按状态、优先级和负责人查找农事任务</p></div><div className="v17-task-tabs"><button type="button" className={!status ? 'is-active' : ''} onClick={() => { setStatus(undefined); setPage(1) }}>全部 <b>{total}</b></button><button type="button" className={status === 'pending' ? 'is-active' : ''} onClick={() => { setStatus('pending'); setPage(1) }}>待处理</button><button type="button" className={status === 'in_progress' ? 'is-active' : ''} onClick={() => { setStatus('in_progress'); setPage(1) }}>执行中</button><button type="button" className={status === 'completed' ? 'is-active' : ''} onClick={() => { setStatus('completed'); setPage(1) }}>已完成</button><Button type="primary" icon={<PlusOutlined />} disabled={!canOperate()} onClick={openCreate}>新建任务</Button></div></div>
+        <div className="v17-task-filters">
+          <Select allowClear placeholder="优先级" value={priority} onChange={(value) => { setPriority(value); setPage(1) }} options={Object.entries(priorityMeta).map(([value, meta]) => ({ value, label: meta.label }))} />
+          <Select allowClear placeholder="任务来源" value={sourceType} onChange={(value) => { setSourceType(value); setPage(1) }} options={Object.entries(sourceLabels).map(([value, label]) => ({ value, label }))} />
+          <Input.Search allowClear placeholder="负责人" value={assigneeInput} onChange={(event) => { setAssigneeInput(event.target.value); if (!event.target.value) { setAssignee(''); setPage(1) } }} onSearch={(value) => { setAssignee(value.trim()); setPage(1) }} />
+          <Input type="date" aria-label="开始日期" value={startTime} onChange={(event) => { setStartTime(event.target.value); setPage(1) }} />
+          <Input type="date" aria-label="结束日期" value={endTime} onChange={(event) => { setEndTime(event.target.value); setPage(1) }} />
+          <Button onClick={() => { setPriority(undefined); setSourceType(undefined); setAssignee(''); setAssigneeInput(''); setStartTime(''); setEndTime(''); setPage(1) }}>重置</Button>
         </div>
+        {error && <Alert className="page-alert" type="error" showIcon message="任务数据加载失败" description={error} action={<Button size="small" onClick={() => void load()}>重试</Button>} />}
+        <p className="table-scroll-hint">可左右滑动查看完整任务；点击右侧详情进入执行操作。</p>
+        <Table<FarmTask> className="v17-task-table" rowKey="id" columns={columns} dataSource={items} loading={loading} pagination={{ current: page, pageSize: 10, total, showSizeChanger: false, hideOnSinglePage: true, onChange: setPage }} scroll={{ x: 1050 }} locale={{ emptyText: <Empty description="当前没有需要处理的任务" /> }} />
       </section>
 
       <aside className="v17-panel v17-ai-task-panel">
-        <div className="v17-section-head"><div><h2>AI 农事建议 <span className="v17-count-dot">3</span></h2></div><button type="button">查看全部 ›</button></div>
-        <div className="v17-ai-recommend-card">
-          <div className="v17-ai-rec-title"><span>🌿</span><div><strong>{focusTask?.title ?? '建议开启顶部通风，降低棚内湿度'}</strong><small>基于环境趋势与当前任务上下文生成</small></div><em>高优先级</em></div>
-          <p>监测到棚内环境出现持续变化，建议优先处理通风与现场复核，避免风险继续累积。</p>
-          <div className="v17-ai-metrics"><div><span>🌡 当前温度</span><strong>32.6℃</strong></div><div><span>💧 相对湿度</span><strong>68%</strong></div><div><span>↗ 未来2小时</span><strong>温度仍可能上升</strong></div></div>
-          <div className="v17-ai-actions"><Button onClick={() => focusTask && void openDetail(focusTask.id)}>查看依据</Button><Button type="primary" onClick={() => { if (!focusTask) return; if (focusTask.status === 'draft') { void submitTask(focusTask.id, { version: focusTask.version, operator: '管理员', note: '从 AI 农事建议面板采纳并提交' }).then(async () => { messageApi.success('建议已采纳并进入任务中心'); await load(); await openDetail(focusTask.id) }).catch((requestError) => messageApi.error(getApiErrorMessage(requestError))) } else { void openDetail(focusTask.id) } }}>采纳建议</Button></div>
-        </div>
-        <div className="v17-related-block"><h3>相关任务联动</h3><button type="button"><LinkOutlined /><span><b>关联病虫害，可能增加病害发生风险</b><small>建议同步加强叶片巡检</small></span><i>›</i></button><button type="button"><LinkOutlined /><span><b>已生成巡检任务模板</b><small>根据本次建议，一键创建相关任务</small></span><i>›</i></button><button type="button"><LinkOutlined /><span><b>与灌溉计划存在时间冲突</b><small>建议调整灌溉时间至下午</small></span><i>›</i></button></div>
+        <div className="v17-section-head"><div><h2>任务聚焦</h2></div></div>
+        {focusTask ? <div className="v17-ai-recommend-card">
+          <div className="v17-ai-rec-title"><span>▣</span><div><strong>{focusTask.title}</strong><small>{sourceLabels[focusTask.source_type] ?? focusTask.source_type} · {focusTask.task_code}</small></div><em>{priorityMeta[focusTask.priority].label}优先级</em></div>
+          <p>{focusTask.description}</p>
+          <div className="v17-ai-metrics"><div><span>当前状态</span><strong>{statusMeta[focusTask.status].label}</strong></div><div><span>负责人</span><strong>{focusTask.assignee_name ?? '待分配'}</strong></div><div><span>截止时间</span><strong>{focusTask.due_at ? time(focusTask.due_at) : '未设定'}</strong></div></div>
+          <div className="v17-ai-actions"><Button type="primary" onClick={() => openDetail(focusTask.id)}>查看并处理任务</Button></div>
+        </div> : <Empty description="暂无可聚焦的任务" />}
       </aside>
     </div>
 
     <div className="v17-task-bottom-grid">
-      <section className="v17-panel v17-explain-panel"><div className="v17-section-head"><div><h2>可解释决策建议</h2></div><button type="button">查看全部 ›</button></div><div className="v17-explain-item"><span>🌱</span><div><b>优化通风策略，降低持续高温风险</b><p>基于历史数据与当前环境预测，建议分时段通风，有助于控制温度，降低病害发生概率。</p></div><i>›</i></div><div className="v17-explain-item"><span>🛡</span><div><b>加强病害预防，控制早疫病风险</b><p>近期温湿度偏高且存在病害迹象，建议增加叶面监测频率。</p></div><i>›</i></div></section>
+      <section className="v17-panel v17-explain-panel"><div className="v17-section-head"><div><h2>执行信息</h2></div></div>{focusTask ? <><div className="v17-explain-item"><span>▣</span><div><b>任务来源</b><p>{sourceLabels[focusTask.source_type] ?? focusTask.source_type}</p></div></div><div className="v17-explain-item"><span>✓</span><div><b>现场动作</b><p>{label(focusTask.action_type)}</p></div></div><div className="v17-explain-item"><span>·</span><div><b>安全提示</b><p>{focusTask.safety_note || '无额外安全提示'}</p></div></div></> : <Empty description="选择任务后查看执行信息" />}</section>
 
-      <section className="v17-panel v17-agritrace-panel"><div className="v17-section-head"><div><h2>AgriTrace 决策证据链</h2><p>从数据到行动，全程可追溯</p></div><button type="button">查看详情 ›</button></div><div className="v17-trace-flow"><div><i>🌿</i><b>环境感知</b><span>04-22 08:30</span><small>温度 32.6℃<br />湿度 68%</small></div><em>→</em><div><i>▥</i><b>趋势分析</b><span>04-22 09:00</span><small>AI 模型识别<br />高温风险</small></div><em>→</em><div><i>💡</i><b>AI 建议</b><span>04-22 09:10</span><small>建议开启通风<br />并加强巡检</small></div><em>→</em><div><i>▣</i><b>创建任务</b><span>04-22 09:10</span><small>已生成农事任务<br />并通知负责人</small></div><em>→</em><div><i>✓</i><b>执行完成</b><span>待执行</span><small>跟踪任务执行<br />验证效果</small></div></div></section>
+      <section className="v17-panel v17-agritrace-panel"><div className="v17-section-head"><div><h2>AgriTrace 证据链</h2><p>来自当前任务的真实生命周期记录</p></div><Button type="link" size="small" disabled={!focusTask} onClick={() => focusTask && openDetail(focusTask.id)}>查看详情</Button></div>{trace?.nodes.length ? <div className="v17-trace-flow is-live">{trace.nodes.slice(0, 5).map((node, index) => <div key={`${label(node.type)}-${node.id}-${index}`}><i>{index + 1}</i><b>{node.title}</b><span>{time(node.occurred_at)}</span><small>{node.summary}</small></div>)}</div> : <Empty description="选择任务后查看真实证据链" />}</section>
 
-      <section className="v17-panel v17-path-panel"><div className="v17-section-head"><div><h2>处理路径</h2><p>针对不同风险的推荐处理方案</p></div></div><button type="button"><span className="is-red">🌡</span><div><b>紧急处理</b><small>立即处理，防止风险进一步扩大</small></div><i>›</i></button><button type="button"><span className="is-blue">🛡</span><div><b>常规处理</b><small>按标准流程执行</small></div><i>›</i></button><button type="button"><span className="is-gold">☀</span><div><b>观察监测</b><small>持续跟踪，必要时调整策略</small></div><i>›</i></button></section>
+      <section className="v17-panel v17-path-panel"><div className="v17-section-head"><div><h2>快捷操作</h2></div></div><div className="v17-task-quick-actions"><Button block icon={<PlusOutlined />} disabled={!canOperate()} onClick={openCreate}>新建任务</Button><Button block onClick={() => void load()}>刷新任务</Button><Button block disabled={!focusTask} onClick={() => focusTask && openDetail(focusTask.id)}>打开当前任务</Button></div></section>
     </div>
 
-    <div className="v17-task-pagination-sentinel" aria-hidden="true"><span>{page}</span><span>{batchId}</span><span>{greenhouseId}</span></div>
-
-    <Drawer title={detail ? `${detail.task_code} · ${detail.title}` : '任务详情'} width={760} open={Boolean(detail)} onClose={closeDetail} extra={detail && <Space wrap>{detail.status === 'draft' && <Button type="primary" onClick={() => void simpleAction('submit')}>提交</Button>}{detail.status === 'pending' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('assign') }}>分配</Button><Button type="primary" disabled={!detail.assignee_name} onClick={() => void simpleAction('start')}>开始</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'in_progress' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'unable_to_verify' }); setActionKind('feedback') }}>填写反馈</Button><Button type="primary" onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'improved' }); setActionKind('complete') }}>完成</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'completed' && <Button onClick={() => void simpleAction('reopen')}>重新打开</Button>}</Space>}>
+    <Drawer title={detail ? `${detail.task_code} · ${detail.title}` : '任务详情'} width="min(760px, 100vw)" push={false} open={Boolean(detail)} onClose={closeDetail} extra={detail && canOperate() && <Space wrap>{detail.status === 'draft' && <Button type="primary" onClick={() => void simpleAction('submit')}>提交</Button>}{detail.status === 'pending' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('assign') }}>分配</Button><Button type="primary" disabled={!detail.assignee_name} onClick={() => void simpleAction('start')}>开始</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'in_progress' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'unable_to_verify' }); setActionKind('feedback') }}>填写反馈</Button><Button type="primary" onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'improved' }); setActionKind('complete') }}>完成</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'completed' && <Button onClick={() => void simpleAction('reopen')}>重新打开</Button>}</Space>}>
       {detail && <Space direction="vertical" size="large" className="full-width">
         <Alert type="warning" showIcon message={detail.safety_note} description={detail.causality_notice} />
         <Descriptions bordered size="small" column={2} items={[
@@ -260,15 +277,15 @@ export default function FarmTaskManagementPage() {
           { key: 'batch', label: '番茄批次', children: String(detail.crop_batch?.batch_code ?? '—') },
           { key: 'source', label: '来源', children: sourceLabels[detail.source_type] },
           { key: 'assignee', label: '负责人', children: detail.assignee_name ?? '待分配' },
-          { key: 'action', label: '动作类型', children: detail.action_type },
+          { key: 'action', label: '动作类型', children: label(detail.action_type) },
           { key: 'version', label: '并发版本', children: `v${detail.version}` },
           { key: 'description', label: '任务说明', span: 2, children: detail.description },
         ]} />
-        <Card size="small" title="来源证据">{detail.source_warning && <pre className="compact-json">{compact(detail.source_warning)}</pre>}{detail.source_disease_record && <pre className="compact-json">{compact(detail.source_disease_record)}</pre>}{detail.source_recommendation && <pre className="compact-json">{compact(detail.source_recommendation)}</pre>}{!detail.source_warning && !detail.source_disease_record && !detail.source_recommendation && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="手工任务无外部来源记录" />}</Card>
-        <Card size="small" title="环境前后快照"><Row gutter={12}><Col xs={24} md={12}><strong>创建快照</strong><pre className="compact-json snapshot-json">{compact(detail.evidence_snapshot_json)}</pre></Col><Col xs={24} md={12}><strong>完成快照</strong>{detail.result_snapshot_json ? <pre className="compact-json snapshot-json">{compact(detail.result_snapshot_json)}</pre> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="任务尚未完成" />}</Col></Row></Card>
+        <Card size="small" title="来源证据">{detail.source_warning && <EvidenceSummary value={detail.source_warning} />}{detail.source_disease_record && <EvidenceSummary value={detail.source_disease_record} />}{detail.source_recommendation && <EvidenceSummary value={detail.source_recommendation} />}{!detail.source_warning && !detail.source_disease_record && !detail.source_recommendation && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={detail.evidence_snapshot_json.decision_plan ? '来源为病害时间机方案，详见创建快照' : '该任务无外部来源记录'} />}</Card>
+        <Card size="small" title="环境前后快照"><Row gutter={12}><Col xs={24} md={12}><strong>创建快照</strong><EvidenceSummary value={detail.evidence_snapshot_json} /></Col><Col xs={24} md={12}><strong>完成快照</strong>{detail.result_snapshot_json ? <EvidenceSummary value={detail.result_snapshot_json} /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="任务尚未完成" />}</Col></Row></Card>
         <Card size="small" title="跨模块证据链"><Alert className="page-alert" type="info" showIcon message={trace?.causality_notice ?? detail.causality_notice} /><Timeline items={trace?.nodes.map((node) => ({ color: node.status === 'missing' ? 'gray' : 'green', children: <div><strong>{node.title}</strong> <Tag>{node.status}</Tag><p>{node.summary}</p><small>{time(node.occurred_at)} · {node.version ? `版本 ${node.version}` : '无版本记录'}</small></div> })) ?? []} /></Card>
         <Card size="small" title="任务生命周期"><Timeline items={detail.events.map((event) => ({ children: <div><strong>{event.event_type}</strong> · {event.operator}<p>{event.note ?? `${event.from_status ?? '—'} → ${event.to_status ?? '—'}`}</p><small>{time(event.created_at)}</small></div> }))} /></Card>
-        <Card size="small" title="执行反馈与附件"><List dataSource={detail.feedbacks} locale={{ emptyText: '暂无执行反馈' }} renderItem={(item) => <List.Item><List.Item.Meta title={`${item.operator} · ${item.result_type}`} description={<><p>{item.execution_note}</p><p>{item.observed_change ?? '未记录观察变化'} · {time(item.executed_at)}</p>{item.attachment_paths_json.map((path) => <a key={path} href={`/${path}`} target="_blank" rel="noreferrer">查看附件</a>)}</>} /></List.Item>} /></Card>
+        <Card size="small" title="执行反馈与附件"><List dataSource={detail.feedbacks} locale={{ emptyText: '暂无执行反馈' }} renderItem={(item) => <List.Item><List.Item.Meta title={`${item.operator} · ${item.result_type}`} description={<><p>{item.execution_note}</p><p>{item.observed_change ?? '未记录观察变化'} · {time(item.executed_at)}</p>{item.attachment_paths_json.map((path) => <Button key={path} type="link" onClick={() => void openTaskAttachment(path)}>查看附件</Button>)}</>} /></List.Item>} /></Card>
       </Space>}
     </Drawer>
 

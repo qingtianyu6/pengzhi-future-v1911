@@ -19,6 +19,8 @@ class User(Base):
     display_name: Mapped[str] = mapped_column(String(40), nullable=False)
     phone: Mapped[str] = mapped_column(String(20), unique=True, nullable=False, index=True)
     organization: Mapped[str | None] = mapped_column(String(120))
+    organization_id: Mapped[int | None] = mapped_column(ForeignKey("organizations.id"), index=True)
+    role: Mapped[str] = mapped_column(String(24), nullable=False, default="admin", server_default="admin")
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)

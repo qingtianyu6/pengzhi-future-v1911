@@ -1,0 +1,73 @@
+{
+  "name": "棚小智",
+  "type": "Original 3D mechanical character with hierarchical bone joints",
+  "meshes": 63,
+  "triangles": 65568,
+  "bones": 16,
+  "bytes": 1666972,
+  "animations": [
+    {
+      "name": "Idle",
+      "duration": 3,
+      "tracks": 24
+    },
+    {
+      "name": "Wave",
+      "duration": 2.4,
+      "tracks": 24
+    },
+    {
+      "name": "SitDown",
+      "duration": 1.8,
+      "tracks": 24
+    },
+    {
+      "name": "Sitting",
+      "duration": 3,
+      "tracks": 24
+    },
+    {
+      "name": "StandUp",
+      "duration": 1.8,
+      "tracks": 24
+    },
+    {
+      "name": "Dozing",
+      "duration": 3,
+      "tracks": 24
+    },
+    {
+      "name": "Stretch",
+      "duration": 3,
+      "tracks": 24
+    },
+    {
+      "name": "Thinking",
+      "duration": 3,
+      "tracks": 25
+    },
+    {
+      "name": "Listening",
+      "duration": 3,
+      "tracks": 24
+    },
+    {
+      "name": "Speaking",
+      "duration": 3,
+      "tracks": 24
+    },
+    {
+      "name": "Reminder",
+      "duration": 2.5,
+      "tracks": 24
+    },
+    {
+      "name": "Complete",
+      "duration": 2.5,
+      "tracks": 24
+    }
+  ],
+  "source": "src/features/assistant3d/pengxiaozhiModel.ts",
+  "runtimeAnimation": "src/features/assistant3d/pengxiaozhiAnimation.ts",
+  "notes": "GLB animations are editable offline samples of the live blended joint controller. The app uses that same model source for continuous mouse tracking and interruptible movements."
+}

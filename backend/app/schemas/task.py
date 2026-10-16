@@ -98,6 +98,7 @@ class TaskEventData(BaseModel):
     from_status: str | None
     to_status: str | None
     operator: str
+    operator_user_id: int | None = None
     note: str | None
     payload_json: dict[str, Any]
     created_at: datetime
@@ -109,6 +110,7 @@ class TaskFeedbackData(BaseModel):
     id: int
     task_id: int
     operator: str
+    operator_user_id: int | None = None
     executed_at: datetime
     result_type: FeedbackResult
     execution_note: str
@@ -148,6 +150,7 @@ class FarmTaskData(BaseModel):
     result_snapshot_json: dict[str, Any] | None
     version: int
     created_by: str
+    created_by_user_id: int | None = None
     created_at: datetime
     updated_at: datetime
     started_at: datetime | None
@@ -192,4 +195,3 @@ class TaskTraceData(BaseModel):
     task_id: int
     nodes: list[TaskTraceNode]
     causality_notice: str = "前后变化只用于记录，不代表任务操作与环境改善存在已验证因果关系。"
-

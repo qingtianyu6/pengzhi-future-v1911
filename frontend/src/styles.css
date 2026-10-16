@@ -242,7 +242,7 @@ button, input { font: inherit; }
   .hero-controls .ant-select { flex: 1; min-width: 150px; }
   .data-provenance { align-items: flex-start; flex-wrap: wrap; }
   .task-filters { grid-template-columns: 1fr; }
-  .ant-drawer-content-wrapper { max-width: calc(100vw - 76px) !important; }
+  .ant-drawer-content-wrapper { max-width: 100vw !important; }
   .ai-workspace { display: flex; height: auto; min-height: 0; flex-direction: column; }
   .ai-sidebar, .ai-chat-card { height: auto; }.ai-sidebar { max-height: 330px; }.ai-chat-card { min-height: 650px; }
   .ai-chat-header, .ai-composer-footer { align-items: flex-start; flex-direction: column; }
@@ -1035,7 +1035,7 @@ body { color: var(--saas-text); background: var(--saas-bg); }
   position:absolute;right:-54px;top:-70px;width:180px;height:180px;border:1px solid rgba(19,129,95,.07);
   border-radius:50%;box-shadow:0 0 0 28px rgba(19,129,95,.025);content:'';pointer-events:none;
 }
-.environment-status-panel { background:rgba(255,255,255,.7); }
+.environment-status-panel { background:linear-gradient(145deg,#103d31,#155b46); }
 .environment-insight-list > div { transition:background .2s ease,transform .2s ease; }
 .environment-insight-list > div:hover { transform:translateX(2px);background:#f4f8f6; }
 .warning-compact-item { transition:background .2s ease; }
@@ -1294,6 +1294,7 @@ body { color: var(--saas-text); background: var(--saas-bg); }
 
 .exact-insight-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
 .exact-insight-card { min-height:112px; display:grid; grid-template-columns:50px minmax(0,1fr) auto auto 18px; align-items:center; gap:12px; padding:15px 18px; border:1px solid #e1e8e5; border-radius:14px; background:#fff; box-shadow:0 7px 20px rgba(20,60,45,.035); }.exact-insight-icon{width:50px;height:50px;display:grid;place-items:center;border-radius:13px;font-size:22px}.exact-risk-card{background:linear-gradient(135deg,#fff7f5,#fff)}.exact-risk-card .exact-insight-icon{color:#e54c37;background:#ffe8e4}.exact-health-card{background:linear-gradient(135deg,#f4fcf8,#fff)}.exact-health-card .exact-insight-icon{color:#13815f;background:#ddf2e8}.exact-decision-card{background:linear-gradient(135deg,#f7f3ff,#fff)}.exact-decision-card .exact-insight-icon{color:#704acb;background:#ede5ff}.exact-insight-card small{color:#597168;font-size:10px}.exact-insight-card strong{display:block;margin:4px 0 3px;color:#173d31;font-size:17px}.exact-insight-card p{margin:0;color:#8b9793;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.exact-insight-card > b{color:#1a7155;font-size:14px}.exact-risk-card > b{color:#e34837}.exact-insight-card > em{color:#8b9994;font-size:8px;font-style:normal}.exact-insight-card > .anticon{color:#6b8178;font-size:10px}
+.exact-insight-card { width:100%; text-align:left; font:inherit; cursor:pointer; }.exact-insight-card:hover { border-color:#a9d8c2; }.exact-insight-card:focus-visible { outline:2px solid #188360; outline-offset:2px; }
 
 .exact-activity-card { min-height:145px; padding:13px 20px 10px; }.exact-activity-card .saas-section-heading{margin-bottom:5px}.exact-activity-list{border-top:1px solid #edf1ef}.exact-activity-row{display:grid;grid-template-columns:72px 10px 148px minmax(0,1fr);align-items:center;gap:12px;min-height:31px;border-bottom:1px solid #edf1ef}.exact-activity-row:last-child{border-bottom:0}.exact-activity-row time{color:#81918b;font-size:9px}.exact-activity-dot{width:8px;height:8px;border-radius:50%;background:#687f77}.exact-activity-dot.warning{background:#f08408}.exact-activity-dot.done{background:#0f9c6c}.exact-activity-dot.review{background:#6f46c8}.exact-activity-row strong{color:#27493d;font-size:10px}.exact-activity-row span{color:#8a9792;font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
@@ -1315,7 +1316,7 @@ body { color: var(--saas-text); background: var(--saas-bg); }
   .exact-content { padding:14px 12px 18px !important; }
   .exact-dashboard{gap:12px!important}.exact-welcome-banner{min-height:148px;padding:18px 16px;border-radius:13px}.exact-welcome-banner::before{inset:0;opacity:.12}.exact-welcome-title{align-items:flex-start;flex-direction:column;gap:7px}.exact-welcome-title h1{font-size:23px}.exact-model-button{align-self:end}
   .exact-metric-grid{grid-template-columns:1fr 1fr;gap:10px}.exact-metric-card{min-height:110px;padding:12px}.exact-metric-top{grid-template-columns:32px 1fr}.exact-status-pill{display:none}.exact-metric-icon{width:32px;height:32px}.exact-metric-main,.exact-metric-bottom{margin-left:0}.exact-metric-main{margin-top:11px}.exact-metric-main strong{font-size:22px}.exact-metric-bottom svg{width:48px}
-  .exact-chart-card,.exact-todo-card{min-height:auto;padding:15px}.exact-chart-card .exact-environment-chart{height:235px}.exact-insight-grid{gap:10px}.exact-activity-row{grid-template-columns:50px 9px 1fr}.exact-activity-row span{grid-column:3}.exact-activity-card{padding:13px 15px}.exact-date-switch{display:none}
+  .exact-chart-card,.exact-todo-card{min-height:auto;padding:15px}.exact-chart-card .exact-environment-chart{height:235px}.exact-insight-grid{gap:10px}.exact-activity-row{grid-template-columns:50px 9px 1fr}.exact-activity-row span{grid-column:3}.exact-activity-card{padding:13px 15px}.exact-chart-card .saas-section-heading{flex-wrap:wrap}.exact-date-switch{display:flex}
 }
 
 /* ===== v1.9.4 marketing header - reference 1680x936 ===== */
@@ -1532,3 +1533,7 @@ html.site-scroll-locked { overflow: hidden !important; }
 @media (max-width: 560px) {
   .home-v11 .outcome-col { grid-template-columns: 1fr; }
 }
+
+/* 3D 大棚占满当前 AppLayout 的主内容工作区。 */
+.exact-content.is-3d-content { padding: 0 !important; overflow: hidden; background: #e8eef1 !important; }
+.commercial-content.is-3d-content > * { width: 100% !important; max-width: none !important; margin: 0 !important; }

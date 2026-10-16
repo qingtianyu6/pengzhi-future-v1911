@@ -1,0 +1,1 @@
+import * as THREE from 'three';import type { Collider } from '../config/types';export function canMoveTo(p:THREE.Vector3,c:Collider[],r=.28){for(const b of c)if(p.x>b.min[0]-r&&p.x<b.max[0]+r&&p.z>b.min[2]-r&&p.z<b.max[2]+r)return false;return true}

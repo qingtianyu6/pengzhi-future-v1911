@@ -1,0 +1,19 @@
+{
+  "format": "xgboost-json",
+  "models": [
+    "model_00.json",
+    "model_01.json",
+    "model_02.json",
+    "model_03.json",
+    "model_04.json",
+    "model_05.json",
+    "model_06.json",
+    "model_07.json",
+    "model_08.json",
+    "model_09.json",
+    "model_10.json",
+    "model_11.json"
+  ],
+  "source_size": 4377653,
+  "source_mtime": 1789868446.9367418
+}

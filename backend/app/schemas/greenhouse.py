@@ -54,3 +54,6 @@ class GreenhouseData(BaseModel):
     created_at: datetime
     updated_at: datetime
     active_batch: CropBatchData | None = None
+    last_recorded_at: datetime | None = None
+    data_status: str = "no_data"
+    device_count: int = 0

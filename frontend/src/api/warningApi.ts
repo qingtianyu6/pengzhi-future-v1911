@@ -14,7 +14,7 @@ export interface WarningFilters {
 }
 
 export async function evaluateWarnings(greenhouseId: number): Promise<WarningEvaluation> {
-  const response=await apiClient.post<ApiResponse<WarningEvaluation>>('/warnings/evaluate',{greenhouse_id:greenhouseId})
+  const response=await apiClient.post<ApiResponse<WarningEvaluation>>('/warnings/evaluate',{greenhouse_id:greenhouseId},{timeout:30_000})
   return response.data.data
 }
 export async function getWarnings(filters:WarningFilters={}):Promise<WarningList>{const response=await apiClient.get<ApiResponse<WarningList>>('/warnings',{params:filters});return response.data.data}

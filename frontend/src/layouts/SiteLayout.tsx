@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import { FloatingAIAssistant } from '../components/FloatingAIAssistant'
 
 const links = [
   ['/home', '首页'],
@@ -79,18 +80,19 @@ export function SiteLayout() {
         <aside className="mobile-nav-drawer" aria-label="移动端导航" onMouseDown={(event) => event.stopPropagation()}>
           <div className="mobile-nav-head"><strong>导航</strong><button aria-label="关闭导航" onClick={() => setMobileMenuOpen(false)}>×</button></div>
           <nav>{links.map(([to, label]) => <Link className={pathname === to ? 'active' : ''} aria-current={pathname === to ? 'page' : undefined} to={to} key={to}><span>{label}</span><b>→</b></Link>)}</nav>
-          <button className="mobile-nav-search" onClick={() => { setMobileMenuOpen(false); setSearchOpen(true) }}><SearchIcon /><span>站内搜索</span></button>
+          <button className="mobile-nav-search" onClick={() => { setMobileMenuOpen(false); setSearchOpen(true) }}><SearchIcon /><span>页面搜索</span></button>
           <div className="mobile-nav-auth"><Link to="/platform?mode=guest"><UserIcon/>游客模式</Link><Link to="/login">登录</Link><Link className="primary" to="/register">注册</Link></div>
         </aside>
       </div>}
-      {searchOpen && <div className="site-search-layer" role="dialog" aria-modal="true" aria-label="站内搜索" onMouseDown={() => setSearchOpen(false)}>
+      {searchOpen && <div className="site-search-layer" role="dialog" aria-modal="true" aria-label="页面搜索" onMouseDown={() => setSearchOpen(false)}>
         <div className="site-search-panel" onMouseDown={(event) => event.stopPropagation()}>
-          <div className="site-search-heading"><strong>站内搜索</strong><button onClick={() => setSearchOpen(false)} aria-label="关闭搜索">×</button></div>
+          <div className="site-search-heading"><strong>页面搜索</strong><button onClick={() => setSearchOpen(false)} aria-label="关闭搜索">×</button></div>
           <label className="site-search-input"><SearchIcon/><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索首页、核心功能、应用场景…"/></label>
           <div className="site-search-results">{results.length ? results.map(([to,label]) => <Link key={to} to={to} onClick={() => { setSearchOpen(false); setQuery('') }}><span>{label}</span><b>→</b></Link>) : <p>没有找到对应页面</p>}</div>
         </div>
       </div>}
       <Outlet />
+      <FloatingAIAssistant />
     </main>
   )
 }

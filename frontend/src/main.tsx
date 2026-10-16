@@ -30,3 +30,7 @@ createRoot(document.getElementById('root')!).render(
     </ConfigProvider>
   </StrictMode>,
 )
+
+import './layouts/workbench-polish.css'
+
+import './layouts/workbench-redesign.css'

@@ -29,6 +29,8 @@ class SensorDataInput(BaseModel):
             self.light_intensity,
             self.co2_concentration,
         )
+        if all(value is None for value in values):
+            raise ValueError("至少提供一个有效环境指标")
         if any(value is None for value in values) and self.quality_flag == "valid":
             self.quality_flag = "missing"
         return self
@@ -121,6 +123,8 @@ class SensorIngestItem(BaseModel):
             self.light_intensity,
             self.co2_concentration,
         )
+        if all(value is None for value in values):
+            raise ValueError("至少提供一个有效环境指标")
         if any(value is None for value in values) and self.quality_flag == "valid":
             self.quality_flag = "missing"
         return self

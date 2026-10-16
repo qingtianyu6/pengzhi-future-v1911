@@ -1,3 +1,4 @@
+import { canManage } from '../../utils/permissions'
 import { useCallback, useEffect, useState } from 'react'
 import { CheckCircleOutlined, CloudUploadOutlined, ExclamationCircleOutlined, ReloadOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
 import { Alert, Button, Form, Input, Modal, Progress, Select, Space, Table, Tag, Typography, Upload, message } from 'antd'
@@ -49,7 +50,7 @@ export default function DiseaseDiagnosisPage() {
       const [model, greenhousePage] = await Promise.all([getDiseaseModelStatus(), getGreenhouses({ page: 1, page_size: 100, status: 'active' })])
       setStatus(model); setGreenhouses(greenhousePage.items)
       const fromUrl = Number(searchParams.get('greenhouse_id')) || null
-      const selected = fromUrl && greenhousePage.items.some((item) => item.id === fromUrl) ? fromUrl : greenhousePage.items.find((item) => item.active_batch?.crop_type === 'tomato')?.id ?? greenhousePage.items[0]?.id ?? null
+      const selected = fromUrl && greenhousePage.items.some((item) => item.id === fromUrl) ? fromUrl : greenhousePage.items[0]?.id ?? null
       setGreenhouseId(selected)
       if (selected) {
         const allBatches = await getCropBatches(selected); const tomato = allBatches.filter((item) => item.crop_type === 'tomato' && item.status === 'growing')
@@ -96,20 +97,20 @@ export default function DiseaseDiagnosisPage() {
     } catch (requestError) { messageApi.error(getApiErrorMessage(requestError)) }
   }
 
-  const selectedGreenhouse = greenhouses.find((item) => item.id === greenhouseId); const topCandidate = result?.top3_predictions[0]
+  const selectedGreenhouse = greenhouses.find((item) => item.id === greenhouseId); const topCandidate = result?.top3_predictions?.[0]
   const columns: ColumnsType<DiseaseRecord> = [
     { title: '时间 / 文件', key: 'file', width: 190, render: (_, row) => <div className="table-primary"><strong>{new Date(row.created_at).toLocaleString()}</strong><span>{row.original_filename}</span></div> },
     { title: '模型候选结果', key: 'result', render: (_, row) => ['recognized', 'review_required'].includes(row.recognition_status) ? <Space direction="vertical" size={2}><strong>{row.predicted_class_name}</strong><Typography.Text type="secondary">置信度 {((row.confidence ?? 0) * 100).toFixed(1)}% · 等待人工复核</Typography.Text></Space> : <Tag color={row.recognition_status === 'low_confidence' ? 'orange' : 'red'}>{row.recognition_status === 'low_confidence' ? '低置信度，未形成确定候选' : '模型不可用'}</Tag> },
     { title: '模型状态', key: 'model', width: 180, render: (_, row) => <Space direction="vertical" size={2}><span>{row.model_version}</span></Space> },
-    { title: '人工复核状态', key: 'review', width: 280, render: (_, row) => <Space wrap><Tag color={reviewLabels[row.review_status].color}>{reviewLabels[row.review_status].label}</Tag>{row.review_status === 'unreviewed' && <>{['recognized', 'review_required'].includes(row.recognition_status) && <Button size="small" type="link" onClick={() => openReview(row, 'confirmed')}>确认候选</Button>}<Button size="small" type="link" onClick={() => openReview(row, 'corrected')}>修正</Button><Button size="small" type="link" danger onClick={() => openReview(row, 'rejected')}>拒绝</Button></>}{['confirmed', 'corrected'].includes(row.review_status) && <Button size="small" type="link" onClick={() => void createFieldTask(row)}>创建现场任务</Button>}</Space> },
+    { title: '人工复核状态', key: 'review', width: 280, render: (_, row) => <Space wrap><Tag color={reviewLabels[row.review_status].color}>{reviewLabels[row.review_status].label}</Tag>{row.review_status === 'unreviewed' && canManage() && <>{['recognized', 'review_required'].includes(row.recognition_status) && <Button size="small" type="link" onClick={() => openReview(row, 'confirmed')}>确认候选</Button>}<Button size="small" type="link" onClick={() => openReview(row, 'corrected')}>修正</Button><Button size="small" type="link" danger onClick={() => openReview(row, 'rejected')}>拒绝</Button></>}{['confirmed', 'corrected'].includes(row.review_status) && canManage() && <Button size="small" type="link" onClick={() => void createFieldTask(row)}>创建现场任务</Button>}</Space> },
   ]
 
   if (loading) return <div className="v18-disease-page"><ProductSkeleton rows={7} /></div>
-  return <div className="business-page disease-page commercial-disease-page v18-disease-page">{messageContext}
+  return <div className="business-page disease-page commercial-disease-page v18-disease-page" data-view={searchParams.get('view') === 'history' ? 'history' : 'identify'}>{messageContext}
     <div className="page-intro commercial-page-intro">
       <div>
         <span className="eyebrow">AI DISEASE ASSISTANT</span>
-        <h1>病害辅助识别</h1>
+        <h1>{searchParams.get('view') === 'history' ? '识别与复核记录' : '病害辅助识别'}</h1>
         <p>上传叶片照片，AI 给出候选结果，再由人工复核后进入现场任务闭环。</p>
       </div>
       <Space wrap><Tag color={status?.model_status === 'ready' ? 'green' : 'orange'}>{status?.model_status === 'under_evaluation' ? '辅助识别模式' : status?.model_status === 'ready' ? '模型已就绪' : '模型状态异常'}</Tag></Space>
@@ -135,7 +136,7 @@ export default function DiseaseDiagnosisPage() {
 
         <div className="disease-upload-actions">
           {previewUrl && <Upload accept=".jpg,.jpeg,.png,.webp" multiple={false} showUploadList={false} beforeUpload={beforeUpload}><Button>更换图片</Button></Upload>}
-          <Button type="primary" size="large" loading={identifying} disabled={!imageFile || !batchId} onClick={() => void identify()}>{identifying ? '正在分析叶片特征…' : '开始识别'}</Button>
+          <Button type="primary" size="large" loading={identifying} disabled={!imageFile || !batchId || !canManage()} onClick={() => void identify()}>{identifying ? '正在分析叶片特征…' : '开始识别'}</Button>
         </div>
       </div>
 
@@ -152,7 +153,7 @@ export default function DiseaseDiagnosisPage() {
 
           <div className="disease-top3">
             <span className="result-label">Top-3 候选</span>
-            {result.top3_predictions.map((item, index) => <div key={item.class_key} className={index === 0 ? 'is-top' : ''}><b>0{index + 1}</b><span>{item.class_name}</span><strong>{(item.confidence * 100).toFixed(1)}%</strong></div>)}
+            {(result.top3_predictions ?? []).map((item, index) => <div key={item.class_key} className={index === 0 ? 'is-top' : ''}><b>0{index + 1}</b><span>{item.class_name}</span><strong>{(item.confidence * 100).toFixed(1)}%</strong></div>)}
           </div>
           <div className="disease-result-meta"><Tag>{result.model_version}</Tag><Tag color="blue">番茄六分类</Tag>{result.duplicate_image && <Tag color="purple">检测到重复图片</Tag>}</div>
           <div className="disease-human-review"><CheckCircleOutlined /><span><strong>下一步：人工复核</strong><small>高置信度也需要人工确认，再决定是否创建现场任务。</small></span></div>

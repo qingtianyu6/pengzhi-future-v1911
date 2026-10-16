@@ -1,16 +1,22 @@
 {
   "name": "pengzhi-future-frontend",
   "private": true,
-  "version": "1.9.11",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "python ../improvements_20261014/smoke_e2e.py",
+    "test:assistant:browser": "python ../assistant_release_20261015/browser_checks.py && python ../assistant_release_20261015/edge_checks.py",
+    "assistant:export-model": "node scripts/export-pengxiaozhi.mjs",
+    "test:assistant:3d": "node scripts/check-pengxiaozhi.mjs && python ../assistant_release_20261015/three_d_browser_checks.py"
   },
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.3.0",
     "antd": "^5.27.1",
     "axios": "^1.11.0",
     "echarts": "^6.0.0",
@@ -19,6 +25,7 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.8.2",
     "remark-gfm": "^4.0.1",
+    "three": "^0.180.0",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
@@ -26,6 +33,7 @@
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
+    "@types/three": "^0.180.0",
     "@vitejs/plugin-react": "^5.0.2",
     "eslint": "^9.34.0",
     "eslint-plugin-react-hooks": "^5.2.0",

@@ -29,6 +29,25 @@ class LLMProvider(ABC):
 
 
 class OpenAICompatibleProvider(LLMProvider):
+    async def chat(self, messages: list[dict[str, Any]], tools: list[dict[str, Any]], tool_choice: Any = "auto") -> dict[str, Any]:
+        if not (self.settings.ai_api_key and self.settings.ai_base_url and self.settings.ai_model):
+            raise ModelNotConfiguredError("尚未配置支持工具调用的模型服务")
+        payload = {"model": self.settings.ai_model, "messages": messages,
+                   "stream": False, "temperature": 0.2}
+        if tools:
+            payload.update(tools=tools, tool_choice=tool_choice)
+        try:
+            async with httpx.AsyncClient(timeout=60) as client:
+                response = await client.post(self._endpoint(), json=payload, headers={
+                    "Authorization": f"Bearer {self.settings.ai_api_key}"})
+                response.raise_for_status()
+                message = response.json()["choices"][0]["message"]
+                return {key: message[key] for key in ("role", "content", "tool_calls") if key in message}
+        except httpx.HTTPStatusError as exc:
+            raise LLMProviderError("工具调用模型服务不可用") from exc
+        except (httpx.HTTPError, KeyError, IndexError, ValueError) as exc:
+            raise LLMProviderError("工具调用模型服务不可用") from exc
+
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
 

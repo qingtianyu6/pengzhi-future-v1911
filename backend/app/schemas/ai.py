@@ -58,6 +58,7 @@ class AIMessageData(BaseModel):
 
 
 class AIChatRequest(BaseModel):
+    require_confirmation: bool = False
     content: str | None = Field(default=None, min_length=1, max_length=4000)
     regenerate_message_id: int | None = Field(default=None, gt=0)
 

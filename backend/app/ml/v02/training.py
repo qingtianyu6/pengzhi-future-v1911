@@ -17,6 +17,7 @@ from xgboost import XGBRegressor
 
 from app.ml.v02.data import ForecastWindows, xgb_matrix
 from app.ml.v02.models import SeasonalResidualRNN
+from app.ml.portable_scalers import load_scalers
 
 
 SEED=20260822
@@ -81,7 +82,7 @@ def predict_residual_rnn(model:SeasonalResidualRNN,scalers:dict[str,StandardScal
 
 
 def load_residual_rnn(path:Path)->tuple[SeasonalResidualRNN,dict[str,StandardScaler]]:
-    payload=torch.load(path,map_location="cpu",weights_only=False);model=SeasonalResidualRNN(payload["input_size"],payload["hidden_size"],payload["horizon"],payload["target_count"],kind=payload["kind"],dropout=0);model.load_state_dict(payload["state_dict"]);model.eval();return model,joblib.load(path.with_suffix(".scalers.joblib"))
+    payload=torch.load(path,map_location="cpu",weights_only=False);model=SeasonalResidualRNN(payload["input_size"],payload["hidden_size"],payload["horizon"],payload["target_count"],kind=payload["kind"],dropout=0);model.load_state_dict(payload["state_dict"]);model.eval();return model,load_scalers(path.with_suffix(".scalers.joblib"))
 
 
 def fit_ensemble_weights(truth:np.ndarray,seasonal:np.ndarray,ml_prediction:np.ndarray)->np.ndarray:

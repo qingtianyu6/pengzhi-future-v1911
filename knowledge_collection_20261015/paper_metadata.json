@@ -1,0 +1,171 @@
+[
+  {
+    "doi": "10.1515/intag-2017-0005",
+    "title": [
+      "Review of optimum temperature, humidity, and vapour pressure deficit for microclimate evaluation and control in greenhouse cultivation of tomato: a review"
+    ],
+    "authors": [
+      "Redmond Ramin Shamshiri",
+      "James W. Jones",
+      "Kelly R. Thorp",
+      "Desa Ahmad",
+      "Hasfalina Che Man",
+      "Sima Taheri"
+    ],
+    "journal": [
+      "International Agrophysics"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2018,
+          4,
+          1
+        ]
+      ]
+    },
+    "volume": "32",
+    "issue": "2",
+    "page": "287-302",
+    "article": null,
+    "sources": [
+      "crossref"
+    ],
+    "cross_validated": false
+  },
+  {
+    "doi": "10.1016/j.scienta.2019.01.006",
+    "title": [
+      "Deficit irrigation in tomato: Agronomical and physio-biochemical implications"
+    ],
+    "authors": [
+      "P.S. Khapte",
+      "Pradeep Kumar",
+      "Uday Burman",
+      "Praveen Kumar"
+    ],
+    "journal": [
+      "Scientia Horticulturae"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2019,
+          4
+        ]
+      ]
+    },
+    "volume": "248",
+    "issue": null,
+    "page": "256-264",
+    "article": null,
+    "sources": [
+      "crossref"
+    ],
+    "cross_validated": false
+  },
+  {
+    "doi": "10.1111/j.1364-3703.2007.00417.x",
+    "title": [
+      "<i>Botrytis cinerea</i>\n                    : the cause of grey mould disease"
+    ],
+    "authors": [
+      "BRIAN WILLIAMSON",
+      "BETTINA TUDZYNSKI",
+      "PAUL TUDZYNSKI",
+      "JAN A. L. VAN KAN"
+    ],
+    "journal": [
+      "Molecular Plant Pathology"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2007,
+          7,
+          23
+        ]
+      ]
+    },
+    "volume": "8",
+    "issue": "5",
+    "page": "561-580",
+    "article": null,
+    "sources": [
+      "crossref"
+    ],
+    "cross_validated": false
+  },
+  {
+    "doi": "10.1016/j.atech.2025.101020",
+    "title": [
+      "Sensing technology for greenhouse tomato production: A systematic review"
+    ],
+    "authors": [
+      "Jingxin Yu",
+      "Jiang Liu",
+      "Congcong Sun",
+      "Jiaqi Wang",
+      "Jianchao Ci",
+      "Jing Jin",
+      "Ni Ren",
+      "Wengang Zheng",
+      "Xiaoming Wei"
+    ],
+    "journal": [
+      "Smart Agricultural Technology"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          8
+        ]
+      ]
+    },
+    "volume": "11",
+    "issue": null,
+    "page": "101020",
+    "article": "101020",
+    "sources": [
+      "crossref"
+    ],
+    "cross_validated": false
+  },
+  {
+    "doi": "10.11869/hnxb.2013.09.1401",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "doi": "10.1016/j.scienta.2026.115180",
+    "title": [
+      "Technological innovations driving yield gains in greenhouse vegetables: Species-specific perspectives"
+    ],
+    "authors": [
+      "Dimitrios Fanourakis",
+      "Theodora Makraki",
+      "Georgios Tsaniklidis",
+      "Georgia Ntatsi",
+      "Oliver Körner"
+    ],
+    "journal": [
+      "Scientia Horticulturae"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2026,
+          10
+        ]
+      ]
+    },
+    "volume": "368",
+    "issue": null,
+    "page": "115180",
+    "article": "115180",
+    "sources": [
+      "crossref"
+    ],
+    "cross_validated": false
+  }
+]

@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field
+from app.schemas.model_health import ModelHealth
 
 
 class EnvironmentPredictionRequest(BaseModel):
@@ -70,6 +71,7 @@ class EnvironmentPredictionData(BaseModel):
     rules_status: Literal["tomato_rule_active", "rules_unavailable"]
     warnings: list[str] = Field(default_factory=list)
     generated_at: datetime
+    health: ModelHealth | None = None
 
 
 PredictionStatusData = EnvironmentPredictionData

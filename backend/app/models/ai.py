@@ -17,6 +17,7 @@ class AIConversation(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(80), nullable=False, default="新对话")
     greenhouse_id: Mapped[int | None] = mapped_column(ForeignKey("greenhouses.id"), nullable=True)
+    owner_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), index=True)
     summary_text: Mapped[str] = mapped_column(Text, nullable=False, default="")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(

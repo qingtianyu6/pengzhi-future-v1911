@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="AI农艺师功能设计" id="agronomist-design">
+    <mxGraphModel dx="1400" dy="760" grid="1" gridSize="10" page="1" pageWidth="1400" pageHeight="760">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="&lt;b&gt;棚智未来 · 会学习的AI农艺师&lt;/b&gt;" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#ffffff;strokeColor=#dce5d1;fontSize=29;strokeColor=none;fillColor=none;align=left;">
+          <mxGeometry as="geometry" x="50" y="25" width="1300" height="58" />
+        </mxCell>
+        <mxCell id="3" value="产品设计方案｜以同一大棚、同一批次、同一生产问题连接五项能力" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#ffffff;strokeColor=#dce5d1;fontSize=15;strokeColor=none;fillColor=none;align=left;fontColor=#89997b;">
+          <mxGeometry as="geometry" x="50" y="86" width="1300" height="40" />
+        </mxCell>
+        <mxCell id="4" value="&lt;b&gt;01 生长档案&lt;/b&gt;&lt;br&gt;状态与来源&lt;br&gt;环境 · 观察 · 管理履历" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#edf3e5;strokeColor=#dce5d1;fontSize=16;">
+          <mxGeometry as="geometry" x="50" y="170" width="220" height="125" />
+        </mxCell>
+        <mxCell id="5" value="&lt;b&gt;02 方案推演&lt;/b&gt;&lt;br&gt;共同基线 · 多种安排&lt;br&gt;输入 · 假设 · 情景结果" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#ffffff;strokeColor=#dce5d1;fontSize=16;">
+          <mxGeometry as="geometry" x="310" y="170" width="220" height="125" />
+        </mxCell>
+        <mxCell id="6" value="&lt;b&gt;03 生产研究&lt;/b&gt;&lt;br&gt;问题 · 假设 · 比较设计&lt;br&gt;观察 · 结果 · 反例" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#ffffff;strokeColor=#dce5d1;fontSize=16;">
+          <mxGeometry as="geometry" x="570" y="170" width="220" height="125" />
+        </mxCell>
+        <mxCell id="7" value="&lt;b&gt;04 农事技能&lt;/b&gt;&lt;br&gt;条件 · 步骤 · 验证&lt;br&gt;来源 · 版本 · 使用反馈" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#edf3e5;strokeColor=#dce5d1;fontSize=16;">
+          <mxGeometry as="geometry" x="830" y="170" width="220" height="125" />
+        </mxCell>
+        <mxCell id="8" value="&lt;b&gt;05 目标编排&lt;/b&gt;&lt;br&gt;对象 · 人员 · 依赖&lt;br&gt;任务 · 观察 · 后续计划" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#ffffff;strokeColor=#dce5d1;fontSize=16;">
+          <mxGeometry as="geometry" x="1090" y="170" width="220" height="125" />
+        </mxCell>
+        <mxCell id="9" value="" source="4" target="5" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#7f9d6b;strokeWidth=2;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#7b8e69;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="10" value="" source="5" target="6" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#7f9d6b;strokeWidth=2;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#7b8e69;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="11" value="" source="6" target="7" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#7f9d6b;strokeWidth=2;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#7b8e69;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="12" value="" source="7" target="8" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#7f9d6b;strokeWidth=2;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#7b8e69;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="13" value="任务执行与观察反馈 → 回到同一案例，进入下一轮" source="8" target="4" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#7f9d6b;strokeWidth=2;fontFamily=Microsoft YaHei;fontSize=12;fontColor=#7b8e69;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=1;dashed=1;">
+          <mxGeometry as="geometry" relative="1">
+            <Array as="points">
+              <mxPoint x="1200" y="345" />
+              <mxPoint x="160" y="345" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="14" value="&lt;b&gt;统一案例与证据&lt;/b&gt;&lt;br&gt;组织 / 大棚 / 区域 / 批次 · 环境记录 · 人工观察 · 知识引用 · 任务与复查 · 模型与技能版本" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#f4f7ed;strokeColor=#dce5d1;fontSize=16;">
+          <mxGeometry as="geometry" x="50" y="405" width="1260" height="92" />
+        </mxCell>
+        <mxCell id="15" value="&lt;b&gt;复用当前项目基础&lt;/b&gt;&lt;br&gt;监测预警 · 三维大棚 · 知识检索&lt;br&gt;农事任务 · Agent运行 · 审批与复查" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#ffffff;strokeColor=#dce5d1;fontSize=15;">
+          <mxGeometry as="geometry" x="50" y="535" width="600" height="110" />
+        </mxCell>
+        <mxCell id="16" value="&lt;b&gt;按数据成熟度逐步开放&lt;/b&gt;&lt;br&gt;档案与流程 → 环境情景 → 生产研究 → 技能复用&lt;br&gt;状态估计与生长预测另行采集、校准和验证" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#fbf3e3;strokeColor=#e6d7b6;fontSize=15;">
+          <mxGeometry as="geometry" x="690" y="535" width="620" height="110" />
+        </mxCell>
+        <mxCell id="17" value="建设方案示意。观察、推演、待验证解释与已完成结果分别记录；当前概念稿不连接实际预测、设备或任务写入。" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontColor=#2c5038;spacing=14;arcSize=12;fillColor=#ffffff;strokeColor=#dce5d1;fontSize=12;strokeColor=none;fillColor=none;fontColor=#9aa68d;">
+          <mxGeometry as="geometry" x="50" y="674" width="1260" height="36" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

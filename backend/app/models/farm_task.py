@@ -60,6 +60,7 @@ class FarmTask(Base):
     result_snapshot_json: Mapped[dict[str, Any] | None] = mapped_column(JSON)
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     created_by: Mapped[str] = mapped_column(String(60), nullable=False)
+    created_by_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now
@@ -80,4 +81,3 @@ class FarmTask(Base):
     )
     events = relationship("TaskEvent", back_populates="task", order_by="TaskEvent.id")
     feedbacks = relationship("TaskFeedback", back_populates="task", order_by="TaskFeedback.id")
-

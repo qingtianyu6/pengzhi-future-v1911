@@ -51,6 +51,7 @@ class WarningEvent(Base):
     last_triggered_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
     acknowledged_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     acknowledged_by: Mapped[str | None] = mapped_column(String(60))
+    last_operator_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     acknowledgement_note: Mapped[str | None] = mapped_column(Text)
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     resolved_by: Mapped[str | None] = mapped_column(String(60))

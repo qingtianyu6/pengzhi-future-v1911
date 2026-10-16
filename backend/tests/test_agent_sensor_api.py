@@ -61,12 +61,35 @@ def test_sensor_ingest_key_can_be_required(client: TestClient, monkeypatch) -> N
             "co2_concentration": 600,
         }]
     }
-    assert client.post("/api/v1/ingest/sensor-data", json=payload).status_code == 401
+    assert client.post("/api/v1/ingest/sensor-data", json=payload,
+                       headers={"Authorization": ""}).status_code == 401
     assert client.post(
         "/api/v1/ingest/sensor-data",
         json=payload,
-        headers={"X-Sensor-Key": "secret-key"},
+        headers={"X-Sensor-Key": "secret-key", "Authorization": ""},
     ).status_code == 200
+
+
+def test_global_sensor_key_is_rejected_with_multiple_organizations(client: TestClient, monkeypatch) -> None:
+    _greenhouse(client, "SENSOR-ORG-A")
+    other = client.post("/api/auth/register", json={
+        "display_name": "乙组织管理员", "phone": "13800000044",
+        "organization": "乙组织", "password": "Greenhouse2026",
+    })
+    assert other.status_code == 200
+    monkeypatch.setattr("app.api.sensor_ingest.get_settings",
+                        lambda: SimpleNamespace(sensor_ingest_key="shared-secret"))
+    payload = {"items": [{
+        "greenhouse_code": "SENSOR-ORG-A", "device_id": "node-cross-org",
+        "recorded_at": "2026-08-30T20:00:00+08:00", "temperature": 25,
+        "air_humidity": 70, "soil_moisture": 60,
+        "light_intensity": 20, "co2_concentration": 600,
+    }]}
+    assert client.post("/api/v1/ingest/sensor-data", json=payload,
+                       headers={"X-Sensor-Key": "shared-secret", "Authorization": ""}).status_code == 403
+    other_headers = {"Authorization": f"Bearer {other.json()['data']['token']}"}
+    assert client.post("/api/v1/ingest/sensor-data", json=payload,
+                       headers=other_headers).status_code == 404
 
 
 def test_general_agent_uses_knowledge_without_greenhouse(client: TestClient, monkeypatch) -> None:

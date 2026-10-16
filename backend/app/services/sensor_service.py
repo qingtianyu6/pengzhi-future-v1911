@@ -110,47 +110,38 @@ def batch_insert(db: Session, payload: SensorBatchRequest) -> SensorBatchResult:
     if missing_greenhouses:
         raise ServiceError(404, f"大棚不存在：{sorted(missing_greenhouses)}")
 
-    grouped_times: dict[int, list[datetime]] = defaultdict(list)
-    normalized_items = []
-    seen: set[tuple[int, datetime]] = set()
-    skipped = 0
+    metrics = ("temperature", "air_humidity", "soil_moisture", "light_intensity", "co2_concentration")
+    keys={(item.greenhouse_id,normalize_timestamp(item.recorded_at)) for item in payload.items}
+    records={}
+    for gid in greenhouse_ids:
+        times=[ts for g,ts in keys if g==gid]
+        for row in db.scalars(select(SensorData).where(SensorData.greenhouse_id==gid, SensorData.recorded_at.in_(times))):
+            records[(gid,row.recorded_at)]=row
+    accepted=skipped=0
     for item in payload.items:
-        recorded_at = normalize_timestamp(item.recorded_at)
-        key = (item.greenhouse_id, recorded_at)
-        if key in seen:
-            skipped += 1
+        ts=normalize_timestamp(item.recorded_at);key=(item.greenhouse_id,ts)
+        row=records.get(key)
+        if row is None:
+            row=SensorData(**item.model_dump(exclude={"recorded_at"}),recorded_at=ts)
+            db.add(row);records[key]=row;accepted+=1
             continue
-        seen.add(key)
-        grouped_times[item.greenhouse_id].append(recorded_at)
-        normalized_items.append((item, recorded_at))
-
-    existing_keys: set[tuple[int, datetime]] = set()
-    for greenhouse_id, times in grouped_times.items():
-        rows = db.execute(
-            select(SensorData.greenhouse_id, SensorData.recorded_at).where(
-                SensorData.greenhouse_id == greenhouse_id,
-                SensorData.recorded_at.in_(times),
-            )
-        )
-        existing_keys.update((row[0], row[1]) for row in rows)
-
-    records = []
-    for item, recorded_at in normalized_items:
-        if (item.greenhouse_id, recorded_at) in existing_keys:
-            skipped += 1
-            continue
-        records.append(
-            SensorData(**item.model_dump(exclude={"recorded_at"}), recorded_at=recorded_at)
-        )
-    db.add_all(records)
-    try:
-        db.commit()
-    except IntegrityError as exception:
-        db.rollback()
-        raise ServiceError(409, "批量数据与已有时间点冲突，整个批次未写入") from exception
-    return SensorBatchResult(
-        success_count=len(records),
-        skipped_count=skipped,
-        failed_count=0,
-        message="批量写入完成；重复时间点已安全跳过",
-    )
+        # A time point is an aggregate: complementary device metrics may fill gaps.
+        # Already present metrics are immutable, making retrying a batch idempotent.
+        filled=False
+        for metric in metrics:
+            incoming=getattr(item,metric)
+            if incoming is not None and getattr(row,metric) is None:
+                setattr(row,metric,incoming);filled=True
+        if filled:
+            devices=sorted(set((row.device_id or "").split("+")+([item.device_id] if item.device_id else []))-{''})
+            row.device_id="+".join(devices)[:80] or None
+            if row.quality_flag != 'suspect' and item.quality_flag != 'suspect':
+                row.quality_flag='valid' if all(getattr(row,k) is not None for k in metrics) else 'missing'
+            else:row.quality_flag='suspect'
+            accepted+=1
+        else:skipped+=1
+    try:db.commit()
+    except IntegrityError as exc:
+        db.rollback();raise ServiceError(409,"同一时间点发生并发写入，请重试批次") from exc
+    return SensorBatchResult(success_count=accepted,skipped_count=skipped,failed_count=0,
+        message="已写入或合并互补指标；已有指标不覆盖，重复上报安全跳过")

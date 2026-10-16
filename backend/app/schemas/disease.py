@@ -66,6 +66,7 @@ class DiseaseRecordData(BaseModel):
     review_status: str
     reviewed_class: str | None
     review_note: str | None
+    reviewed_by_user_id: int | None = None
     created_at: datetime
     updated_at: datetime
 

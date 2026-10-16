@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.config import get_settings
 from app.database import get_db
-from app.models import Greenhouse
+from app.models import Greenhouse, Organization
 from app.schemas.common import ApiResponse
 from app.schemas.sensor_data import (
     SensorBatchRequest,
@@ -19,6 +19,7 @@ from app.schemas.sensor_data import (
     SensorIngestStatus,
 )
 from app.services import sensor_service
+from app.services import auth_service
 from app.services.errors import ServiceError
 
 
@@ -26,12 +27,24 @@ router = APIRouter(prefix="/v1/ingest", tags=["设备数据接入"])
 Database = Annotated[Session, Depends(get_db)]
 
 
-def _check_sensor_key(value: str | None) -> None:
+def _check_sensor_key(value: str | None, db: Session, authorization: str | None) -> int | None:
+    if authorization:
+        user, _ = auth_service.authenticate(db, authorization)
+        if user.role not in {"admin", "agronomist"} or user.organization_id is None:
+            raise ServiceError(403, "当前角色无权接入传感器")
+        return user.organization_id
     expected = get_settings().sensor_ingest_key
     if not expected:
-        return
+        user, _ = auth_service.authenticate(db, authorization)
+        if user.role not in {"admin", "agronomist"}:
+            raise ServiceError(403, "当前角色无权接入传感器")
+        return user.organization_id
     if not value or not hmac.compare_digest(value, expected):
         raise ServiceError(401, "传感器接入密钥无效")
+    organization_ids = list(db.scalars(select(Organization.id).order_by(Organization.id).limit(2)))
+    if len(organization_ids) != 1:
+        raise ServiceError(403, "多组织环境不能使用全局传感器密钥；请使用所属组织管理员令牌")
+    return organization_ids[0]
 
 
 @router.get(
@@ -43,7 +56,7 @@ def ingest_status() -> ApiResponse[SensorIngestStatus]:
     settings = get_settings()
     return ApiResponse(data=SensorIngestStatus(
         endpoint="/api/v1/ingest/sensor-data",
-        auth_required=bool(settings.sensor_ingest_key),
+        auth_required=True,
         accepted_metrics=[
             "temperature",
             "air_humidity",
@@ -64,11 +77,15 @@ def ingest_sensor_data(
     payload: SensorIngestRequest,
     db: Database,
     sensor_key: Annotated[str | None, Header(alias="X-Sensor-Key")] = None,
+    authorization: Annotated[str | None, Header()] = None,
 ) -> ApiResponse[SensorBatchResult]:
-    _check_sensor_key(sensor_key)
+    organization_id = _check_sensor_key(sensor_key, db, authorization)
     codes = {item.greenhouse_code.strip() for item in payload.items}
     rows = db.execute(
-        select(Greenhouse.code, Greenhouse.id).where(Greenhouse.code.in_(codes))
+        select(Greenhouse.code, Greenhouse.id).where(
+            Greenhouse.code.in_(codes),
+            *((Greenhouse.organization_id == organization_id,) if organization_id else ()),
+        )
     )
     greenhouse_map = {code: greenhouse_id for code, greenhouse_id in rows}
     missing = sorted(codes - greenhouse_map.keys())
