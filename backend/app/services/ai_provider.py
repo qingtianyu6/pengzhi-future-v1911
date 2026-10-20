@@ -41,7 +41,9 @@ class OpenAICompatibleProvider(LLMProvider):
                 response = await client.post(self._endpoint(), json=payload, headers={
                     "Authorization": f"Bearer {self.settings.ai_api_key}"})
                 response.raise_for_status()
-                message = response.json()["choices"][0]["message"]
+                body = response.json()
+                self.last_usage = {k: v for k, v in body.get("usage", {}).items() if k in {"prompt_tokens", "completion_tokens", "total_tokens"} and isinstance(v, (int, float))}
+                message = body["choices"][0]["message"]
                 return {key: message[key] for key in ("role", "content", "tool_calls") if key in message}
         except httpx.HTTPStatusError as exc:
             raise LLMProviderError("工具调用模型服务不可用") from exc

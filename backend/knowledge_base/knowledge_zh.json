@@ -1,0 +1,1511 @@
+[
+  {
+    "id": "zh-winter-1",
+    "title": "冬季棚膜清洁与有效光照",
+    "summary": "冬季寡照时，棚膜清洁和合理揭盖有助于利用自然光。",
+    "guidance": [
+      "检查膜面积尘及遮挡。",
+      "结合保温条件安排揭盖。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "冬季棚膜清洁与有效光照",
+      "光照管理",
+      "环境与气象"
+    ],
+    "applicability": "北方冬季设施果菜；按棚型、天气和长势调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "设施蔬菜冬季生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/tzgg/202210/t20221028_6414218.htm",
+        "position": "参考主题：光照管理",
+        "accessed_at": "2026-10-16T14:03:53.094775+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-winter-2",
+    "title": "冬季通风排湿与保温协调",
+    "summary": "寒冷天气仍需控制棚内湿度，放风应结合棚温和天气。",
+    "guidance": [
+      "查看夜间湿度与结露。",
+      "择较暖时段适度排湿。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "冬季通风排湿与保温协调",
+      "湿度管理",
+      "环境与气象"
+    ],
+    "applicability": "北方冬季设施果菜；按棚型、天气和长势调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "设施蔬菜冬季生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/tzgg/202210/t20221028_6414218.htm",
+        "position": "参考主题：湿度管理",
+        "accessed_at": "2026-10-16T14:03:53.094775+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-freeze-1",
+    "title": "雨雪前棚体覆盖与保温检查",
+    "summary": "雨雪前检查覆盖物、棚体和保温条件，降低受冻及设施损伤风险。",
+    "guidance": [
+      "检查覆盖完整性。",
+      "及时清理积雪并加强巡查。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "雨雪前棚体覆盖与保温检查",
+      "设施维护",
+      "环境与气象"
+    ],
+    "applicability": "秋冬低温雨雪；不作为统一温度设定。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "秋冬蔬菜抗寒防冻稳产保供技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202110/t20211029_6380858.htm",
+        "position": "参考主题：设施维护",
+        "accessed_at": "2026-10-16T14:03:53.204015+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-freeze-2",
+    "title": "久阴转晴后的叶片萎蔫观察",
+    "summary": "连续阴天后骤晴可能出现失水萎蔫，应观察恢复情况。",
+    "guidance": [
+      "避免突然长时间强光暴露。",
+      "结合叶片状态逐步恢复管理。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "久阴转晴后的叶片萎蔫观察",
+      "光照管理",
+      "环境与气象"
+    ],
+    "applicability": "秋冬低温雨雪；不作为统一温度设定。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "秋冬蔬菜抗寒防冻稳产保供技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202110/t20211029_6380858.htm",
+        "position": "参考主题：光照管理",
+        "accessed_at": "2026-10-16T14:03:53.204015+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-heat-1",
+    "title": "高温期遮阳与通风协同",
+    "summary": "高温强光下，遮阳和通风应配合，兼顾作物受光需要。",
+    "guidance": [
+      "检查风口是否畅通。",
+      "根据天气调整遮阳时间。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "高温期遮阳与通风协同",
+      "蔬菜降温",
+      "环境与气象"
+    ],
+    "applicability": "高温干旱蔬菜生产；按当地水源及棚型调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "果菜茶应对高温干旱生产技术指导意见",
+        "url": "https://jgs.moa.gov.cn/fxpg/202308/t20230829_6435334.htm",
+        "position": "参考主题：蔬菜降温",
+        "accessed_at": "2026-10-16T14:03:53.205015+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-heat-2",
+    "title": "干旱期水分管理与长势观察",
+    "summary": "干旱应对需结合墒情和长势，避免脱离现场条件安排灌溉。",
+    "guidance": [
+      "先检查土壤和植株状态。",
+      "将天气与供水条件一起评估。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "干旱期水分管理与长势观察",
+      "科学水肥",
+      "环境与气象"
+    ],
+    "applicability": "高温干旱蔬菜生产；按当地水源及棚型调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "果菜茶应对高温干旱生产技术指导意见",
+        "url": "https://jgs.moa.gov.cn/fxpg/202308/t20230829_6435334.htm",
+        "position": "参考主题：科学水肥",
+        "accessed_at": "2026-10-16T14:03:53.205015+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-southspring-1",
+    "title": "南方春季菜田排水准备",
+    "summary": "春季降雨前要检查沟渠，降低渍害对蔬菜生产的影响。",
+    "guidance": [
+      "清理排水通道。",
+      "结合地势检查低洼积水。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "育苗与定植"
+    ],
+    "category": "育苗与定植",
+    "stages": [],
+    "keywords": [
+      "南方春季菜田排水准备",
+      "防灾减灾",
+      "育苗与定植"
+    ],
+    "applicability": "南方春季；适用于当地茬口及降雨条件。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "南方春季蔬菜生产管理技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gzdt/202303/t20230310_6422807.htm",
+        "position": "参考主题：防灾减灾",
+        "accessed_at": "2026-10-16T14:03:53.203014+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-southspring-2",
+    "title": "换茬清园与尾菜处理",
+    "summary": "及时处理尾菜和藤蔓等残留，为下茬生产准备较清洁的田间环境。",
+    "guidance": [
+      "清理残株杂物。",
+      "根据下茬安排翻晒地块。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "育苗与定植"
+    ],
+    "category": "育苗与定植",
+    "stages": [],
+    "keywords": [
+      "换茬清园与尾菜处理",
+      "综合管护",
+      "育苗与定植"
+    ],
+    "applicability": "南方春季；适用于当地茬口及降雨条件。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "南方春季蔬菜生产管理技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gzdt/202303/t20230310_6422807.htm",
+        "position": "参考主题：综合管护",
+        "accessed_at": "2026-10-16T14:03:53.203014+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-northsummer-1",
+    "title": "果菜初花期与结果期的水肥区别",
+    "summary": "初花期控旺与结果期供肥水的重点不同，应随生育阶段调整。",
+    "guidance": [
+      "先确认初花或结果阶段。",
+      "结果期按长势少量多次供肥水。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "水肥与土壤"
+    ],
+    "category": "水肥与土壤",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期",
+      "膨果期",
+      "转色期"
+    ],
+    "keywords": [
+      "果菜初花期与结果期的水肥区别",
+      "在田管理",
+      "水肥与土壤"
+    ],
+    "applicability": "北方夏季；不同果菜的阶段需求分别判断。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "北方夏季蔬菜生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202206/t20220621_6403023.htm",
+        "position": "参考主题：在田管理",
+        "accessed_at": "2026-10-16T14:03:53.829259+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-northsummer-2",
+    "title": "高畦栽培与田间通风排水",
+    "summary": "合理畦作有利于排水和通风透光，减少田间积水。",
+    "guidance": [
+      "查看畦沟连通情况。",
+      "避免枝叶过密阻碍空气流动。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "水肥与土壤"
+    ],
+    "category": "水肥与土壤",
+    "stages": [],
+    "keywords": [
+      "高畦栽培与田间通风排水",
+      "田间管理",
+      "水肥与土壤"
+    ],
+    "applicability": "北方夏季；不同果菜的阶段需求分别判断。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "北方夏季蔬菜生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202206/t20220621_6403023.htm",
+        "position": "参考主题：田间管理",
+        "accessed_at": "2026-10-16T14:03:53.829259+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-southsummer-1",
+    "title": "台风前蔬菜支架与成熟产品处置",
+    "summary": "台风前应检查支架、沟渠，并安排成熟产品及时采收。",
+    "guidance": [
+      "加固搭架及棚室。",
+      "提前疏通田间沟渠。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "台风前蔬菜支架与成熟产品处置",
+      "台风防范",
+      "环境与气象"
+    ],
+    "applicability": "南方夏季台风、暴雨风险期。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "南方夏季蔬菜生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202206/t20220621_6403021.htm",
+        "position": "参考主题：台风防范",
+        "accessed_at": "2026-10-16T14:03:54.158028+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-southsummer-2",
+    "title": "夏季品种选择与灾害适应性",
+    "summary": "夏季品种选择需考虑耐热、耐涝、抗旱和抗病性。",
+    "guidance": [
+      "结合当地主要灾害选种。",
+      "同时配合水肥管理。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "夏季品种选择与灾害适应性",
+      "品种选择",
+      "环境与气象"
+    ],
+    "applicability": "南方夏季台风、暴雨风险期。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "南方夏季蔬菜生产技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202206/t20220621_6403021.htm",
+        "position": "参考主题：品种选择",
+        "accessed_at": "2026-10-16T14:03:54.158028+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-windrain-1",
+    "title": "强风前棚室与绑蔓检查",
+    "summary": "大风前检查设施及支撑，对搭架作物及时绑蔓，减少损伤。",
+    "guidance": [
+      "检查压膜和支架。",
+      "提前整理易倒伏植株。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "强风前棚室与绑蔓检查",
+      "大风防范",
+      "环境与气象"
+    ],
+    "applicability": "大风、降温及强降雨前后；现场作业另需保障人员安全。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "蔬菜防范大风降温和强降雨技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gzdt/202304/t20230422_6426042.htm",
+        "position": "参考主题：大风防范",
+        "accessed_at": "2026-10-16T14:03:54.095181+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-windrain-2",
+    "title": "受涝菜田恢复的先后顺序",
+    "summary": "受涝后先加快排水，再结合受损程度恢复田间管理。",
+    "guidance": [
+      "深清沟、排除积水。",
+      "扶正倒伏植株并清理病株。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "受涝菜田恢复的先后顺序",
+      "灾后管理",
+      "环境与气象"
+    ],
+    "applicability": "大风、降温及强降雨前后；现场作业另需保障人员安全。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "蔬菜防范大风降温和强降雨技术指导意见",
+        "url": "https://zzys.moa.gov.cn/gzdt/202304/t20230422_6426042.htm",
+        "position": "参考主题：灾后管理",
+        "accessed_at": "2026-10-16T14:03:54.095181+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-marchpest-1",
+    "title": "育苗棚病虫检查与健康苗筛查",
+    "summary": "育苗阶段要关注病苗和带虫苗，避免随定植扩散。",
+    "guidance": [
+      "检查苗株叶片及生长点。",
+      "发现异常苗先隔离核查。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [
+      "苗期",
+      "定植期",
+      "缓苗期"
+    ],
+    "keywords": [
+      "育苗棚病虫检查与健康苗筛查",
+      "育苗棚管理",
+      "病害与虫害"
+    ],
+    "applicability": "北京春季病虫提示；其他地区需核对本地监测。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "3月蔬菜生产重点关注病虫提示",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/743561104/index.html",
+        "position": "参考主题：育苗棚管理",
+        "accessed_at": "2026-10-16T14:03:54.521706+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-marchpest-2",
+    "title": "早春生产棚小型害虫巡查",
+    "summary": "春季巡查需同时观察叶部病害、粉虱、蚜虫和蓟马等。",
+    "guidance": [
+      "查看叶背及嫩梢。",
+      "记录异常发生区域和变化。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "早春生产棚小型害虫巡查",
+      "生产棚监测",
+      "病害与虫害"
+    ],
+    "applicability": "北京春季病虫提示；其他地区需核对本地监测。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "3月蔬菜生产重点关注病虫提示",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/743561104/index.html",
+        "position": "参考主题：生产棚监测",
+        "accessed_at": "2026-10-16T14:03:54.521706+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-cooldisease-1",
+    "title": "番茄花果灰霉样症状的排查",
+    "summary": "低温高湿条件下，番茄灰霉病可危害花、果及其他器官。",
+    "guidance": [
+      "记录花果受害部位。",
+      "结合湿度和持续时间核查。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期",
+      "膨果期",
+      "转色期"
+    ],
+    "keywords": [
+      "番茄花果灰霉样症状的排查",
+      "灰霉病",
+      "病害与虫害"
+    ],
+    "applicability": "低温寡照、棚内高湿；这里只作候选辨识。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "清明前后蔬菜低温高湿型病害种类介绍",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/436398535/index.html",
+        "position": "参考主题：灰霉病",
+        "accessed_at": "2026-10-16T14:03:55.011454+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-cooldisease-2",
+    "title": "甜瓜叶片霜霉样症状的观察",
+    "summary": "甜瓜可发生霜霉病，高湿条件下需关注叶部症状。",
+    "guidance": [
+      "分别拍摄叶片正背面。",
+      "不可把番茄叶霉病直接套用到甜瓜。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "甜瓜叶片霜霉样症状的观察",
+      "霜霉病",
+      "病害与虫害"
+    ],
+    "applicability": "低温寡照、棚内高湿；这里只作候选辨识。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "清明前后蔬菜低温高湿型病害种类介绍",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/436398535/index.html",
+        "position": "参考主题：霜霉病",
+        "accessed_at": "2026-10-16T14:03:55.011454+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-blossom-1",
+    "title": "番茄脐部凹陷干腐与生理性脐腐",
+    "summary": "脐部凹陷、干腐可作为脐腐病候选特征，需与其他果腐区分。",
+    "guidance": [
+      "记录病斑起始位置。",
+      "观察果实硬度及干湿状态。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期",
+      "膨果期",
+      "转色期"
+    ],
+    "keywords": [
+      "番茄脐部凹陷干腐与生理性脐腐",
+      "识别特征",
+      "病害与虫害"
+    ],
+    "applicability": "番茄果实生理性问题；不据单张照片确诊。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "警惕脐腐病发生与为害",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/743995836/index.html",
+        "position": "参考主题：识别特征",
+        "accessed_at": "2026-10-16T14:03:54.918909+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-blossom-2",
+    "title": "脐腐风险不能只看土壤缺钙",
+    "summary": "水分失调及养分偏施也可能影响钙吸收，并诱发脐腐问题。",
+    "guidance": [
+      "核查近期供水变化。",
+      "结合施肥和根系状态排查。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期",
+      "膨果期",
+      "转色期"
+    ],
+    "keywords": [
+      "脐腐风险不能只看土壤缺钙",
+      "发生特点",
+      "病害与虫害"
+    ],
+    "applicability": "番茄果实生理性问题；不据单张照片确诊。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "警惕脐腐病发生与为害",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/743995836/index.html",
+        "position": "参考主题：发生特点",
+        "accessed_at": "2026-10-16T14:03:54.918909+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-crack-1",
+    "title": "番茄裂果形态与发生位置记录",
+    "summary": "裂果形态不同，记录果蒂、果肩及侧面裂纹有助于追查。",
+    "guidance": [
+      "拍摄裂口位置。",
+      "记录成熟度和品种。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "采收与品质"
+    ],
+    "category": "采收与品质",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期",
+      "膨果期",
+      "转色期"
+    ],
+    "keywords": [
+      "番茄裂果形态与发生位置记录",
+      "裂果类型",
+      "采收与品质"
+    ],
+    "applicability": "番茄结果与转色期；按品种和栽培方式调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "节气探农事：番茄裂果原因及预防措施",
+        "url": "https://nyncj.beijing.gov.cn/nyj/jcsn/jqkxc_zxgjc78/jqsy/326161637/index.html",
+        "position": "参考主题：裂果类型",
+        "accessed_at": "2026-10-16T14:03:55.240974+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-crack-2",
+    "title": "番茄转色期供水与功能叶保护",
+    "summary": "忽干忽湿和过度摘叶都可能增加裂果风险。",
+    "guidance": [
+      "核查转色期灌溉记录。",
+      "避免过度去叶使果实直接暴晒。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "采收与品质"
+    ],
+    "category": "采收与品质",
+    "stages": [],
+    "keywords": [
+      "番茄转色期供水与功能叶保护",
+      "预防措施",
+      "采收与品质"
+    ],
+    "applicability": "番茄结果与转色期；按品种和栽培方式调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "节气探农事：番茄裂果原因及预防措施",
+        "url": "https://nyncj.beijing.gov.cn/nyj/jcsn/jqkxc_zxgjc78/jqsy/326161637/index.html",
+        "position": "参考主题：预防措施",
+        "accessed_at": "2026-10-16T14:03:55.240974+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-latecold-1",
+    "title": "晚疫病排查要结合叶面结露",
+    "summary": "低温高湿和叶面结露有利于番茄晚疫病发生，单看中心湿度不够。",
+    "guidance": [
+      "观察叶片结露。",
+      "核查放风及浇水后的天气。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "晚疫病排查要结合叶面结露",
+      "发病规律",
+      "病害与虫害"
+    ],
+    "applicability": "寒潮与结露风险期；确诊及用药须另行复核。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "寒潮来袭做好番茄晚疫病防控",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/436302001/index.html",
+        "position": "参考主题：发病规律",
+        "accessed_at": "2026-10-16T14:03:56.931499+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-latecold-2",
+    "title": "番茄疑似中心病株的扩散巡查",
+    "summary": "疑似中心病株出现后，增加周边巡查并核实受害范围。",
+    "guidance": [
+      "记录相邻株症状。",
+      "病残体处理与防控请结合现场指导。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "番茄疑似中心病株的扩散巡查",
+      "防控要点",
+      "病害与虫害"
+    ],
+    "applicability": "寒潮与结露风险期；确诊及用药须另行复核。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "寒潮来袭做好番茄晚疫病防控",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/436302001/index.html",
+        "position": "参考主题：防控要点",
+        "accessed_at": "2026-10-16T14:03:56.931499+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-virus-1",
+    "title": "番茄病毒样症状与传毒昆虫排查",
+    "summary": "病毒病排查应同时关注粉虱、蚜虫、蓟马等可能传毒的昆虫。",
+    "guidance": [
+      "查看嫩叶及生长点。",
+      "记录虫情而非仅凭叶色判断。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "番茄病毒样症状与传毒昆虫排查",
+      "发生与传播",
+      "病害与虫害"
+    ],
+    "applicability": "宁夏公开指导；病毒类型与传播途径须分别核实。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "第二十四期植保情报：番茄病毒病防控技术",
+        "url": "https://nynct.nx.gov.cn/xwzx/zwdt/202412/t20241226_4770983.html",
+        "position": "参考主题：发生与传播",
+        "accessed_at": "2026-10-16T14:03:55.574561+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-virus-2",
+    "title": "病毒病管理的源头控制思路",
+    "summary": "源头控制结合农业、物理与生物措施，减少病毒病发生传播。",
+    "guidance": [
+      "核查种苗来源与健康状况。",
+      "结合当地植保指导制定措施。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "病毒病管理的源头控制思路",
+      "绿色防控",
+      "病害与虫害"
+    ],
+    "applicability": "宁夏公开指导；病毒类型与传播途径须分别核实。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "第二十四期植保情报：番茄病毒病防控技术",
+        "url": "https://nynct.nx.gov.cn/xwzx/zwdt/202412/t20241226_4770983.html",
+        "position": "参考主题：绿色防控",
+        "accessed_at": "2026-10-16T14:03:55.574561+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-transplant-1",
+    "title": "番茄定植缓苗与正常生长的温度衔接",
+    "summary": "缓苗期和缓苗后温度管理目标不同，需随生长状态调整。",
+    "guidance": [
+      "记录定植日期。",
+      "结合长势逐步调整通风。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "育苗与定植"
+    ],
+    "category": "育苗与定植",
+    "stages": [
+      "苗期",
+      "定植期",
+      "缓苗期"
+    ],
+    "keywords": [
+      "番茄定植缓苗与正常生长的温度衔接",
+      "温度管理",
+      "育苗与定植"
+    ],
+    "applicability": "北京春提前塑料大棚；不能直接套用于其他茬口。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "节气探农事：番茄定植关键期如何管护",
+        "url": "https://nyncj.beijing.gov.cn/nyj/jcsn/jqkxc_zxgjc78/jqsy/326161040/index.html",
+        "position": "参考主题：温度管理",
+        "accessed_at": "2026-10-16T14:03:55.961950+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-transplant-2",
+    "title": "番茄第一穗坐果前后的供水区别",
+    "summary": "坐果前防旺长，结果后注意均衡供水，避免土壤忽干忽湿。",
+    "guidance": [
+      "先核查第一穗坐果情况。",
+      "结合土壤水分安排灌溉。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "育苗与定植"
+    ],
+    "category": "育苗与定植",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期",
+      "膨果期",
+      "转色期"
+    ],
+    "keywords": [
+      "番茄第一穗坐果前后的供水区别",
+      "水肥管理",
+      "育苗与定植"
+    ],
+    "applicability": "北京春提前塑料大棚；不能直接套用于其他茬口。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "节气探农事：番茄定植关键期如何管护",
+        "url": "https://nyncj.beijing.gov.cn/nyj/jcsn/jqkxc_zxgjc78/jqsy/326161040/index.html",
+        "position": "参考主题：水肥管理",
+        "accessed_at": "2026-10-16T14:03:55.961950+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-melon-1",
+    "title": "甜瓜授粉日期记录与采收判断",
+    "summary": "授粉时记录日期，采收还需结合品种与实际成熟度。",
+    "guidance": [
+      "给授粉果做日期标记。",
+      "避免只按固定天数采瓜。"
+    ],
+    "crops": [
+      "muskmelon"
+    ],
+    "topics": [
+      "整枝与授粉"
+    ],
+    "category": "整枝与授粉",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期"
+    ],
+    "keywords": [
+      "甜瓜授粉日期记录与采收判断",
+      "授粉、采收",
+      "整枝与授粉"
+    ],
+    "applicability": "上海春季大棚技术；品种、整枝方式和留果方案需核对。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "春季甜瓜大棚栽培技术",
+        "url": "https://nyncw.sh.gov.cn/nyjs/20181227/0009-109447.html",
+        "position": "参考主题：授粉、采收",
+        "accessed_at": "2026-10-16T14:03:56.699872+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-melon-2",
+    "title": "甜瓜疏果时的品种特征核对",
+    "summary": "疏果要结合品种，优先保留符合特征的正常果。",
+    "guidance": [
+      "观察幼果形状。",
+      "清除畸形、受害果时核对留果方案。"
+    ],
+    "crops": [
+      "muskmelon"
+    ],
+    "topics": [
+      "整枝与授粉"
+    ],
+    "category": "整枝与授粉",
+    "stages": [
+      "开花期",
+      "坐果期",
+      "结果期",
+      "膨果期",
+      "转色期"
+    ],
+    "keywords": [
+      "甜瓜疏果时的品种特征核对",
+      "疏果",
+      "整枝与授粉"
+    ],
+    "applicability": "上海春季大棚技术；品种、整枝方式和留果方案需核对。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "春季甜瓜大棚栽培技术",
+        "url": "https://nyncw.sh.gov.cn/nyjs/20181227/0009-109447.html",
+        "position": "参考主题：疏果",
+        "accessed_at": "2026-10-16T14:03:56.699872+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-melon-3",
+    "title": "甜瓜整枝方式与品种适配",
+    "summary": "该指导采用双蔓整枝；不能当作所有甜瓜品种的统一方案。",
+    "guidance": [
+      "先核实品种与栽培形式。",
+      "整枝前明确计划留蔓。"
+    ],
+    "crops": [
+      "muskmelon"
+    ],
+    "topics": [
+      "整枝与授粉"
+    ],
+    "category": "整枝与授粉",
+    "stages": [],
+    "keywords": [
+      "甜瓜整枝方式与品种适配",
+      "植株调整",
+      "整枝与授粉"
+    ],
+    "applicability": "上海春季大棚技术；品种、整枝方式和留果方案需核对。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "春季甜瓜大棚栽培技术",
+        "url": "https://nyncw.sh.gov.cn/nyjs/20181227/0009-109447.html",
+        "position": "参考主题：植株调整",
+        "accessed_at": "2026-10-16T14:03:56.699872+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-melon-4",
+    "title": "甜瓜种植地排灌与轮作条件",
+    "summary": "甜瓜定植地需关注排灌、土壤和前茬情况。",
+    "guidance": [
+      "查看地下水及排水条件。",
+      "核查近期瓜类种植史。"
+    ],
+    "crops": [
+      "muskmelon"
+    ],
+    "topics": [
+      "整枝与授粉"
+    ],
+    "category": "整枝与授粉",
+    "stages": [],
+    "keywords": [
+      "甜瓜种植地排灌与轮作条件",
+      "定植准备",
+      "整枝与授粉"
+    ],
+    "applicability": "上海春季大棚技术；品种、整枝方式和留果方案需核对。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "春季甜瓜大棚栽培技术",
+        "url": "https://nyncw.sh.gov.cn/nyjs/20181227/0009-109447.html",
+        "position": "参考主题：定植准备",
+        "accessed_at": "2026-10-16T14:03:56.699872+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-melonfert-1",
+    "title": "甜瓜滴灌施肥前的墒情与长势核查",
+    "summary": "滴灌施肥应结合季节、品种需水需肥规律以及田间状态。",
+    "guidance": [
+      "先检查墒情和长势。",
+      "不采用一套固定水肥表贯穿全程。"
+    ],
+    "crops": [
+      "muskmelon"
+    ],
+    "topics": [
+      "水肥与土壤"
+    ],
+    "category": "水肥与土壤",
+    "stages": [],
+    "keywords": [
+      "甜瓜滴灌施肥前的墒情与长势核查",
+      "水肥管理",
+      "水肥与土壤"
+    ],
+    "applicability": "设施甜瓜；原文兼含西瓜，不能混用两个作物的具体参数。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "西瓜甜瓜设施栽培水肥一体化技术",
+        "url": "https://nyncw.sh.gov.cn/nyjs/20181129/0009-107593.html",
+        "position": "参考主题：水肥管理",
+        "accessed_at": "2026-10-16T14:03:56.322435+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-melonfert-2",
+    "title": "甜瓜采前水肥调整与成熟计划",
+    "summary": "采前管理需结合预计采收日和品种成熟进程调整水肥。",
+    "guidance": [
+      "核查授粉及预定采收日期。",
+      "结合当地条件复核控水安排。"
+    ],
+    "crops": [
+      "muskmelon"
+    ],
+    "topics": [
+      "水肥与土壤"
+    ],
+    "category": "水肥与土壤",
+    "stages": [
+      "结果期",
+      "采收期"
+    ],
+    "keywords": [
+      "甜瓜采前水肥调整与成熟计划",
+      "采前管理",
+      "水肥与土壤"
+    ],
+    "applicability": "设施甜瓜；原文兼含西瓜，不能混用两个作物的具体参数。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "西瓜甜瓜设施栽培水肥一体化技术",
+        "url": "https://nyncw.sh.gov.cn/nyjs/20181129/0009-107593.html",
+        "position": "参考主题：采前管理",
+        "accessed_at": "2026-10-16T14:03:56.322435+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-springfert-1",
+    "title": "设施番茄施肥与土壤养分检测",
+    "summary": "番茄施肥应参考土壤肥力并分配基肥、追肥，不直接套固定亩用量。",
+    "guidance": [
+      "核对检测结果与产量目标。",
+      "记录已有基肥和追肥。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "水肥与土壤"
+    ],
+    "category": "水肥与土壤",
+    "stages": [],
+    "keywords": [
+      "设施番茄施肥与土壤养分检测",
+      "设施番茄",
+      "水肥与土壤"
+    ],
+    "applicability": "2023年春季指导；需依据土壤检测、产量目标及作物分别调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "2023年蔬菜春季科学施肥指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202303/t20230314_6423044.htm",
+        "position": "参考主题：设施番茄",
+        "accessed_at": "2026-10-16T14:03:57.368233+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-springfert-2",
+    "title": "设施甜瓜分期施肥的资料查阅",
+    "summary": "甜瓜施肥要区分生长和果实形成阶段，并与节水灌溉配合。",
+    "guidance": [
+      "核对原文设施甜瓜章节。",
+      "按生育期调整，不混用番茄配方。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "水肥与土壤"
+    ],
+    "category": "水肥与土壤",
+    "stages": [],
+    "keywords": [
+      "设施甜瓜分期施肥的资料查阅",
+      "设施甜瓜",
+      "水肥与土壤"
+    ],
+    "applicability": "2023年春季指导；需依据土壤检测、产量目标及作物分别调整。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "2023年蔬菜春季科学施肥指导意见",
+        "url": "https://zzys.moa.gov.cn/gdxw/202303/t20230314_6423044.htm",
+        "position": "参考主题：设施甜瓜",
+        "accessed_at": "2026-10-16T14:03:57.368233+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-tuta-1",
+    "title": "番茄潜叶蛾叶片潜食痕迹调查",
+    "summary": "发现潜食痕迹时需检查叶片及其他受害部位，并核实虫种。",
+    "guidance": [
+      "保留清晰症状照片。",
+      "检查棚内外受害分布。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "番茄潜叶蛾叶片潜食痕迹调查",
+      "虫害识别",
+      "病害与虫害"
+    ],
+    "applicability": "番茄潜叶蛾风险地区；虫种判断需核实。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "番茄潜叶蛾绿色防控技术指导意见",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/436377224/index.html",
+        "position": "参考主题：虫害识别",
+        "accessed_at": "2026-10-16T14:03:57.060059+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-tuta-2",
+    "title": "番茄潜叶蛾虫源与棚室周边管理",
+    "summary": "潜叶蛾管理应关注虫源及寄主，结合棚室周边作物情况。",
+    "guidance": [
+      "调查残株及周边寄主。",
+      "结合当地绿色防控方案执行。"
+    ],
+    "crops": [
+      "tomato"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "番茄潜叶蛾虫源与棚室周边管理",
+      "农业防治",
+      "病害与虫害"
+    ],
+    "applicability": "番茄潜叶蛾风险地区；虫种判断需核实。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "番茄潜叶蛾绿色防控技术指导意见",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/436377224/index.html",
+        "position": "参考主题：农业防治",
+        "accessed_at": "2026-10-16T14:03:57.060059+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-julypest-1",
+    "title": "夏季害螨与蓟马等小型害虫观察",
+    "summary": "夏季设施蔬菜应关注害螨、蓟马等小型害虫及伴随症状。",
+    "guidance": [
+      "查看叶背和嫩部。",
+      "记录虫体、症状和受害区域。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "夏季害螨与蓟马等小型害虫观察",
+      "病虫监测",
+      "病害与虫害"
+    ],
+    "applicability": "北京7月病虫提示；其他时段以当地预报为准。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "7月蔬菜生产重点关注病虫提示",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/743692314/index.html",
+        "position": "参考主题：病虫监测",
+        "accessed_at": "2026-10-16T14:03:58.396420+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-julypest-2",
+    "title": "夏季强对流天气与病虫风险联查",
+    "summary": "高温、强降水前后，灾害防范和病虫监测需要同步考虑。",
+    "guidance": [
+      "提前检查排水和遮阴。",
+      "灾后观察生理异常及病害变化。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "病害与虫害"
+    ],
+    "category": "病害与虫害",
+    "stages": [],
+    "keywords": [
+      "夏季强对流天气与病虫风险联查",
+      "天气应对",
+      "病害与虫害"
+    ],
+    "applicability": "北京7月病虫提示；其他时段以当地预报为准。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "7月蔬菜生产重点关注病虫提示",
+        "url": "https://nyncj.beijing.gov.cn/nyj/zwgk/ztgk/zwbhxx/743692314/index.html",
+        "position": "参考主题：天气应对",
+        "accessed_at": "2026-10-16T14:03:58.396420+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-winterequipment-1",
+    "title": "低温前灌溉及设施装备检查",
+    "summary": "冬季生产应提前检查设施和相关装备，减少低温造成的故障。",
+    "guidance": [
+      "检查水肥与保温设施。",
+      "结合寒潮预报安排维护。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "低温前灌溉及设施装备检查",
+      "设施装备",
+      "环境与气象"
+    ],
+    "applicability": "冬季蔬菜设施及装备维护；设备操作按本机规程执行。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "冬季蔬菜稳产保供机械化生产技术指导意见",
+        "url": "https://njhs.moa.gov.cn/tzggjzcjd/202111/t20211123_6382709.htm",
+        "position": "参考主题：设施装备",
+        "accessed_at": "2026-10-16T14:03:57.647587+00:00"
+      }
+    ]
+  },
+  {
+    "id": "zh-winterequipment-2",
+    "title": "寒潮前成熟蔬菜抢收安排",
+    "summary": "寒潮前可结合成熟度安排采收，以降低产品受冻损失。",
+    "guidance": [
+      "记录已达采收标准的批次。",
+      "结合天气与设备条件安排作业。"
+    ],
+    "crops": [
+      "tomato",
+      "muskmelon"
+    ],
+    "topics": [
+      "环境与气象"
+    ],
+    "category": "环境与气象",
+    "stages": [],
+    "keywords": [
+      "寒潮前成熟蔬菜抢收安排",
+      "采收管理",
+      "环境与气象"
+    ],
+    "applicability": "冬季蔬菜设施及装备维护；设备操作按本机规程执行。",
+    "language": "zh-CN",
+    "updated_at": "2026-10-16",
+    "content_kind": "reference_summary",
+    "sources": [
+      {
+        "name": "冬季蔬菜稳产保供机械化生产技术指导意见",
+        "url": "https://njhs.moa.gov.cn/tzggjzcjd/202111/t20211123_6382709.htm",
+        "position": "参考主题：采收管理",
+        "accessed_at": "2026-10-16T14:03:57.647587+00:00"
+      }
+    ]
+  }
+]

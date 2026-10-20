@@ -9,15 +9,18 @@ import { isGuestMode } from '../api/guestMode'
 import { AgriculturalAgentMascot, type MascotState } from './AgriculturalAgentMascot'
 import { useMascotCompanion } from '../hooks/useMascotCompanion'
 import { LiveAgriculturalMascot } from './LiveAgriculturalMascot'
+import { useAssistantPlacement } from '../hooks/useAssistantPlacement'
 import './FloatingAIAssistant.css'
 
 const AIAssistantPage = lazy(() => import('../pages/AI/AIAssistantPage'))
-type Preferences = { collapsed: boolean; hidden: boolean; right: number; bottom: number; motion: boolean }
-const defaultPrefs: Preferences = { collapsed: false, hidden: false, right: 24, bottom: 24, motion: true }
-function readPrefs(key: string): Preferences {
+type Preferences = { collapsed: boolean; hidden: boolean; right: number; bottom: number; motion: boolean; manualPosition: boolean }
+const defaultPrefs: Preferences = { collapsed: false, hidden: false, right: 24, bottom: 24, motion: true, manualPosition: true }
+function readPrefs(key: string, standalone=false): Preferences {
   try {
     const stored = JSON.parse(localStorage.getItem(key) || '{}')
-    return { collapsed: stored.collapsed === true, hidden: stored.hidden === true, motion: stored.motion !== false,
+    const migrate=standalone&&!localStorage.getItem(key+':floating-restored-v1')
+    if(migrate)return {...defaultPrefs,motion:stored.motion!==false}
+    return { collapsed: stored.collapsed === true, hidden: stored.hidden === true, motion: stored.motion !== false, manualPosition: stored.manualPosition !== false,
       right: Number.isFinite(stored.right) ? Math.max(8, stored.right) : 24,
       bottom: Number.isFinite(stored.bottom) ? Math.max(8, stored.bottom) : 24 }
   } catch { return defaultPrefs }
@@ -32,14 +35,14 @@ function WebsiteGuide() {
   return <section className="assistant-website-guide"><AgriculturalAgentMascot /><h2>你好，我是棚小智</h2><p className="assistant-guide-label">平台使用向导</p><p aria-live="polite">{answer}</p><div>{Object.keys(questions).map(question => <Button block key={question} onClick={() => setAnswer(questions[question])}>{question}</Button>)}</div><Space wrap><Link className="assistant-primary-link" to={getStoredToken() ? '/platform' : '/login'}>进入工作台对话</Link><Link to="/platform?mode=guest">体验示例大棚</Link></Space><small>本页提供平台介绍。工作台中的 AI 对话会关联你有权限的大棚。</small></section>
 }
 
-export function FloatingAIAssistant() {
+export function FloatingAIAssistant({standalone=false}:{standalone?:boolean}={}) {
   const location = useLocation()
   const navigate = useNavigate()
   const workbench = location.pathname.startsWith('/platform')
   const greenhouseId = workbench ? Number(new URLSearchParams(location.search).get('greenhouse_id')) || undefined : undefined
   const userKey = isGuestMode() ? 'guest' : String(getStoredUser()?.id ?? 'public')
   const prefsKey = `pengzhi_assistant_prefs_v1:${userKey}`
-  const [prefs, setPrefs] = useState(() => readPrefs(prefsKey))
+  const [prefs, setPrefs] = useState(() => readPrefs(prefsKey,standalone))
   const [open, setOpen] = useState(false)
   const [expanded, setExpanded] = useState(false)
   useEffect(() => { if (!open) setActivity('idle') }, [open])
@@ -51,6 +54,15 @@ export function FloatingAIAssistant() {
   const [welcome, setWelcome] = useState(false)
   const [pageVisible, setPageVisible] = useState(!document.hidden)
   const [small, setSmall] = useState(window.innerWidth <= 620)
+  const [editing, setEditing] = useState(false)
+  useEffect(() => {
+    let timer: number | undefined
+    const sync = () => setEditing(Boolean(document.activeElement?.closest('input, textarea, [contenteditable="true"], .ant-select')))
+    const blur = () => { timer = window.setTimeout(sync, 100) }
+    document.addEventListener('focusin', sync)
+    document.addEventListener('focusout', blur)
+    return () => { document.removeEventListener('focusin', sync); document.removeEventListener('focusout', blur); window.clearTimeout(timer) }
+  }, [])
   const [dragging, setDragging] = useState(false)
   const [reminding, setReminding] = useState(false)
   const [staticFallback, setStaticFallback] = useState(false)
@@ -59,13 +71,23 @@ export function FloatingAIAssistant() {
   const drag = useRef<{ x: number; y: number; right: number; bottom: number; moved: boolean } | null>(null)
   const suppressClick = useRef(false)
   const collapsed = prefs.collapsed
+  const position = useAssistantPlacement(dock, prefs, !prefs.manualPosition && !open && !blocked && !prefs.hidden && !dragging, location.pathname + ':' + collapsed + ':' + small)
   const companionActive = !open && !blocked && !prefs.hidden && !collapsed && pageVisible && !dragging && !welcome && !reminding && activity === 'idle'
   const companion = useMascotCompanion(companionActive, prefs.motion, `${userKey}:${greenhouseId ?? 'public'}`)
-  const clamp = useCallback((next: Preferences) => ({ ...next,
-    right: Math.max(8, Math.min(next.right, Math.max(8, window.innerWidth - (next.collapsed ? 52 : window.innerWidth <= 620 ? 96 : 144) - 8))),
-    bottom: Math.max(12, Math.min(next.bottom, Math.max(12, window.innerHeight - (next.collapsed ? 96 : window.innerWidth <= 620 ? 216 : 276) - 8))),
-  }), [])
-  useEffect(() => { setPrefs(clamp(readPrefs(prefsKey))) }, [prefsKey, clamp])
+  const clamp = useCallback((next: Preferences) => {
+    const element = dock.current
+    const matchesSize = element && element.classList.contains('is-compact') === next.collapsed
+    const width = matchesSize ? element.offsetWidth : next.collapsed ? 52 : window.innerWidth <= 620 ? 96 : 144
+    const height = matchesSize ? element.offsetHeight : next.collapsed ? 96 : window.innerWidth <= 620 ? 216 : 276
+    return { ...next,
+      right: Math.max(8, Math.min(next.right, Math.max(8, window.innerWidth - width - 8))),
+      bottom: Math.max(12, Math.min(next.bottom, Math.max(12, window.innerHeight - height - 8))),
+    }
+  }, [])
+  useEffect(() => {
+    setPrefs(clamp(readPrefs(prefsKey,standalone)))
+    if(standalone)localStorage.setItem(prefsKey+':floating-restored-v1','1')
+  }, [prefsKey, clamp, standalone])
   useEffect(() => { localStorage.setItem(prefsKey, JSON.stringify(prefs)) }, [prefs, prefsKey])
   useEffect(() => {
     const resize = () => { setSmall(window.innerWidth <= 620); setPrefs(previous => clamp(previous)) }
@@ -75,11 +97,12 @@ export function FloatingAIAssistant() {
     return () => { window.removeEventListener('resize', resize); window.visualViewport?.removeEventListener('resize', resize); document.removeEventListener('visibilitychange', visibility) }
   }, [clamp])
   useEffect(() => {
+    if (workbench) return
     if (sessionStorage.getItem('pengzhi_assistant_welcomed')) return
     const show = window.setTimeout(() => setWelcome(true), 700)
     const hide = window.setTimeout(() => { setWelcome(false); sessionStorage.setItem('pengzhi_assistant_welcomed', '1') }, 5200)
     return () => { window.clearTimeout(show); window.clearTimeout(hide) }
-  }, [])
+  }, [workbench])
   useEffect(() => {
     setOpen(false); setActivity('idle'); setWelcome(false)
   }, [location.pathname, userKey])
@@ -139,6 +162,7 @@ export function FloatingAIAssistant() {
   }
   const warningPill = warningCount ? <button className="assistant-warning-pill" type="button" aria-label={`本棚有${warningCount}条活动预警，查看预警`} title="查看当前大棚的活动预警" onClick={viewWarnings}><span>{warningCount > 99 ? '99+' : warningCount}</span><span className="assistant-warning-unit">条</span>预警</button> : null
   const settings = { items: [
+    { key: 'placement', label: prefs.manualPosition ? '开启自动避让' : '自由拖动 · 固定当前位置', onClick: () => setPrefs(previous => ({ ...previous, right: position.right, bottom: position.bottom, manualPosition: !previous.manualPosition })) },
     { key: 'rest', label: companion.resting ? '起身活动' : '坐下休息', disabled: companion.quiet, onClick: () => companion.setResting(!companion.resting) },
     { key: 'motion', label: prefs.motion ? '安静陪伴 · 暂停动作' : '恢复陪伴动作', onClick: () => setPrefs(previous => ({ ...previous, motion: !previous.motion })) },
     { key: 'collapse', label: collapsed ? '展开角色' : '收起为小图标', onClick: () => setPrefs(previous => ({ ...previous, collapsed: !collapsed })) },
@@ -146,17 +170,25 @@ export function FloatingAIAssistant() {
     { key: 'reset', label: '恢复默认位置', onClick: () => setPrefs({ ...defaultPrefs }) },
   ] }
   return <>
-    {!open && !blocked && !prefs.hidden && <div ref={dock} className={`pengxiaozhi-dock${collapsed ? ' is-compact' : ''}${dragging ? ' is-dragging' : ''}${pageVisible ? '' : ' is-paused'}${companion.quiet ? ' is-quiet' : ''}`} style={{ right: prefs.right, bottom: `max(${prefs.bottom}px, env(safe-area-inset-bottom, 0px))` }} data-state={state} data-motion={motion ?? 'idle'}>
+    {!open && !blocked && !prefs.hidden && <div ref={dock} className={`pengxiaozhi-dock${collapsed ? ' is-compact' : ''}${dragging ? ' is-dragging' : ''}${pageVisible ? '' : ' is-paused'}${companion.quiet ? ' is-quiet' : ''}`} style={{ right: position.right, bottom: `max(${position.bottom}px, env(safe-area-inset-bottom, 0px))` }} data-editing={small && editing} aria-hidden={small && editing} data-state={state} data-motion={motion ?? 'idle'}>
       {welcome && !collapsed && <div className="assistant-welcome" role="status" style={{ right: Math.min(0, window.innerWidth - prefs.right - (small ? 205 : 225) - 8) }}>你好，我是棚小智<br /><span>{workbench ? '可以帮你查看本棚情况' : '带你了解棚智未来'}</span><button type="button" aria-label="关闭欢迎提示" onClick={() => setWelcome(false)}>×</button></div>}
       {!collapsed && <div className="assistant-dock-controls">{warningPill}<button type="button" aria-label="收起棚小智" onClick={() => setPrefs(previous => ({ ...previous, collapsed: true }))}><MinusOutlined /></button><Dropdown menu={settings} trigger={['click']}><button type="button" aria-label="棚小智设置"><MoreOutlined /></button></Dropdown></div>}
       {!welcome && !collapsed && companionActive && companion.hint && <div className={`assistant-companion-hint${hintBelow ? ' is-below' : ''}`} aria-live="off" style={{ right: Math.min(0, window.innerWidth - prefs.right - (small ? 178 : 210) - 8) }}>{companion.hint}</div>}
       {collapsed && warningPill}
       <button className="assistant-character-trigger" type="button" aria-label="打开棚小智" aria-haspopup="dialog" onClick={() => start()}
-        title="点我对话，按住可以拖动"
+        title="按住自由拖动，点击对话；方向键微调位置"
+        onKeyDown={event => {
+          const directions: Record<string, [number, number]> = { ArrowLeft: [1, 0], ArrowRight: [-1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }
+          const direction = directions[event.key]
+          if (!direction) return
+          event.preventDefault()
+          const step = event.shiftKey ? 32 : 12
+          setPrefs(previous => clamp({ ...previous, right: position.right + direction[0] * step, bottom: position.bottom + direction[1] * step, manualPosition: true }))
+        }}
         onPointerEnter={event => companion.onPointerEnter(event.pointerType)} onPointerLeave={companion.onPointerLeave}
         onFocus={companion.onFocus} onBlur={companion.onBlur}
-        onPointerDown={event => { if (event.button !== 0) return; drag.current = { x: event.clientX, y: event.clientY, right: prefs.right, bottom: prefs.bottom, moved: false }; event.currentTarget.setPointerCapture(event.pointerId) }}
-        onPointerMove={event => { companion.onPointerMove(event.pointerType); const initial = drag.current; if (!initial) return; const dx = event.clientX - initial.x; const dy = event.clientY - initial.y; if (!initial.moved && Math.hypot(dx, dy) < 6) return; initial.moved = true; setDragging(true); setPrefs(previous => clamp({ ...previous, right: initial.right - dx, bottom: initial.bottom - dy })) }}
+        onPointerDown={event => { if (event.button !== 0) return; drag.current = { x: event.clientX, y: event.clientY, right: position.right, bottom: position.bottom, moved: false }; event.currentTarget.setPointerCapture(event.pointerId) }}
+        onPointerMove={event => { companion.onPointerMove(event.pointerType); const initial = drag.current; if (!initial) return; const dx = event.clientX - initial.x; const dy = event.clientY - initial.y; if (!initial.moved && Math.hypot(dx, dy) < 6) return; initial.moved = true; setDragging(true); setPrefs(previous => clamp({ ...previous, right: initial.right - dx, bottom: initial.bottom - dy, manualPosition: true })) }}
         onPointerUp={() => { suppressClick.current = Boolean(drag.current?.moved); drag.current = null; setDragging(false) }}
         onPointerCancel={() => { drag.current = null; setDragging(false); suppressClick.current = false }}>
         {collapsed ? <AgriculturalAgentMascot state={state} showStateBadge={false}/> : <LiveAgriculturalMascot state={state} motion={motion} quiet={companion.quiet} paused={!pageVisible || dragging} onRendererChange={onRendererChange}/>}

@@ -14,11 +14,16 @@ const ApplicationScenariosPage = lazy(() => import('../pages/ApplicationScenario
 const CoreFunctionsPage = lazy(() => import('../pages/CoreFunctionsPage'))
 const PlatformIntroductionPage = lazy(() => import('../pages/PlatformIntroductionPage'))
 const DashboardPage = lazy(() => import('../pages/Dashboard/DashboardPage'))
+const GreenhouseSimulationPage = lazy(() => import('../pages/GreenhouseSimulation/GreenhouseSimulationPage'))
+const AgronomistPage = lazy(() => import('../pages/Agronomist/AgronomistPage'))
+const ForumPage = lazy(() => import('../pages/Community/ForumPage'))
+const InvestigatePage = lazy(() => import('../pages/Investigate/InvestigatePage'))
+const NewsPage = lazy(() => import('../pages/Community/NewsPage'))
+const KnowledgePage = lazy(() => import('../pages/Community/KnowledgePage'))
+const AIQualityPage = lazy(() => import('../pages/Community/AIQualityPage'))
 const DataCenterPage = lazy(() => import('../pages/DataCenterPage'))
 const Greenhouse3DPage = lazy(() => import('../features/greenhouse3d/Greenhouse3DPage'))
 const EnvironmentAnalysisPage = lazy(() => import('../pages/EnvironmentAnalysisPage'))
-const DiagnosisPage = lazy(() => import('../pages/Diagnosis/DiseaseDiagnosisPage'))
-const DiseaseTimeMachinePage = lazy(() => import('../pages/DiseaseTimeMachinePage'))
 const ProductionDecisionPage = lazy(() => import('../pages/ProductionDecisionPage'))
 const NotFoundPage = lazy(() => import('../pages/NotFound'))
 const AuthPage = lazy(() => import('../pages/Auth/AuthPage'))
@@ -33,6 +38,14 @@ function LegacyRedirect({ to, tab }: { to: string; tab?: string }) {
   if (tab) params.set('tab', tab)
   const query = params.toString()
   return <Navigate replace to={`${to}${query ? `?${query}` : ''}`} />
+}
+
+function InvestigationRedirect({risk=false}:{risk?:boolean}) {
+  const location=useLocation(), params=new URLSearchParams(location.search)
+  if(risk)params.set('panel','risk')
+  else if(params.get('view')==='history')params.set('panel','recognition')
+  params.delete('view')
+  return <Navigate replace to={'/platform/investigate?'+params.toString()}/>
 }
 
 function ProtectedPlatform() {
@@ -74,11 +87,18 @@ export const router = createBrowserRouter([
     errorElement: <RouteError />,
     children: [
       { index: true, element: withSuspense(<DashboardPage />) },
+      { path: 'autonomy', element: withSuspense(<GreenhouseSimulationPage />) },
+      { path: 'research', element: withSuspense(<AgronomistPage />) },
+      { path: 'forum', element: withSuspense(<ForumPage />) },
+      { path: 'investigate', element: withSuspense(<InvestigatePage />) },
+      { path: 'news', element: withSuspense(<NewsPage />) },
+      { path: 'knowledge', element: withSuspense(<KnowledgePage />) },
+      { path: 'ai-quality', element: withSuspense(<AIQualityPage />) },
       { path: 'data', element: withSuspense(<DataCenterPage />) },
       { path: '3d', element: withSuspense(<Greenhouse3DPage />) },
       { path: 'environment', element: withSuspense(<EnvironmentAnalysisPage />) },
-      { path: 'diagnosis', element: withSuspense(<DiagnosisPage />) },
-      { path: 'disease-time-machine', element: withSuspense(<DiseaseTimeMachinePage />) },
+      { path: 'diagnosis', element: <InvestigationRedirect /> },
+      { path: 'disease-time-machine', element: <InvestigationRedirect risk /> },
       { path: 'production', element: withSuspense(<ProductionDecisionPage />) },
 
       // 旧链接继续可用，统一跳转到新的工作台结构。

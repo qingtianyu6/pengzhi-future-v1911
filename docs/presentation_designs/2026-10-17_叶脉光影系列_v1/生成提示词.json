@@ -1,0 +1,31 @@
+{
+  "tool": "内置 image_gen",
+  "shared_prompt": "Use case: productivity-visual. Create ONE premium 16:9 widescreen PowerPoint background plate for 棚智未来, an agricultural AI platform. Input image is a STYLE REFERENCE only: preserve its refined photographic botanical macro aesthetics, velvety dark forest-green, jade translucent tomato leaf veins, subtle warm golden rim-light, atmospheric depth and premium editorial finish. Create a DIFFERENT composition belonging to the SAME slide family. Background ONLY, no text, lettering, logos, watermark, numbers, frames, UI, charts, robots or collage. Keep plentiful smooth unobstructed negative space for slide content, avoid high contrast details behind content. Agricultural elegance, restrained and natural, no sci-fi neon or generic technology circuitry. Landscape aspect ratio 16:9.",
+  "reference": "C:/Users/wumin/.codex/generated_images/01a13adb-1e6d-73e1-b25b-d4be258e58f8/exec-523aa96d-f77a-472f-9b47-1812d8ed0e8e.png",
+  "images": [
+    {
+      "n": 1,
+      "name": "01_双角叶影_章节页",
+      "prompt": "A rich dark forest green canvas with one gracefully cropped translucent tomato leaf entering from upper right, and a much smaller blurred leaf edge in lower left. Fine golden sunlight catches delicate leaf serrations and veins. The entire central 70 percent is uninterrupted smooth deep green negative space for a centered section title. Rich luminous botanical photography, asymmetric sophisticated balance. Leaves stay confined to corners.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-05f64bee-2228-4cb1-9ff3-7a2d1772a4d2.png"
+    },
+    {
+      "n": 2,
+      "name": "02_米白叶影_正文页",
+      "prompt": "A LIGHT companion background to the reference. Warm ivory and exceptionally pale sage smooth matte background covering 85 percent of the canvas. Only the far right 15 percent has a refined cropped translucent tomato leaf with a few golden backlit veins, casting a very delicate soft green shadow. Gentle diffused daylight. Top left and central large area clean near-uniform ivory for dark green headings, two-column text and screenshots. Premium botanical editorial, airy legible and minimal, no dark vignette.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-26853187-93b8-49cd-a3d3-8f5a8cb6d09f.png"
+    },
+    {
+      "n": 3,
+      "name": "03_深绿细叶_图表页",
+      "prompt": "A near-uniform deep forest green canvas, subtly luminous at center. A very small refined curved tomato leaf tip with jade veins and tiny warm gold edge glints lies along the extreme bottom right edge, occupying less than 12 percent of the whole image. A faint soft leaf shadow on the extreme top right. Reserve at least 85 percent of the image including the whole upper left, center and lower left as smooth low-detail green suitable for large charts or architecture diagrams later. No plant in the center.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-288700aa-1459-470c-8162-3489358801e8.png"
+    },
+    {
+      "n": 4,
+      "name": "04_新叶晨光_结束页",
+      "prompt": "Dark forest-green atmospheric backdrop. At the RIGHT third, an elegant realistic young tomato sprout with two gracefully opening translucent leaves, delicate veins illuminated by a narrow warm golden sunrise beam from upper right. Sophisticated macro photography, a few restrained dew drops, no visible pot or soil mound. The LEFT 65 percent is clean deep green negative space with gentle tonal depth for closing statement. Optimistic, calm, organic and premium; no glitter particles.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-70e15069-6c51-49e2-831e-f5ee3965e8d1.png"
+    }
+  ]
+}

@@ -1,6 +1,13 @@
 """业务模型将在第二天依据 docs/database-design.md 分模块实现。"""
+from app.models.greenhouse_sim import GreenhouseSimulationEvent
 from app.models.crop_batch import CropBatch
+from app.models.agronomist import AgronomyRecord, CropObservation
+from app.models.community import (ForumPost, ForumComment, ForumReaction, ForumReport, ContentAsset,
+    NewsSource, NewsArticle, NewsDigest, NewsBookmark, NotificationPreference, AutomationJob,
+    KnowledgeDocument, KnowledgeChunk, AIEvaluationRun, AITrace)
 from app.models.greenhouse import Greenhouse
+from app.models.greenhouse_device import GreenhouseDevice
+from app.models.community import NewsAutomation, NewsEvidence
 from app.models.sensor_data import SensorData
 from app.models.warning_event import WarningEvent
 from app.models.decision_recommendation import DecisionRecommendation
@@ -17,7 +24,7 @@ from app.models.forecast_audit import ForecastAudit
 from app.models.v2_decision import (DecisionPlan, GreenhouseProfile, RiskEvent, SimulationRecord,
                                     TreatmentEvaluation)
 
-__all__ = ["AIConversation", "AIMessage", "AIToolCall", "CropBatch", "DecisionRecommendation",
+__all__ = ["GreenhouseDevice", "AIConversation", "AIMessage", "AIToolCall", "CropBatch", "DecisionRecommendation",
            "DiseaseRecognitionRecord", "FarmTask", "Greenhouse", "SensorData", "TaskEvent",
            "TaskFeedback", "WarningEvent", "AuthSession", "User", "Organization",
            "ActionCandidate", "Intervention", "OutcomeObservation", "ForecastAudit",

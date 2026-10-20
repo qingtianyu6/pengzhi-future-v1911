@@ -16,7 +16,17 @@ export interface Greenhouse {
   last_recorded_at?: string | null
   data_status?: string
   device_count?: number
+  online_device_count?: number
 }
+
+export interface GreenhouseManagementSummary {
+  total: number; connected: number; device_count: number; online_devices: number; online_window_minutes: number
+}
+export interface GreenhouseDevice {
+  greenhouse_id: number; device_id: string; name: string; kind: string; registered: boolean
+  last_seen: string | null; online: boolean
+}
+export interface DeviceBinding { device_id: string; name: string; kind: string }
 
 export interface GreenhouseInput {
   code: string

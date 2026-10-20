@@ -396,6 +396,12 @@ def _transition(db: Session, task_id: int, payload: VersionedAction, *, expected
             raise ServiceError(409, "处置状态与任务状态不一致")
         intervention.status = "pending"
     if target == "in_progress":
+        dependencies = task.evidence_snapshot_json.get("agronomist_goal", {}).get("depends_on_task_ids", [])
+        if dependencies:
+            completed = list(db.scalars(select(FarmTask.id).where(
+                FarmTask.id.in_(dependencies), FarmTask.status == "completed")))
+            if len(completed) != len(dependencies):
+                raise ServiceError(409, "请先完成目标编排中的前置任务")
         task.started_at = _now()
         if intervention is not None:
             if intervention.status != "pending":

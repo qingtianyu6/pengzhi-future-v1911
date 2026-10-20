@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "page": 1,
+      "name": "01_封面.png",
+      "source": "C:/Users/wumin/.codex/generated_images/01a13adb-1e6d-73e1-b25b-d4be258e58f8/exec-b626e34a-8cd2-4562-bbcd-0c59f65f4906.png"
+    },
+    {
+      "page": 2,
+      "name": "02_行业痛点.png",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-eed0e39b-211a-403d-80ee-b8f2f4fe8ac5.png"
+    },
+    {
+      "page": 3,
+      "name": "03_整体解决方案.png",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-5a09a635-b780-414a-a759-7d9455088995.png"
+    },
+    {
+      "page": 4,
+      "name": "04_棚小智.png",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-705137a9-99f1-4bc7-ba09-6d8a40f03856.png"
+    },
+    {
+      "page": 5,
+      "name": "05_棚智探因.png",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-bb31da77-960b-4f44-872e-42107a9453fd.png"
+    },
+    {
+      "page": 6,
+      "name": "06_棚智自治.png",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-e4a3cffd-43ab-4fea-9b84-d792438632d0.png"
+    }
+  ],
+  "tool": "built-in image_gen",
+  "style": "Create one finished 16:9 landscape Chinese competition PowerPoint slide image, full bleed, no surrounding device or mockup. Match the supplied cover's brand: forest green #103C31, warm ivory #F8F5EB, muted jade #8FB89C, tiny warm gold accents. Sophisticated contemporary editorial typography: clearly SONG/MING serif Chinese DISPLAY HEADLINES with heavy verticals and thin horizontals; neutral clean sans-serif body; only a short handwritten calligraphic accent if requested. The typeface contrast must be visually obvious, matching the updated cover. All Chinese text must be accurate, large and legible in an auditorium. Very sparse copy, flat editorial composition, generous whitespace, no rounded cards, no dashboard UI as decorative elements, no pill badges, no neon, no blue holograms, no random statistics, no fake performance claims, no school/teacher names. Small consistent top-left brand '棚智未来', small slide number lower-left, and tiny bottom-right 'AI 辅助制作'. The input cover is STYLE REFERENCE only; do not repeat its full page layout or cover copy on content slides.",
+  "prompts": {
+    "2": "SLIDE 02, pain point. Warm ivory background, editorial split layout: left 42% a beautiful large rectangular photographic-style macro of tomato foliage in a greenhouse showing a few visibly yellowing leaves, muted natural light, discreet caption '番茄叶片异常 · 场景示意'. This is an illustration of a possible problem, never claim a diagnosed disease. Right 50% the main headline in dark-green modern Song serif over two lines: '发现异常之后，' / '下一步怎么办？'. Beneath, three flat typographic entries separated by delicate horizontal rules, no cards. Entry 01 bold sans label '数据有了，原因仍不清楚' and one short small line '环境波动、病虫表现与管理因素交织'. Entry 02 '建议有了，处理仍难追踪' and line '任务、人员与复查需要衔接'. Entry 03 '问题处理了，经验却没留下' and line '下一次仍要重新排查'. Large tasteful handwritten accent along lower-left or bottom '让排查有方向，让处理有记录。'. Use clear visual hierarchy, avoid excessive text. Number '02'.",
+    "3": "SLIDE 03, whole solution. Warm ivory canvas, large dark forest-green Song serif headline upper-left '从发现异常，到经验复用'. Below a small sans subtitle '围绕同一座大棚、同一个种植批次，连接每一步工作'. Center stage ONE continuous, elegant horizontal five-step process, generous spacing, large thin pale green step numbers 01 02 03 04 05, deep-green short stage labels: '监测与预警', '主动探因', '农事任务', '结果复查', '研究与技能'. Beneath each stage a single small line respectively: '发现环境变化', '指导证据收集', '安排现场处理', '记录处理结果', '沉淀可复用经验'. Connect with restrained thin green directional lines; a subtle large curved return line beneath from last to second labeled '已有案例支持后续排查'. Separate a small lower-right branch labeled '模拟验证' and text '比较温室调控策略', linked as an auxiliary research branch; do NOT imply task creation automatically controls hardware or cures a disease. A small understated greenhouse architectural line motif along bottom can ground agricultural context, but no fake charts. No UI panels. Page number '03'.",
+    "4": "SLIDE 04, mascot and actual Agent abilities. Deep forest-green background matching cover, elegant warm-white serif title upper-left '你好，我是棚小智'. Small sans subtitle '有形象、能交流、可调用业务工具的 AI 农艺伙伴'. Large existing mascot on left-center 36% width, same exact straw hat / leaf / cream body / forest green face identity as reference, friendly waving pose with subtle soft studio light; no new character. On right, three vertically stacked FLAT editorial capability sections separated by thin muted-green rules, not boxed cards: headline '独立三维形象', explanatory line '待机、挥手、思考与状态反馈'; headline '自然语言交互', explanatory line '理解问题，组织可追溯的回答'; headline '22 项业务工具', explanatory line '连接环境、知识、任务与研究记录'. Near bottom a restrained handwritten brush sentence '让农事交互，更自然。'. Keep mascot refined, cute but professional. No invented tool execution screenshots or numerical performance claims. Number '04'.",
+    "5": "SLIDE 05, core innovation active evidence selection. Warm ivory background. Large dark-green Song serif headline '新证据，改变下一步判断'. Small sans subtitle '棚智探因：根据支持与冲突证据，动态选择下一项检查'. Main content a clear left-to-right conceptual evidence storyboard (not fake application screenshots), three editorial columns with generous whitespace and fine connecting lines. Left column '第一轮' with text '东侧叶片异常' / '中央湿度正常' / '先排查局部环境差异'. Middle column '补充观察' with an elegant small magnifying-glass line motif over leaf underside, and text '用户记录：叶背可见细网' / '该证据支持刺吸危害方向'. Right column '重新评估' with text '调整候选原因排序' / '更新下一项检查建议' / '保留其他未决解释'. Make the evidence line '叶背可见细网' visually prominent with gold underline and green serif lettering. Clearly print '示例观察 · 证据更新机制示意' beneath storyboard, so no claim of actual trial or diagnosis. Bottom area on pale-green full-width understated band a single large readable formula '观察价值 ≈ 区分能力 × 证据缺失程度 − 成本惩罚', and small line '完成的检查不重复推荐，预算影响操作排序；评分不代表发病概率'. No invented scores, probabilities, research charts or accuracy claims. Page '05'.",
+    "6": "SLIDE 06, greenhouse simulation control. Warm ivory background, large dark-green Song serif title '让调控策略，先经过模拟比较'. Small sans subtitle '棚智自治：环境目标、控制动作与反馈的工程验证'. Left 55% use a clean crop of the supplied REAL existing simulation webpage screenshot as documentary supporting image, show its central controls and status area as a single picture with simple square-corner hairline border, not redrawn as fabricated outputs. Retain relevant existing labels 'AI 温室模拟调控' and virtual/simulation nature; do not invent or improve curves or results, do not show yellow test squares. Right 36% concise vertical control flow: '环境与目标' then line '温湿度、土温、含水率与光照'; next '三种控制方式' and lines '手动控制 / 阈值规则 / 预测优化'; next '动作与反馈' and line '风扇、水泵、补光灯与指令回执'. Bottom-right small restrained note '虚拟设备与协议链路已实现' and '真实硬件能力以实测为准'. Bottom a readable disclosure '软件仿真展示 · 动态模型未经实棚标定'. No invented performance chart, no fake hardware photograph, no claim of physical deployment or actual energy savings. Page '06'."
+  },
+  "note": "第1页沿用已确认的宋体与手写体封面。其余为设计效果图；界面及示例不作为实测结果，正式答辩替换原始截图与验证材料。"
+}

@@ -1,8 +1,9 @@
 import { AxiosError } from 'axios'
 import type { CropBatch } from '../types/cropBatch'
-import type { Greenhouse } from '../types/greenhouse'
+import type { DeviceBinding, GreenhouseDevice, Greenhouse } from '../types/greenhouse'
 import type { DiseaseRecord, DiseaseIdentification, DiseaseModelStatus } from '../types/disease'
 import type { EnvironmentPrediction } from '../types/prediction'
+import type { WarningEvent } from '../types/warning'
 import type { AxiosAdapter, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import type { CurrentDecision, DecisionRecommendation, RecommendationStatus } from '../types/decision'
 import type { FarmTask } from '../types/task'
@@ -55,6 +56,36 @@ const demoGreenhouses: Greenhouse[] = [
     active_batch: { ...demoBatch, id: 9002, greenhouse_id: 102, batch_code: 'DEMO-MELON-01', variety: '甜瓜 · 绿宝', crop_type: 'muskmelon', growth_stage: '果实膨大期' },
   },
 ]
+
+// Guest changes remain local to this tab and never reach business tables.
+try {
+  const saved: unknown = JSON.parse(sessionStorage.getItem('pengzhi-greenhouses-v1') || 'null')
+  if (Array.isArray(saved) && saved.every(g => g && typeof g.id === 'number' && typeof g.name === 'string' && typeof g.code === 'string' && typeof g.area_mu === 'string' && ['active','paused','closed'].includes(g.status))) {
+    demoGreenhouses.splice(0, demoGreenhouses.length, ...(saved as Greenhouse[]))
+  }
+} catch { /* start with the isolated example workspace */ }
+function saveGuestGreenhouses() {
+  sessionStorage.setItem('pengzhi-greenhouses-v1',JSON.stringify(demoGreenhouses))
+}
+
+function guestDevices(greenhouseId: number): GreenhouseDevice[] {
+  let bindings: Record<string, DeviceBinding[]> = {}
+  try { bindings = JSON.parse(sessionStorage.getItem('pengzhi-device-bindings-v1') || '{}') } catch { /* empty session */ }
+  const rows: GreenhouseDevice[] = [101, 102].includes(greenhouseId)
+    ? [{greenhouse_id:greenhouseId,device_id:'DEMO-SENSOR',name:'环境传感器',kind:'environment',registered:false,last_seen:iso(),online:true}] : []
+  for (const device of bindings[String(greenhouseId)] || []) {
+    const row = rows.find(r=>r.device_id===device.device_id)
+    if(row) Object.assign(row,device,{registered:true})
+    else rows.push({...device,greenhouse_id:greenhouseId,registered:true,last_seen:null,online:false})
+  }
+  return rows
+}
+function guestGreenhouseState(g: Greenhouse): Greenhouse {
+  const devices=guestDevices(g.id)
+  return {...g,last_recorded_at:[101,102].includes(g.id)?iso():null,
+    data_status:[101,102].includes(g.id)?'current':'no_data',device_count:devices.length,
+    online_device_count:devices.filter(d=>d.online).length}
+}
 
 const readings = Array.from({ length: 24 }, (_, index) => {
   const hour = index - 23
@@ -112,6 +143,13 @@ const warning = {
   dismissed_reason: null,
   created_at: iso(-70),
   updated_at: iso(-12),
+}
+
+function currentGuestWarning(gid: number): WarningEvent {
+  let saved: Partial<WarningEvent> = {}
+  try { saved = JSON.parse(sessionStorage.getItem(`pengzhi-warning-${gid}`) || '{}') } catch { /* new session */ }
+  const gh=demoGreenhouses.find(g=>g.id===gid)
+  return {...warning,...saved,greenhouse_id:gid,crop_batch_id:gh?.active_batch?.id??null,crop_type:gh?.active_batch?.crop_type??'unknown'} as WarningEvent
 }
 
 const tasks: FarmTask[] = [
@@ -318,7 +356,7 @@ function taskDetail(task = tasks[0]) {
     ...task,
     greenhouse,
     crop_batch: greenhouse.active_batch,
-    source_warning: task.source_warning_id ? warning : null,
+    source_warning: task.source_warning_id ? currentGuestWarning(task.greenhouse_id) : null,
     source_disease_record: null,
     source_recommendation: task.source_recommendation_id ? recommendation : null,
     events: [
@@ -436,7 +474,7 @@ function dashboardSummary(greenhouseId = 101) {
     empty_state: !currentReadings.length,
     warning_summary: {
       highest_risk_level: 'attention',
-      open_warning_count: 1,
+      open_warning_count: currentReadings.length && ['open','acknowledged'].includes(currentGuestWarning(greenhouseId).status) ? 1 : 0,
       latest_warning_id: 501,
       latest_warning_title: warning.title,
       future_risk_timeline: [],
@@ -459,6 +497,7 @@ function page(items: unknown[], pageNumber = 1, pageSize = 10) {
 }
 
 function response(config: InternalAxiosRequestConfig, data: unknown): AxiosResponse {
+  persistResearchTasks()
   return { data: apiData(data), status: 200, statusText: 'OK', headers: {}, config }
 }
 
@@ -475,16 +514,17 @@ function guestReadings(gid: number) { if (![101,102].includes(gid)) return []; r
 function fail(config: InternalAxiosRequestConfig, message: string, status = 422): never {
   throw new AxiosError(message, String(status), config, undefined, { ...response(config, null), status, data: { code: status, message, data: null } })
 }
-function guestPrediction(gid: number): EnvironmentPrediction {
+function guestPrediction(gid: number, horizon = 6): EnvironmentPrediction {
   const history = guestReadings(gid), last = history.at(-1)!
   return {
-    greenhouse_id: gid, status: 'ready', forecast_service_status: 'ready', forecast_method: 'guest_demo', forecast_method_labels: ['游客示例趋势'], model_status: 'under_evaluation', effective_model_status: 'baseline_ready', ml_candidate_status: 'under_evaluation', forecast_strategy: 'per_target_per_horizon_hybrid', ml_output_count: 0, total_output_count: 12,
-    crop: '示例作物', crop_type: gid === 102 ? 'muskmelon' : 'tomato', crop_match_status: gid === 102 ? 'mismatched' : 'matched_public_tomato', model_name: '游客趋势示例', model_type: 'demo', model_version: 'guest-demo', training_crop: '示例', training_region: '示例', training_domain: 'guest', validation_status: 'under_evaluation', calibration_status: 'not_calibrated', decision_scope: 'decision_support', cross_crop_warning: false, cross_region_warning: false, input_data_source: 'demo', input_end_time: last.recorded_at, history_hours: 24, horizon_hours: 6, rules_status: 'rules_unavailable', warnings: ['仅为游客示例，不是实际模型预测'], generated_at: iso(), health: null,
+    greenhouse_id: gid, status: last ? 'ready' : 'insufficient_data', forecast_service_status: last ? 'ready' : 'insufficient_data', forecast_method: 'guest_demo', forecast_method_labels: ['游客示例趋势'], model_status: 'under_evaluation', effective_model_status: 'baseline_ready', ml_candidate_status: 'under_evaluation', forecast_strategy: 'per_target_per_horizon_hybrid', ml_output_count: 0, total_output_count: horizon*2,
+    crop: '示例作物', crop_type: gid === 102 ? 'muskmelon' : 'tomato', crop_match_status: gid === 102 ? 'mismatched' : 'matched_public_tomato', model_name: '游客趋势示例', model_type: 'demo', model_version: 'guest-demo', training_crop: '示例', training_region: '示例', training_domain: 'guest', validation_status: 'under_evaluation', calibration_status: 'not_calibrated', decision_scope: 'decision_support', cross_crop_warning: false, cross_region_warning: false, input_data_source: 'demo', input_end_time: last?.recorded_at??null, history_hours: 24, horizon_hours: horizon, rules_status: 'rules_unavailable', warnings: ['仅为游客示例，不是实际模型预测'], generated_at: iso(), health: null,
     history: history.map(r => ({ timestamp: r.recorded_at, temperature_c: r.temperature, air_humidity_pct: r.air_humidity })),
-    predictions: Array.from({length:6},(_,i)=>({forecast_time:iso((i+1)*60),horizon:i+1,temperature_c:last.temperature+(i+1)*0.2,air_humidity_pct:last.air_humidity-(i+1),par_umol_m2_s:null,lower_bounds:{air_temperature_c:last.temperature-2,air_humidity_pct:last.air_humidity-8},upper_bounds:{air_temperature_c:last.temperature+3,air_humidity_pct:last.air_humidity+8},forecast_method:'guest_demo',method_version:'demo',methods:{},units:{}}))
+    predictions: last ? Array.from({length:horizon},(_,i)=>({forecast_time:iso((i+1)*60),horizon:i+1,temperature_c:last.temperature+(i+1)*0.2,air_humidity_pct:last.air_humidity-(i+1),par_umol_m2_s:null,lower_bounds:{air_temperature_c:last.temperature-2,air_humidity_pct:last.air_humidity-8},upper_bounds:{air_temperature_c:last.temperature+3,air_humidity_pct:last.air_humidity+8},forecast_method:'guest_demo',method_version:'demo',methods:{},units:{}})) : []
   }
 }
 function demoResponse(config: InternalAxiosRequestConfig): AxiosResponse | null {
+  restoreResearchTasks()
   const path = pathOf(config)
   const method = (config.method ?? 'get').toLowerCase()
   const payload = typeof config.data === 'string' ? JSON.parse(config.data) as Record<string, unknown> : {}
@@ -498,14 +538,37 @@ function demoResponse(config: InternalAxiosRequestConfig): AxiosResponse | null 
     return response(config,{environment:{name:'游客环境趋势示例',version:'demo',status:'demo',prediction_window_hours:6,algorithms:['示例趋势'],training_crop:'示例',temperature_h1:metric,humidity_h1:metric},disease:{name:'游客病害流程示例',version:'demo',status:'under_evaluation',architecture:'示例',class_count:6,confidence_threshold:null,internal_accuracy:null,internal_macro_f1:null,accepted_accuracy:null,external_accuracy:null,external_macro_f1:null}})
   }
   if (path === '/health') return response(config, { service: 'pengzhi-api', status: 'healthy', version: 'guest-demo', database: 'connected' })
+  if (path === '/greenhouses/management-summary') {
+    const devices=demoGreenhouses.flatMap(g=>guestDevices(g.id))
+    return response(config,{total:demoGreenhouses.length,connected:demoGreenhouses.filter(g=>[101,102].includes(g.id)).length,
+      device_count:devices.length,online_devices:devices.filter(d=>d.online).length,online_window_minutes:120})
+  }
+  const deviceMatch=path.match(/^\/greenhouses\/(\d+)\/devices(?:\/([^/]+))?$/)
+  if(deviceMatch){
+    const greenhouseId=Number(deviceMatch[1])
+    if(!demoGreenhouses.some(g=>g.id===greenhouseId))return fail(config,'大棚不存在',404)
+    if(method==='get')return response(config,guestDevices(greenhouseId))
+    let bindings: Record<string,DeviceBinding[]>={}
+    try{bindings=JSON.parse(sessionStorage.getItem('pengzhi-device-bindings-v1')||'{}')}catch{/* empty session */}
+    const key=String(greenhouseId)
+    if(method==='delete')bindings[key]=(bindings[key]||[]).filter(d=>d.device_id!==decodeURIComponent(deviceMatch[2]||''))
+    else{
+      if(!/^[A-Za-z0-9_.:-]{1,80}$/.test(String(payload.device_id||'')) || !String(payload.name||'').trim())return fail(config,'请填写有效设备编号和名称',422)
+      const device={device_id:String(payload.device_id),name:String(payload.name).trim(),kind:String(payload.kind||'environment')}
+      bindings[key]=[...(bindings[key]||[]).filter(d=>d.device_id!==device.device_id),device]
+    }
+    sessionStorage.setItem('pengzhi-device-bindings-v1',JSON.stringify(bindings))
+    return response(config,null)
+  }
   if (path === '/greenhouses') {
     if (method === 'get') {
       const q=String(config.params?.keyword || '').toLowerCase()
-      const rows=demoGreenhouses.map(g=>({...g,last_recorded_at:[101,102].includes(g.id)?iso():null,data_status:[101,102].includes(g.id)?'current':'no_data',device_count:[101,102].includes(g.id)?1:0})).filter(g=>(!config.params?.status || g.status===config.params.status) && (!q || `${g.name} ${g.code} ${g.location}`.toLowerCase().includes(q)))
+      const rows=demoGreenhouses.map(guestGreenhouseState).filter(g=>(!config.params?.status || g.status===config.params.status) && (!q || `${g.name} ${g.code} ${g.location}`.toLowerCase().includes(q)))
       return response(config, page(rows, Number(config.params?.page) || 1, Number(config.params?.page_size) || 100))
     }
-    const created: Greenhouse = { id: Date.now(), code: String(payload.code), name: String(payload.name), location: String(payload.location), area_mu: String(payload.area_mu), status: 'active', manager_name: String(payload.manager_name || ''), created_at: iso(), updated_at: iso(), active_batch: null }
-    demoGreenhouses.push(created)
+    if(demoGreenhouses.some(g=>g.code===String(payload.code)))return fail(config,'大棚编号已存在',409)
+    const created: Greenhouse = { id: Date.now(), code: String(payload.code), name: String(payload.name), location: String(payload.location), area_mu: String(payload.area_mu), status: (['active','paused','closed'].includes(String(payload.status)) ? payload.status : 'active') as Greenhouse['status'], manager_name: String(payload.manager_name || ''), created_at: iso(), updated_at: iso(), active_batch: null }
+    demoGreenhouses.push(created); saveGuestGreenhouses()
     window.dispatchEvent(new Event('greenhouses-changed'))
     return response(config, created)
   }
@@ -513,34 +576,57 @@ function demoResponse(config: InternalAxiosRequestConfig): AxiosResponse | null 
   if (greenhouseMatch) {
     const index=demoGreenhouses.findIndex(g=>g.id===Number(greenhouseMatch[1]))
     if(index<0) return fail(config,'大棚不存在',404)
-    if(method==='delete') { const deleted=demoGreenhouses.splice(index,1)[0]; for(let i=tasks.length-1;i>=0;i--)if(tasks[i].greenhouse_id===deleted.id)tasks.splice(i,1); window.dispatchEvent(new Event('greenhouses-changed')); return response(config,null) }
-    if(method!=='get') Object.assign(demoGreenhouses[index],payload,{updated_at:iso()})
-    return response(config,{...demoGreenhouses[index],last_recorded_at:[101,102].includes(demoGreenhouses[index].id)?iso():null,data_status:[101,102].includes(demoGreenhouses[index].id)?'current':'no_data',device_count:[101,102].includes(demoGreenhouses[index].id)?1:0})
+    if(method==='delete') { const deleted=demoGreenhouses.splice(index,1)[0]; saveGuestGreenhouses(); for(let i=tasks.length-1;i>=0;i--)if(tasks[i].greenhouse_id===deleted.id)tasks.splice(i,1); window.dispatchEvent(new Event('greenhouses-changed')); return response(config,null) }
+    if(method!=='get') { if(payload.code && demoGreenhouses.some((g,i)=>i!==index && g.code===payload.code))return fail(config,'大棚编号已存在',409); Object.assign(demoGreenhouses[index],payload,{updated_at:iso()}); saveGuestGreenhouses() }
+    return response(config,guestGreenhouseState(demoGreenhouses[index]))
   }
   const cropMatch = path.match(/^\/greenhouses\/(\d+)\/crop-batches$/)
   if (cropMatch) {
     const gh=demoGreenhouses.find(g=>g.id===Number(cropMatch[1])); if(!gh)return fail(config,'大棚不存在',404)
     if(method==='get')return response(config,gh.active_batch ? [gh.active_batch] : [])
-    gh.active_batch={...demoBatch,...payload,id:Date.now(),greenhouse_id:gh.id} as typeof demoBatch
+    gh.active_batch={...demoBatch,...payload,id:Date.now(),greenhouse_id:gh.id} as typeof demoBatch; saveGuestGreenhouses()
     return response(config,gh.active_batch)
   }
   if (path.match(/^\/crop-batches\/\d+$/)) return response(config, { ...demoBatch, ...(config.data ? JSON.parse(String(config.data)) : {}) })
   if (path.match(/^\/greenhouses\/\d+\/profile$/)) return response(config, { greenhouse: demoGreenhouses[0], active_batch: demoBatch, latest_environment: readings.at(-1), open_warning_count: 1 })
 
   if (path === '/dashboard/summary') return response(config, dashboardSummary(gid))
-  if (path === '/predictions/environment') return response(config, guestPrediction(gid))
+  if (path === '/predictions/environment') return response(config, guestPrediction(gid,Number(config.params?.horizon_hours)||6))
   if (path === '/sensors/latest') return response(config, guestReadings(gid).at(-1))
   if (path === '/sensors/history') return response(config, { items: guestReadings(gid), total: readings.length, page: 1, page_size: readings.length, start_time: readings[0].recorded_at, end_time: readings.at(-1)?.recorded_at, source_note: '游客演示数据' })
   if (path === '/sensors/import-preview') return response(config, { filename: 'guest-demo.csv', total_rows: 24, recognized_columns: { recorded_at: '时间', temperature: '温度' }, available_metrics: ['temperature', 'air_humidity', 'soil_moisture'], time_start: readings[0].recorded_at, time_end: readings.at(-1)?.recorded_at, interval_minutes: 60, duplicate_time_rows: 0, invalid_time_rows: 0, out_of_range_rows: 0, completeness_rate: 100, continuity_rate: 100, valid_range_rate: 100, quality_score: 96, quality_level: '优秀', import_ready: true, issues: ['游客模式仅预览，不会导入数据库'], sample_rows: readings.slice(0, 5) })
   if (path === '/sensors/import-file') return fail(config, '游客支持示例预览；正式导入请登录账号')
   if (path === '/v1/ingest/status') return response(config, { endpoint: '/api/v1/ingest/sensor-data', auth_required: true, header_name: 'Authorization / X-Sensor-Key', accepted_metrics: ['temperature', 'air_humidity', 'soil_moisture', 'light_intensity', 'co2_concentration'], max_batch_size: 1000 })
 
-  if (path === '/warnings/summary') return response(config, { open_total: 1, attention_total: 1, warning_total: 0, critical_total: 0, acknowledged_total: 0, resolved_today: 0, latest_warning: warning, greenhouse_distribution: { [demoGreenhouses[0].name]: 1 } })
-  if (path === '/warnings') return response(config, page([{ ...warning, greenhouse_id: gid, crop_batch_id: batch?.id, crop_type: batch?.crop_type }], Number(config.params?.page) || 1, Number(config.params?.page_size) || 10))
-  if (path === '/warnings/evaluate') return response(config, { greenhouse_id: 101, crop_batch_id: 9001, crop_type: 'tomato', crop_rule_version: 'demo-rule-v1', crop_match_status: 'matched', cross_region_warning: false, expert_calibration_required: false, growth_stage: '开花坐果期', current_risk: risk(), future_risks: [], forecast_status: 'ready', data_quality_issues: [], created_count: 0, updated_count: 0, skipped_count: 0, warnings: [warning], recommendations: [recommendation], data_source: 'sensor', calibration_status: 'demo', decision_scope: 'guest-demo', cross_crop_warning: false, evaluated_at: iso() })
+  if (path === '/warnings/summary') {
+    const rows=demoGreenhouses.filter(g=>guestReadings(g.id).length).map(g=>currentGuestWarning(g.id))
+    const active=rows.filter(w=>['open','acknowledged'].includes(w.status))
+    return response(config,{open_total:rows.filter(w=>w.status==='open').length,attention_total:active.length,warning_total:0,critical_total:0,acknowledged_total:rows.filter(w=>w.status==='acknowledged').length,resolved_today:rows.filter(w=>w.status==='resolved').length,latest_warning:rows[0]??null,greenhouse_distribution:Object.fromEntries(demoGreenhouses.map(g=>[g.name,active.filter(w=>w.greenhouse_id===g.id).length]))})
+  }
+  if (path === '/warnings') {
+    const rows=guestReadings(gid).length?[currentGuestWarning(gid)]:[]
+    const selected=rows.filter(w=>(!config.params?.status||w.status===config.params.status)&&(!config.params?.warning_type||w.warning_type===config.params.warning_type))
+    return response(config,page(selected,Number(config.params?.page)||1,Number(config.params?.page_size)||10))
+  }
+  if (path === '/warnings/evaluate') return response(config,{greenhouse_id:gid,crop_batch_id:batch?.id??null,crop_type:batch?.crop_type??'unknown',crop_rule_version:'demo-rule-v1',crop_match_status:'matched',cross_region_warning:false,expert_calibration_required:false,growth_stage:batch?.growth_stage??null,current_risk:risk(),future_risks:[],skipped_count:0,data_quality_issues:[],calibration_status:'demo',cross_crop_warning:false,created_count:0,updated_count:0,warnings:guestReadings(gid).length?[currentGuestWarning(gid)]:[],recommendations:guestReadings(gid).length?[demoRecommendation(gid)]:[],forecast_status:guestReadings(gid).length?'ready':'insufficient_data',data_source:'demo',decision_scope:'guest-demo',evaluated_at:iso()})
   const warningMatch = path.match(/^\/warnings\/(\d+)$/)
-  if (warningMatch) return response(config, { ...warning, greenhouse_name: demoGreenhouses[0].name, batch_code: demoBatch.batch_code, growth_stage: demoBatch.growth_stage, recommendations: [recommendation] })
-  if (path.match(/^\/warnings\/\d+\/(acknowledge|resolve|dismiss)$/)) return response(config, { ...warning, status: path.endsWith('/resolve') ? 'resolved' : path.endsWith('/dismiss') ? 'dismissed' : 'acknowledged' })
+  if(warningMatch){
+    if(Number(warningMatch[1])!==501||!guestReadings(gid).length)return fail(config,'预警不存在',404)
+    return response(config,{...currentGuestWarning(gid),greenhouse_name:greenhouse.name,batch_code:batch?.batch_code??null,growth_stage:batch?.growth_stage??null,recommendations:[demoRecommendation(gid)]})
+  }
+  const warningAction=path.match(/^\/warnings\/(\d+)\/(acknowledge|resolve|dismiss)$/)
+  if(warningAction){
+    if(Number(warningAction[1])!==501||!guestReadings(gid).length)return fail(config,'预警不存在',404)
+    const item=currentGuestWarning(gid), action=warningAction[2]
+    if(!['open','acknowledged'].includes(item.status))return fail(config,'当前预警已结束',409)
+    if(action==='acknowledge' && item.status!=='open')return fail(config,'只有待处理预警可以确认',409)
+    const updated={...item,updated_at:new Date().toISOString()}
+    if(action==='acknowledge')Object.assign(updated,{status:'acknowledged',acknowledged_at:new Date().toISOString(),acknowledged_by:'体验用户',acknowledgement_note:String(payload.note||'已确认')})
+    if(action==='resolve')Object.assign(updated,{status:'resolved',resolved_at:new Date().toISOString(),resolved_by:'体验用户',resolution_note:String(payload.note||'已复查')})
+    if(action==='dismiss')Object.assign(updated,{status:'dismissed',dismissed_at:new Date().toISOString(),dismissed_reason:String(payload.reason||'')})
+    sessionStorage.setItem(`pengzhi-warning-${gid}`,JSON.stringify(updated))
+    return response(config,updated)
+  }
   if (path.match(/^\/warnings\/\d+\/decision-support$/)) return response(config, { status: 'ready', candidate_evidence: [], current_risk_score: 62, scenarios: [], outcome_model_status: 'observational_estimates', outcome_estimates: [], explanation: '游客模式下展示决策支持样例，不会存档。' })
   if (path.match(/^\/warnings\/\d+\/candidates$/)) return response(config, [{ id: 701, warning_event_id: 501, action_code: 'ventilation', title: '通风降湿', description: '开启顶窗并记录 30 分钟后变化', action_type: 'ventilation', expected_response_minutes: 30, energy_level: 'low', labor_level: 'low', evidence_note: '演示证据', status: 'available' }])
   if (path.match(/^\/warnings\/\d+\/similar-cases$/)) return response(config, { status: 'ready', total_eligible_cases: 0, matches: [], action_evidence: [], explanation: '游客模式暂无可检索的历史案例。' })
@@ -559,6 +645,10 @@ function demoResponse(config: InternalAxiosRequestConfig): AxiosResponse | null 
   if (taskActionMatch) {
     const task = tasks.find((item) => item.id === Number(taskActionMatch[1])) ?? tasks[0]
     const action = taskActionMatch[2]
+    if (action === 'start') {
+      const dep = task.evidence_snapshot_json?.agronomist_goal as { depends_on_task_ids?: number[] } | undefined
+      if (dep?.depends_on_task_ids?.some(id => tasks.find(t => t.id === id)?.status !== 'completed')) return fail(config, '请先完成目标编排中的前置任务', 409)
+    }
     const input = config.data && typeof config.data === 'string' ? JSON.parse(config.data) : {}
     if (action === 'feedback') return response(config, { id: Date.now(), task_id: task.id, operator: '游客', executed_at: iso(), result_type: 'improved', execution_note: '游客临时反馈', observed_change: null, attachment_paths_json: [], environment_snapshot_json: {}, requires_follow_up: false, follow_up_note: null, created_at: iso(), updated_at: iso() })
     if (action === 'evaluate') return response(config, null)
@@ -573,7 +663,15 @@ function demoResponse(config: InternalAxiosRequestConfig): AxiosResponse | null 
     return response(config, taskDetail(task))
   }
   if (path.match(/^\/tasks\/\d+\/evaluation$/)) return response(config, null)
-  if (path.match(/^\/tasks\/from-(warning|disease)\/\d+$/)) return response(config, createGuestTask({ title: '风险现场复核', description: '根据当前风险进行现场检查', greenhouse_id: gid, action_type: 'field_inspection', priority: 'high' }))
+  if (path.match(/^\/tasks\/from-warning\/\d+$/)) {
+    const existing=tasks.find(t=>t.greenhouse_id===gid && t.source_warning_id===501 && t.status!=='cancelled')
+    if(existing)return response(config,existing)
+    const task=createGuestTask({title:'风险现场复核',description:'根据当前预警进行现场检查',greenhouse_id:gid,action_type:'field_inspection',priority:'high'})
+    Object.assign(task,{source_type:'warning',source_id:501,source_warning_id:501})
+    sessionStorage.setItem('pengzhi_warning_tasks_v1',JSON.stringify(tasks.filter(t=>t.source_type==='warning' && t.id>802)))
+    return response(config,task)
+  }
+  if (path.match(/^\/tasks\/from-disease\/\d+$/)) return response(config, createGuestTask({title:'病害现场复核',greenhouse_id:gid,action_type:'field_inspection',priority:'high'}))
 
   if (path === '/diseases/model-status') return response(config, { service_status:'demo', model_status:'under_evaluation', model_version:'guest-demo', target_crop:'tomato', supported_classes:classes, input_size:224, confidence_threshold:0.7, internal_metrics_summary:{}, external_metrics_summary:{}, validation_status:'under_evaluation', limitations:['游客仅展示预设示例，不对上传照片进行真实分类'] } satisfies DiseaseModelStatus)
   if (path === '/diseases/identify') {
@@ -626,4 +724,34 @@ export function createGuestDemoAdapter(fallback: AxiosAdapter): AxiosAdapter {
     }
     return fallback(config)
   }
+}
+
+let researchTasksRestored = false
+function restoreResearchTasks() {
+  if (researchTasksRestored) return
+  researchTasksRestored = true
+  try {
+    const stored: FarmTask[] = [...JSON.parse(sessionStorage.getItem('pengzhi_research_tasks_v1') || '[]'),...JSON.parse(sessionStorage.getItem('pengzhi_warning_tasks_v1') || '[]')]
+    for (const task of stored) if (!tasks.some(t => t.id === task.id)) tasks.push(task)
+  } catch { sessionStorage.removeItem('pengzhi_research_tasks_v1') }
+}
+function persistResearchTasks() {
+  sessionStorage.setItem('pengzhi_research_tasks_v1', JSON.stringify(tasks.filter(t => t.evidence_snapshot_json?.agronomist_goal)))
+}
+export function guestResearchContext(gid: number) {
+  restoreResearchTasks()
+  const greenhouse = demoGreenhouses.find(g => g.id === gid)
+  if (!greenhouse) throw new Error('游客大棚不存在')
+  return { greenhouse, readings: guestReadings(gid), tasks: tasks.filter(t => t.greenhouse_id === gid) }
+}
+export function createGuestResearchTasks(gid: number, goalId: number, steps: { title: string; action_type: string; description: string; depends_on: number[] }[]) {
+  restoreResearchTasks()
+  const ids: number[] = []
+  for (const [index, step] of steps.entries()) {
+    const task = createGuestTask({ greenhouse_id: gid, ...step })
+    task.evidence_snapshot_json = { ...task.evidence_snapshot_json, agronomist_goal: { id: goalId, step: index, depends_on_task_ids: step.depends_on.map(i => ids[i]) } }
+    ids.push(task.id)
+  }
+  persistResearchTasks()
+  return ids
 }

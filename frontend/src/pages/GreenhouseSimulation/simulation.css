@@ -1,0 +1,27 @@
+.greenhouse-simulation { display: flex; flex-direction: column; gap: 16px; padding-bottom: 30px; }
+.simulation-hero { display: flex; align-items: center; justify-content: space-between; padding: 28px; background: linear-gradient(120deg,#e7f5ee,#f5faf8); border: 1px solid #d7e8df; border-radius: 18px; }
+.simulation-hero h2.ant-typography { margin: 10px 0; color: #173f31; }
+.simulation-hero .ant-typography { margin-bottom: 0; }
+.greenhouse-simulation .ant-card { border-radius: 14px; }
+.greenhouse-simulation .ant-tag { margin-bottom: 4px; }
+.simulation-parameter { margin-bottom: 15px; }
+.simulation-parameter label { display: block; color: #3a5047; margin-bottom: 8px; }
+.simulation-parameter small { color: #82958c; }
+.simulation-inputs, .simulation-parameter-head { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.simulation-inputs .ant-input-number { width: 100%; }
+.simulation-parameter-head { font-size: 12px; color: #71877b; margin-bottom: 12px; }
+.simulation-manual { margin-bottom: 20px; }
+.simulation-trend { height: 290px; width: 100%; }
+.simulation-reason { padding: 16px; background: #f3f8f5; border-left: 3px solid #529f78; margin-top: 18px; }
+.simulation-oled { background: #13261f; color: #b5ffd1; padding: 16px; border-radius: 9px; font-size: 12px; margin-top: 16px; white-space: pre-wrap; }
+.simulation-wire { height: 260px; overflow: auto; font-size: 11px; overflow-wrap: anywhere; }
+.simulation-experiment { margin: 16px 0; }
+@media(max-width:600px) { .simulation-hero { padding:18px; align-items: flex-start; gap: 12px; } .simulation-hero h2.ant-typography { font-size:22px; } }
+.greenhouse-simulation { min-width: 0; }
+.greenhouse-simulation .ant-table-container { min-width: 0 !important; }
+.greenhouse-simulation .ant-table-cell { overflow-wrap: anywhere; }
+.greenhouse-simulation .ant-tag { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+@media(max-width:600px) {
+  .greenhouse-simulation .ant-statistic-content { font-size: 22px; }
+  .pz-ui.wb-shell .greenhouse-simulation .ant-table-tbody > tr > td { padding: 10px 8px !important; }
+}

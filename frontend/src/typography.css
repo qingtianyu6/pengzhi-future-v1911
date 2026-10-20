@@ -1,0 +1,104 @@
+/* Locally hosted, OFL-licensed variable Chinese font; no remote font dependency. */
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('/fonts/pengzhi-ui-sc.woff2') format('woff2'), url('/fonts/pengzhi-ui-sc.woff') format('woff');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+:root {
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --pz-type-title: 32px;
+  --pz-type-section: 22px;
+  --pz-type-subtitle: 18px;
+  --pz-type-body: 15px;
+  --pz-type-label: 14px;
+  --pz-type-caption: 13px;
+}
+body { font-family: var(--font-sans); text-rendering: optimizeLegibility; }
+.pz-ui.wb-shell { font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+.pz-ui.wb-shell :is(h1,h2,h3,h4) { font-family: inherit; letter-spacing: .015em; }
+.pz-ui.wb-shell .ant-menu-title-content { font-weight: 500; }
+.pz-ui.wb-shell :is(.ant-input-number-input, time, .pz-budget-display) { font-variant-numeric: tabular-nums; }
+
+/* One reading scale across workspaces; icons, metrics and 3D labels keep their own sizes. */
+#pengzhi-platform {
+  font-family: var(--font-sans);
+  font-size: var(--pz-type-body);
+  line-height: 1.75;
+  font-weight: 400;
+  font-synthesis: none;
+}
+#pengzhi-platform .pz-workspace-page { font-size: var(--pz-type-body); line-height: 1.75; }
+#pengzhi-platform .exact-side-menu :is(.ant-menu-item,.ant-menu-submenu-title) { font-size: 15px !important; }
+#pengzhi-platform .exact-side-menu .pz-knowledge-nav > .ant-menu > .ant-menu-item { font-size: 14px !important; }
+#pengzhi-platform .exact-side-menu .ant-menu-item-group-title { font-size: 11px !important; }
+#pengzhi-platform .exact-brand-copy > span { font-size: 11px !important; }
+#pengzhi-platform .pz-workspace-page :is(h1,h2,h3,h4) {
+  font-family: var(--font-sans) !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+  text-wrap: pretty;
+}
+#pengzhi-platform .pz-workspace-page h1 { font-size: var(--pz-type-title) !important; line-height: 1.4 !important; }
+#pengzhi-platform .pz-workspace-page h2 { font-size: var(--pz-type-section) !important; line-height: 1.5 !important; }
+#pengzhi-platform .pz-workspace-page h3 { font-size: var(--pz-type-subtitle) !important; line-height: 1.55 !important; }
+#pengzhi-platform .pz-workspace-page h4 { font-size: 16px !important; line-height: 1.6 !important; }
+#pengzhi-platform .pz-workspace-page p { font-size: var(--pz-type-body) !important; line-height: 1.85 !important; }
+#pengzhi-platform .pz-workspace-page :is(.community-eyebrow,.pz-section-kicker,.gh-management-eyebrow) {
+  font-size: 12px !important; letter-spacing: 1.5px; font-weight: 550 !important;
+}
+#pengzhi-platform :is(.ant-btn,.ant-input,.ant-input-number-input,.ant-select-selector,.ant-select-selection-item,.ant-select-selection-placeholder,.ant-form-item-label > label,.ant-tabs-tab,.ant-segmented-item-label) {
+  font-family: var(--font-sans) !important;
+  font-size: var(--pz-type-label) !important;
+}
+#pengzhi-platform .ant-btn { font-weight: 500 !important; }
+#pengzhi-platform .ant-btn-sm { font-size: var(--pz-type-caption) !important; }
+#pengzhi-platform .ant-btn-lg { font-size: var(--pz-type-body) !important; }
+#pengzhi-platform :is(.ant-table,.ant-descriptions,.ant-alert,.ant-empty-description,.ant-form-item-explain,.ant-collapse-header) {
+  font-size: var(--pz-type-label) !important; line-height: 1.7;
+}
+#pengzhi-platform .ant-table-thead th { font-weight: 600 !important; }
+#pengzhi-platform :is(.ant-tag,.ant-pagination,.ant-pagination-item,.ant-pagination-item a) { font-size: var(--pz-type-caption) !important; }
+#pengzhi-platform :is(.forum-summary,.knowledge-summary,.news-summary,.news-article-summary,.iw-candidate-heading > small,.iw-evidence-facts) {
+  font-size: var(--pz-type-body) !important; line-height: 1.8 !important;
+}
+#pengzhi-platform :is(.community-post-meta,.forum-post-meta,.forum-post-author,.forum-post-stats,.knowledge-source-line,.news-source-line,.news-article-meta,.news-row-meta,.env-chart-note,.env-event-axis,.iw-map-zones button,.iw-observation-form > summary,.iw-progress li > span,.exact-task-copy small,.exact-activity-row time) {
+  font-size: var(--pz-type-caption) !important; line-height: 1.65 !important;
+}
+#pengzhi-platform :is(.knowledge-tags > span,.forum-tags > span,.forum-post-tags > span,.news-tags > span,.iw-priority-tag,.iw-display-steps > li > span) {
+  font-size: 12px !important; line-height: 1.7 !important;
+}
+#pengzhi-platform :is(.knowledge-row h2,.forum-post h2,.forum-row h2,.news-article h2,.news-row h2,.news-editorial-row h2) {
+  font-size: 20px !important; line-height: 1.6 !important; font-weight: 600 !important;
+}
+#pengzhi-platform .news-page .news-masthead h1 { font-size: 48px !important; line-height: 1.3 !important; font-weight: 750 !important; }
+#pengzhi-platform .news-page .news-feature-copy h2 { font-size: 30px !important; line-height: 1.45 !important; }
+#pengzhi-platform .news-quick h3 { font-size: 16px !important; }
+#pengzhi-platform .news-quick p { font-size: var(--pz-type-caption) !important; }
+#pengzhi-platform .news-main-navigation > nav > button { font-size: 17px !important; font-weight: 500; }
+#pengzhi-platform .news-main-navigation > nav > button[aria-pressed=true] { font-size: 19px !important; font-weight: 650; }
+#pengzhi-platform :is(.community-markdown,.knowledge-reference-detail) { font-size: 16px !important; line-height: 1.9 !important; }
+#pengzhi-platform :is(.community-markdown,.knowledge-reference-detail) :is(p,li) { font-size: 16px !important; line-height: 1.9 !important; }
+#pengzhi-platform .pz-section-heading strong { font-size: 22px !important; font-weight: 650 !important; }
+#pengzhi-platform .pz-section-links a { font-size: 14px !important; }
+#pengzhi-platform .pz-workspace-page :is(.gh-hero-eyebrow,.gh-hero-metrics dt,.gh-data-meta,.gh-data-meta span,.gh-list-footer small,.gh-access-strip span:not(.anticon),.env-sampling,.env-sampling small,.env-metric-strip em,.env-metric-strip label,.knowledge-quick-search,.knowledge-quick-search > button,.knowledge-source-line,.knowledge-source-line time,.community-post-meta,.community-post-meta time,.forum-author,.forum-post-tags,.news-refresh time,.news-row-meta,.news-row-meta time,.ag-context,.ag-inline-note,.ag-record-head small) { font-size: 12px !important; line-height: 1.65 !important; }
+#pengzhi-platform .pz-workspace-page .forum-post .community-post-meta .forum-author { font-size: 13px !important; }
+#pengzhi-platform .pz-workspace-page .forum-post .community-post-meta time { font-size: 12px !important; }
+#pengzhi-platform .knowledge-expand { min-width: 36px; min-height: 36px; }
+#pengzhi-platform .pz-workspace-page .ag-eyebrow { font-size: 12px !important; }
+#pengzhi-platform .knowledge-source-kind { display: inline-block; padding: 1px 8px; margin-right: 8px; background: #eaf0e2; border-radius: 4px; font-size: 12px; color: #4f725d; }
+/* Portals are mounted outside the platform shell. Use the same font there too. */
+:is(.ant-modal-root,.ant-drawer,.ant-dropdown,.ant-select-dropdown,.ant-tooltip,.ant-message) { font-family: var(--font-sans); }
+:is(.ant-modal-title,.ant-drawer-title) { font-size: 20px !important; font-weight: 650 !important; line-height: 1.5 !important; }
+:is(.ant-modal-body,.ant-drawer-body) { font-size: 15px; line-height: 1.8; }
+:is(.ant-modal-body,.ant-drawer-body) .community-markdown { font-size: 16px; line-height: 1.9; }
+@media (max-width: 760px) {
+  :root { --pz-type-title: 27px; --pz-type-section: 21px; --pz-type-subtitle: 17px; }
+  #pengzhi-platform .news-page .news-masthead h1 { font-size: 34px !important; }
+  #pengzhi-platform .news-page .news-feature-copy h2 { font-size: 25px !important; }
+  #pengzhi-platform :is(.knowledge-row h2,.forum-post h2,.forum-row h2,.news-article h2,.news-row h2,.news-editorial-row h2) { font-size: 18px !important; }
+}
+@media (max-width: 620px) {
+  #pengzhi-platform :is(input.ant-input,textarea.ant-input,.ant-input-number-input) { font-size: 16px !important; }
+}

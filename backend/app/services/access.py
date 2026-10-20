@@ -16,6 +16,8 @@ from app.models import (AIConversation, ActionCandidate, DecisionPlan, Greenhous
                         RiskEvent, SimulationRecord, TaskEvent, TaskFeedback, TreatmentEvaluation, WarningEvent)
 from app.services.auth_service import authenticate
 from app.services.errors import ServiceError
+from app.models.agronomist import AgronomyRecord, CropObservation
+from app.models.greenhouse_device import GreenhouseDevice
 
 
 @dataclass(frozen=True)
@@ -27,7 +29,7 @@ class Principal:
 
 
 CURRENT_USER: ContextVar[Principal | None] = ContextVar("current_business_user", default=None)
-SCOPED_MODELS = (ActionCandidate, Intervention, OutcomeObservation, ForecastAudit, CropBatch,
+SCOPED_MODELS = (GreenhouseDevice, AgronomyRecord, CropObservation, ActionCandidate, Intervention, OutcomeObservation, ForecastAudit, CropBatch,
                  DecisionRecommendation, DiseaseRecognitionRecord, FarmTask,
                  SensorData, WarningEvent, GreenhouseProfile, RiskEvent, DecisionPlan,
                  TreatmentEvaluation, SimulationRecord)
@@ -61,7 +63,8 @@ async def business_access(
         # Every business-writing tool still rechecks the actor in agent.guard.
         personal_ai = path.startswith("/api/v1/ai/") or path == "/api/agent/chat" or (
             path.startswith("/api/agent/runs/") and path.endswith("/cancel"))
-        roles = {"admin", "agronomist", "executor", "observer"} if personal_ai else (
+        personal_content = (path.startswith("/api/community/forum") and "/moderation" not in path) or path.startswith("/api/community/news/preferences") or path.startswith("/api/community/news/bookmarks") or path.startswith("/api/community/news/digests")
+        roles = {"admin", "agronomist", "executor", "observer"} if personal_ai or personal_content else (
             {"admin", "agronomist", "executor"} if (
                 path.startswith("/api/tasks") or path.startswith("/api/interventions")
             ) else {"admin", "agronomist"})

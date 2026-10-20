@@ -1,0 +1,48 @@
+from pathlib import Path
+import json
+from playwright.sync_api import sync_playwright,expect
+out=Path(__file__).resolve().parents[2]/'.run/forum-refresh';out.mkdir(parents=True,exist_ok=True)
+checks=[];errors=[];writes=[]
+def check(name,ok=True):
+ assert ok,name
+ checks.append(name);print('PASS',name,flush=True)
+with sync_playwright() as p:
+ browser=p.chromium.launch();context=browser.new_context(viewport={'width':1600,'height':1000});page=context.new_page()
+ page.on('pageerror',lambda e:errors.append(str(e)))
+ page.on('request',lambda r:writes.append(r.url) if '/api/community/' in r.url and r.method not in ('GET','OPTIONS') else None)
+ page.goto('http://127.0.0.1:5173/platform/forum?greenhouse_id=101&mode=guest')
+ expect(page.locator('.forum-post')).to_have_count(1)
+ check('全宽论坛，无固定侧栏',page.locator('.wb-assistant-rail').count()==0)
+ check('移除大段游客提示',page.get_by_text('游客示例社区 · 帖子与互动仅保存在当前浏览器会话，不写入正式论坛。').count()==0)
+ check('独立悬浮三维角色',page.locator('.pengxiaozhi-dock').evaluate('(e)=>getComputedStyle(e).position==="fixed"&&!e.closest(".pz-ui")&&!e.classList.contains("is-compact")'))
+ page.locator('.forum-post-actions button').nth(1).click();expect(page.locator('.forum-post-actions button').nth(1)).to_have_attribute('aria-pressed','true');check('列表点赞更新')
+ page.locator('.forum-post-actions button').nth(2).click();expect(page.locator('.forum-post-actions button').nth(2)).to_have_attribute('aria-pressed','true')
+ page.get_by_role('button',name='我的收藏',exact=True).click();expect(page.locator('.forum-post')).to_have_count(1);check('收藏与我的收藏筛选')
+ page.get_by_role('button',name='重置筛选',exact=True).click()
+ page.get_by_role('button',name='农事经验',exact=True).click();expect(page.locator('.forum-empty')).to_be_visible();check('分类筛选与空状态')
+ page.get_by_role('button',name='清除筛选条件').click();expect(page.locator('.forum-post')).to_have_count(1)
+ page.locator('.forum-search input').fill('不存在的测试词');page.locator('.forum-search input').press('Enter');expect(page.locator('.forum-empty')).to_be_visible();check('搜索与重置')
+ page.get_by_role('button',name='清除筛选条件').click()
+ page.get_by_role('button',name='发布帖子',exact=True).click()
+ page.locator('#forum-post-editor_title').fill('浏览器验收：番茄叶片观察')
+ page.locator('#forum-post-editor_body').fill('记录叶片正反面和区域温湿度，供后续观察比较。')
+ page.get_by_role('button',name='确认发布',exact=True).click();expect(page.locator('.forum-page.is-detail h2').first).to_have_text('浏览器验收：番茄叶片观察');check('真实表单发布与详情')
+ page.get_by_role('textbox',name='回复内容').fill('已补充叶片背面的观察，待复查。');page.get_by_role('button',name='发表回复').click()
+ expect(page.locator('.community-comment')).to_have_count(1)
+ page.get_by_role('button',name='采纳答案').click();expect(page.locator('.community-comment').get_by_text('已采纳',exact=True)).to_be_visible();check('回复与采纳')
+ page.get_by_role('button',name='编辑帖子',exact=True).click();check('编辑与回复表单ID独立',len(page.locator('[id]').evaluate_all('(els)=>{const ids=els.map(e=>e.id);return ids.filter((id,i)=>ids.indexOf(id)!==i)}'))==0)
+ page.locator('#forum-post-editor_title').fill('浏览器验收：修改后的观察');page.get_by_role('button',name='确认发布',exact=True).click();expect(page.locator('.forum-page.is-detail h2').first).to_have_text('浏览器验收：修改后的观察');check('编辑保存')
+ page.get_by_role('button',name='← 返回论坛',exact=True).click();page.get_by_role('button',name='我的帖子',exact=True).click();expect(page.locator('.forum-post')).to_have_count(1);check('我的帖子')
+ page.get_by_role('button',name='重置筛选',exact=True).click()
+ # Browser-side readiness waits for the actual canvas, no screenshot placeholder.
+ page.locator('.pengxiaozhi-dock canvas').wait_for(timeout=60000);page.wait_for_timeout(2500)
+ page.screenshot(path=str(out/'desktop-reference.png'),full_page=True)
+ check('桌面无横向溢出',page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
+ page.set_viewport_size({'width':390,'height':844});page.wait_for_timeout(500)
+ check('手机无横向溢出',page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
+ expect(page.get_by_role('button',name='发布帖子',exact=True)).to_be_visible();expect(page.get_by_role('button',name='我的收藏',exact=True)).to_be_visible()
+ page.screenshot(path=str(out/'mobile-reference.png'),full_page=True);check('手机功能入口可见')
+ check('游客操作不写正式API',not writes)
+ check('无JavaScript运行错误',not errors)
+ (out/'browser-reference-results.json').write_text(json.dumps({'passed':len(checks),'checks':checks,'errors':errors},ensure_ascii=False,indent=2),encoding='utf-8')
+ browser.close()

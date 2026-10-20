@@ -96,7 +96,9 @@ def _knowledge_reply(evidence: list[dict[str, Any]]) -> str:
         for source in item.get("sources", [])[:1]:
             name = source.get("name")
             if name and name not in sources:
-                sources.append(name)
+                position = source.get("position") or item.get("position") or ""
+                url = source.get("url")
+                sources.append((f"[{name}]({url})" if url else name) + (f" · {position}" if position else ""))
     if sources:
         lines.append("\n知识来源：" + "；".join(sources))
     return "\n".join(line for line in lines if line)

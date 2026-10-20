@@ -1,10 +1,11 @@
 {
   "name": "棚小智",
-  "type": "Original 3D mechanical character with hierarchical bone joints",
-  "meshes": 63,
-  "triangles": 65568,
+  "type": "Original rigged character with continuous skinned limbs",
+  "meshes": 49,
+  "skinnedMeshes": 4,
+  "triangles": 93672,
   "bones": 16,
-  "bytes": 1666972,
+  "bytes": 2432636,
   "animations": [
     {
       "name": "Idle",

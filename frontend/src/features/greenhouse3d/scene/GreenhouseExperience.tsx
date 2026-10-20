@@ -90,13 +90,13 @@ export default function GreenhouseExperience({config,mode,onMode,onSelection,lig
    gl.shadowMap.type=THREE.PCFSoftShadowMap
  }}>
    <ResponsiveCameraFov/>
-   <color attach="background" args={[lightsOn?'#26343c':outside?'#e8eef1':'#dfeaec']}/>
-   {!inspection&&<fog attach="fog" args={[lightsOn?'#26343c':outside?'#e8eef1':'#dfeaec',34,76]}/>} 
+   <color attach="background" args={[lightsOn?'#253c36':outside?'#edf1e7':'#e6eee5']}/>
+   {!inspection&&<fog attach="fog" args={[lightsOn?'#253c36':outside?'#edf1e7':'#e6eee5',34,76]}/>}
    <ambientLight intensity={lightsOn?.26:outside?.52:.60}/>
-   <hemisphereLight args={[lightsOn?'#536979':'#f3f9fb',lightsOn?'#1e272c':'#7b8078',lightsOn?.32:outside?.84:1.0]}/>
+   <hemisphereLight args={[lightsOn?'#536979':'#fff9ec',lightsOn?'#1e272c':'#86967b',lightsOn?.32:outside?.84:1.0]}/>
    <directionalLight castShadow={!inspection} position={[8,16,-7]} intensity={lightsOn?.14:outside?.92:1.0} color={lightsOn?'#9aa9b2':'#fff4e8'} shadow-mapSize-width={2048} shadow-mapSize-height={2048}/>
    <directionalLight position={[-10,10,8]} intensity={lightsOn?.08:outside?.36:.3} color="#c8e5f4"/>
-   {outside&&<mesh receiveShadow position={[0,-.12,0]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[54,42]}/><meshStandardMaterial color="#e1e6e8" roughness={.68}/></mesh>}
+   {outside&&<mesh receiveShadow position={[0,-.12,0]} rotation={[-Math.PI/2,0,0]}><planeGeometry args={[54,42]}/><meshStandardMaterial color="#d8e1ca" roughness={.85}/></mesh>}
    {mode!=='inside'&&<GreenhouseExterior doorOpen={mode==='entering'} onClick={()=>mode==='outside'&&onMode('confirm')} onBounds={setBounds}/>} 
   {(mode==='entering'||mode==='inside')&&layout.valid&&<group rotation={[0,Math.PI,0]}><GreenhouseInterior config={config} layout={layout} lightsOn={lightsOn} growthStage={growthStage} inspection={inspection} onBed={selectBed} onDevice={selectDevice}/></group>} 
    <ScenePicker onBed={selectBed} onDevice={selectDevice} onExterior={()=>{if(mode==='outside')onMode('confirm')}}/>

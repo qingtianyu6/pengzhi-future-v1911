@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends
 from app.services.access import business_access
 
 from app.api.health import router as health_router
+from app.api.community import router as community_router
+from app.api.agronomist import router as agronomist_router
 from app.api.predictions import router as predictions_router
 from app.api.greenhouses import router as greenhouses_router
 from app.api.crop_batches import router as crop_batches_router
@@ -28,9 +30,19 @@ from app.api.v2_decision import (decision_router as v2_decision_router,
                                  simulation_router as v2_simulation_router)
 
 
+from app.api.greenhouse_sim import router as greenhouse_sim_router
+
 api_router = APIRouter()
+api_router.include_router(greenhouse_sim_router)
+from app.api.investigation import router as investigation_router, demo_router as investigation_demo_router
 protected = [Depends(business_access)]
+api_router.include_router(investigation_router, dependencies=protected)
+api_router.include_router(investigation_demo_router)
 api_router.include_router(health_router)
+api_router.include_router(community_router, dependencies=protected)
+from app.api.community import public_router as community_public_router
+api_router.include_router(community_public_router)
+api_router.include_router(agronomist_router, dependencies=protected)
 api_router.include_router(guest_ai_router)
 api_router.include_router(predictions_router, dependencies=protected)
 api_router.include_router(greenhouses_router, dependencies=protected)

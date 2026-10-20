@@ -10,8 +10,14 @@
 .mascot-voice-bars { position: absolute; bottom: 0; left: 26%; height: 20px; display: flex; gap: 3px; align-items: center; padding: 2px 7px; border-radius: 10px; background: #e8f5ee; }
 .mascot-voice-bars i { display: block; width: 3px; height: 9px; background: #188564; animation: pxz-bar .7s ease-in-out infinite alternate; }.mascot-voice-bars i:nth-child(2n) { animation-delay: .25s; }
 .pengxiaozhi-dock { position: fixed; z-index: 990; width: 144px; display: flex; flex-direction: column; align-items: center; gap: 3px; color: #173f32; filter: drop-shadow(0 7px 10px #143d2525); }
+.pengxiaozhi-dock:not(.is-dragging) { transition: right .18s ease, bottom .18s ease; }
+.pengxiaozhi-dock .assistant-companion-hint { display: none; pointer-events: none; }
+.pengxiaozhi-dock:hover .assistant-companion-hint, .pengxiaozhi-dock:focus-within .assistant-companion-hint { display: block; }
+@media(prefers-reduced-motion:reduce) { .pengxiaozhi-dock:not(.is-dragging) { transition: none; } }
 .pengxiaozhi-dock button { font: inherit; cursor: pointer; }
 .assistant-character-trigger { position: relative; width: 140px; height: 128px; border: 0; padding: 0; background: transparent; touch-action: none; border-radius: 24px; }
+.pengxiaozhi-dock .assistant-character-trigger { cursor: grab; user-select: none; -webkit-user-select: none; }
+.pengxiaozhi-dock.is-dragging .assistant-character-trigger { cursor: grabbing; }
 .assistant-character-trigger:focus-visible, .assistant-dock-actions button:focus-visible, .assistant-dock-controls button:focus-visible { outline: 3px solid #2b9f79; outline-offset: 3px; }
 .assistant-character-trigger .pengxiaozhi-mascot { width: 140px; height: 128px; animation: pxz-breathe 5s ease-in-out infinite; transform-origin: 50% 94%; }
 .pengxiaozhi-dock[data-state="thinking"] .assistant-character-trigger .pengxiaozhi-mascot { animation: pxz-think 2.4s ease-in-out infinite; }

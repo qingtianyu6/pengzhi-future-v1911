@@ -1,0 +1,19 @@
+{
+  "family": "Noto Sans SC",
+  "version": "Version 2.004-H2;hotconv 1.0.118;makeotfexe 2.5.65603",
+  "license": "SIL OFL 1.1",
+  "source": "https://github.com/google/fonts/tree/main/ofl/notosanssc",
+  "source_sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+  "output_sha256": "51bcfc8606ab165e633cec41814526312b80aeff69b36903de47e1f52cb266eb",
+  "glyphs": 7182,
+  "weight_axis": "100–900",
+  "subset": "GB2312 Chinese + current frontend vocabulary + Latin/punctuation; system fallback for other characters",
+  "woff2": {
+    "file": "pengzhi-ui-sc.woff2",
+    "sha256": "a50e36d0f928184545aabb0ff240dcbc605ddb00cab1f87b8b7576601943e69c",
+    "bytes": 1907732,
+    "source_bytes": 2532364,
+    "glyph_coverage_verified": true,
+    "weight_axis_verified": true
+  }
+}

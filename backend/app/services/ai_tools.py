@@ -229,7 +229,8 @@ def collect_tool_evidence(
 ) -> list[dict[str, Any]]:
     evidence: list[dict[str, Any]] = []
 
-    knowledge_result = {"status": "available", "items": search_knowledge(question, limit=4)}
+    active_batch = db.scalar(select(CropBatch).where(CropBatch.greenhouse_id == greenhouse_id, CropBatch.status == "growing")) if greenhouse_id else None
+    knowledge_result = {"status": "available", "items": search_knowledge(question, limit=4, db=db, crop=active_batch.crop_type if active_batch else None)}
     _record_tool(
         db,
         conversation_id,

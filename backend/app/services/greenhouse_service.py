@@ -18,11 +18,14 @@ from app.services.errors import ServiceError
 def _to_greenhouse_data(db: Session, greenhouse: Greenhouse) -> GreenhouseData:
     active = get_active_batch(db, greenhouse.id)
     latest = db.scalar(select(SensorData).where(SensorData.greenhouse_id == greenhouse.id).order_by(SensorData.recorded_at.desc()).limit(1))
-    device_count = db.scalar(select(func.count(func.distinct(SensorData.device_id))).where(SensorData.greenhouse_id == greenhouse.id, SensorData.source == "sensor", SensorData.device_id.is_not(None))) or 0
+    from app.services.greenhouse_management import device_rows
+    devices = device_rows(db, greenhouse.id)
+    device_count = len(devices)
     timestamp = latest.recorded_at.replace(tzinfo=UTC) if latest and latest.recorded_at.tzinfo is None else latest.recorded_at if latest else None
     state = "no_data" if not latest else "historical" if datetime.now(UTC)-timestamp > timedelta(hours=2) else "suspect" if latest.quality_flag != "valid" else "current"
     return GreenhouseData(
         last_recorded_at=timestamp, data_status=state, device_count=device_count,
+        online_device_count=sum(device["online"] for device in devices),
         id=greenhouse.id,
         code=greenhouse.code,
         name=greenhouse.name,
@@ -105,6 +108,8 @@ def delete_greenhouse(db: Session, greenhouse_id: int) -> None:
     if greenhouse is None:
         raise ServiceError(404, "大棚不存在")
     try:
+        from app.models.greenhouse_device import GreenhouseDevice
+        db.execute(delete(GreenhouseDevice).where(GreenhouseDevice.greenhouse_id == greenhouse_id))
         from app.models import AgentRun, AgentApproval, AgentRecheck, AgentStep, AgentToolCall
         from sqlalchemy import or_
         run_ids = list(db.scalars(select(AgentRun.id).where(or_(
@@ -114,6 +119,9 @@ def delete_greenhouse(db: Session, greenhouse_id: int) -> None:
                 AgentRun.status.not_in(["COMPLETED", "FAILED", "CANCELLED"])).limit(1)):
             raise ServiceError(409, "请先取消该棚的活动Agent运行")
         for model in (AgentApproval, AgentRecheck, AgentStep, AgentToolCall):
+            if model is AgentApproval:
+                from app.models.community import AITrace
+                db.execute(delete(AITrace).where(AITrace.run_id.in_(run_ids)))
             db.execute(delete(model).where(model.run_id.in_(run_ids)))
         db.execute(delete(AgentRun).where(AgentRun.id.in_(run_ids)))
         conversation_ids = select(AIConversation.id).where(
@@ -139,6 +147,9 @@ def delete_greenhouse(db: Session, greenhouse_id: int) -> None:
         db.execute(delete(DiseaseRecognitionRecord).where(DiseaseRecognitionRecord.greenhouse_id == greenhouse_id))
         db.execute(delete(WarningEvent).where(WarningEvent.greenhouse_id == greenhouse_id))
         db.execute(delete(SensorData).where(SensorData.greenhouse_id == greenhouse_id))
+        from app.models.agronomist import AgronomyRecord, CropObservation
+        db.execute(delete(CropObservation).where(CropObservation.greenhouse_id == greenhouse_id))
+        db.execute(delete(AgronomyRecord).where(AgronomyRecord.greenhouse_id == greenhouse_id))
         db.execute(delete(CropBatch).where(CropBatch.greenhouse_id == greenhouse_id))
         db.delete(greenhouse)
         db.commit()

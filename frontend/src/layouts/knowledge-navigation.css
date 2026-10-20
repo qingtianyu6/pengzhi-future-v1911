@@ -1,0 +1,17 @@
+/* The title navigates; only its independent arrow expands the three pages. */
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav>.ant-menu-submenu-title{position:relative;height:46px!important;line-height:46px!important;margin:5px 0!important;width:100%!important;padding:0 46px 0 15px!important;border-radius:9px!important;color:#d2e0d4!important;font-size:14px!important}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav>.ant-menu-submenu-title>.anticon{font-size:16px!important;color:inherit}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav.ant-menu-submenu-selected>.ant-menu-submenu-title{background:#e1edce!important;color:#244e38!important;font-weight:650}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav>.ant-menu-submenu-title:hover{background:#ffffff10!important;color:#fff!important}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav.ant-menu-submenu-selected>.ant-menu-submenu-title:hover{background:#d7e7c1!important;color:#244e38!important}
+.pz-knowledge-toggle{position:absolute;right:7px;top:8px;width:30px;height:30px;display:grid;place-items:center;padding:0;border:0;border-radius:5px;background:none;color:inherit;cursor:pointer;line-height:1}
+.pz-knowledge-toggle:hover{background:#345c3a15}.pz-knowledge-toggle:focus-visible{outline:2px solid #82b394;outline-offset:-2px}
+.pz-knowledge-toggle>.anticon{font-size:11px!important;transition:transform .18s ease}
+.pz-knowledge-toggle[aria-expanded=true]>.anticon{transform:rotate(180deg)}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav>.ant-menu{background:#092f242b!important;border-radius:6px;padding:5px 0!important;margin:0!important}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav>.ant-menu>.ant-menu-item{height:38px!important;line-height:38px!important;width:100%!important;margin:2px 0!important;padding-left:43px!important;border-radius:5px!important;font-size:13px!important;font-weight:400!important;color:#bbd0c0!important}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav>.ant-menu>.ant-menu-item-selected{background:#ffffff12!important;color:#f4ffe9!important;font-weight:600!important}
+.pz-ui.wb-shell .exact-side-menu .pz-knowledge-nav>.ant-menu>.ant-menu-item-selected:before{display:none!important}
+.pz-ui.wb-shell.investigation-unified-shell .exact-side-menu .pz-knowledge-nav>.ant-menu-submenu-title{height:62px!important;line-height:62px!important;border-radius:0!important;margin:0!important;padding-left:32px!important;font-size:18px!important;color:#edf5e9!important}
+.pz-ui.wb-shell.investigation-unified-shell .pz-knowledge-toggle{top:16px;right:12px}
+@media(prefers-reduced-motion:reduce){.pz-knowledge-toggle>.anticon{transition:none}}

@@ -1,0 +1,63 @@
+/* Six workspaces, one shared content hierarchy. No mascot/model styles here. */
+.pz-menu-caption { margin: 26px 28px 8px; color: #9ab3a4; font-size: 10px; letter-spacing: .16em; }
+.pz-ui.wb-shell .exact-side-menu { flex: 0 0 auto; padding: 4px 14px 12px !important; }
+.pz-ui.wb-shell .exact-side-menu .ant-menu-item {
+  height: 49px !important; line-height: 49px !important; margin: 5px 0 !important;
+  padding-left: 17px !important; font-size: 14px !important; border-radius: 12px;
+}
+.pz-ui.wb-shell .exact-side-menu .ant-menu-item .anticon { font-size: 18px !important; }
+.pz-ui.wb-shell .exact-side-menu .ant-menu-title-content { margin-inline-start: 13px; }
+.pz-ui.wb-shell .exact-side-menu .ant-menu-item-selected { box-shadow: 0 4px 12px #071e1712; }
+.pz-sider-note { margin: 28px 28px 24px; color: #d1dfce; font-size: 12px; line-height: 2; }
+.pz-sider-note > span { display: block; width: 25px; height: 2px; margin-bottom: 12px; background: #a1bc88; }
+.pz-sider-note small { color: #9fb7a7; font-size: 10px; }
+.pz-ui.wb-shell .exact-sider-bottom { margin-top: auto !important; }
+.pz-workspace-page { min-width: 0; }
+.pz-section-nav {
+  border: 1px solid #dfe6d7; border-radius: 17px; background: #fafcf5;
+  margin-bottom: 26px; overflow: hidden; min-width: 0;
+}
+.pz-section-heading { display: flex; align-items: center; gap: 12px; padding: 17px 21px 14px; }
+.pz-section-symbol { display: grid; place-items: center; width: 37px; height: 37px; border-radius: 11px; background: #e8efdd; color: #3a644b; font-size: 18px; flex-shrink: 0; }
+.pz-section-heading strong { font-size: 14px; font-weight: 650; color: #294d3b; }
+.pz-section-heading p { font-size: 11px; line-height: 1.6; color: #788975; margin: 3px 0 0; }
+.pz-ui.wb-shell .pz-section-nav-compact { border: 0 !important; border-radius: 0 !important; background: transparent !important; margin: 0 0 22px !important; padding: 0 !important; }
+.pz-ui.wb-shell .pz-section-nav-compact .pz-section-links { border-top: 0 !important; padding-top: 0 !important; background: transparent !important; }
+.pz-section-links { display: flex; align-items: stretch; flex-wrap: wrap; gap: 5px; border-top: 1px solid #e6ebdf; background: #f0f4e9; padding: 7px 12px; }
+.pz-section-links a {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  color: #677d69; padding: 10px 15px; font-size: 12px; line-height: 1.4;
+  border: 1px solid transparent; border-radius: 9px; text-decoration: none;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.pz-section-links a > .anticon { font-size: 14px; }
+.pz-section-links a:hover { color: #245f43; background: #e5eddb; }
+.pz-section-links a[aria-current="page"] { color: #21573e; background: #fffefa; border-color: #dce6d1; box-shadow: 0 2px 5px #284c3206; font-weight: 650; }
+.pz-section-links a:focus-visible { outline-offset: -2px; }
+.pz-settings-note { font-size: 12px; color: #70816e; line-height: 1.8; }
+.pz-ui.wb-shell .exact-content.wb-content.is-3d-content .wb-route-body { display: flex; flex-direction: column; height: 100%; }
+.pz-ui .is-3d-content .pz-section-nav { flex-shrink: 0; margin: 12px 18px 0; border-radius: 12px; }
+.pz-ui .is-3d-content .pz-section-heading { display: none; }
+.pz-ui .is-3d-content .pz-section-links { border-top: 0; }
+.pz-ui .is-3d-content .pz-workspace-page { flex: 1; min-height: 0; position: relative; overflow: hidden; }
+.pz-ui .is-3d-content .greenhouse-3d-page { height: 100% !important; min-height: 0 !important; }
+@media (min-width: 1600px) { .pz-ui .pz-section-links a { padding-inline: 20px; } }
+@media (max-height: 800px) {
+  .pz-sider-note { display: none; }
+  .pz-menu-caption { margin-top: 16px; }
+}
+@media (max-width: 760px) {
+  .pz-section-nav { margin-bottom: 21px; border-radius: 13px; }
+  .pz-section-heading { padding: 14px 15px 12px; gap: 10px; }
+  .pz-section-heading p { font-size: 10px; }
+  .pz-section-symbol { width: 32px; height: 32px; font-size: 16px; }
+  .pz-section-links { padding: 6px; gap: 4px; }
+  .pz-section-links a { flex: 1 1 auto; padding: 10px; font-size: 12px; }
+  .pz-section-links a > .anticon { display: none; }
+}
+@media (max-width: 620px) {
+  .pz-ui .is-3d-content .pz-section-nav { margin: 8px 10px 0; }
+  .pz-ui.wb-shell .exact-side-menu .ant-menu-item { height: 46px !important; line-height: 46px !important; }
+  .pz-menu-caption { margin-top: 16px; }
+  .pz-sider-note { display: none; }
+}

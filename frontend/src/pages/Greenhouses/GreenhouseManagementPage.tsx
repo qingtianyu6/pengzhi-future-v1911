@@ -1,15 +1,21 @@
 import { canManage } from '../../utils/permissions'
 import { getStoredUser } from '../../api/authApi'
 import { useCallback, useEffect, useState } from 'react'
-import { ApartmentOutlined, CheckCircleOutlined, LinkOutlined, PlusOutlined, ReloadOutlined, SearchOutlined, WarningOutlined } from '@ant-design/icons'
-import { Alert, Button, Card, Col, Descriptions, Drawer, Empty, Form, Input, InputNumber, Modal, Row, Select, Space, Spin, Table, Tag, Typography, message } from 'antd'
-import type { ColumnsType } from 'antd/es/table'
-import { useNavigate } from 'react-router-dom'
+import { DownOutlined, UpOutlined, MoreOutlined, PlusOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons'
+import { Alert, Button, Card, Col, Descriptions, Drawer, Dropdown, Empty, Form, Input, InputNumber, Modal, Pagination, Row, Select, Space, Spin, Tag, message } from 'antd'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { createCropBatch } from '../../api/cropBatchApi'
 import { getApiErrorMessage } from '../../api/client'
-import { createGreenhouse, deleteGreenhouse, getGreenhouse, getGreenhouses, updateGreenhouse } from '../../api/greenhouseApi'
+import { createGreenhouse, deleteGreenhouse, getGreenhouse, getGreenhouses, getManagementSummary, updateGreenhouse } from '../../api/greenhouseApi'
 import type { CropBatchInput, CropType } from '../../types/cropBatch'
-import type { Greenhouse, GreenhouseInput, GreenhouseStatus } from '../../types/greenhouse'
+import type { Greenhouse, GreenhouseInput, GreenhouseManagementSummary, GreenhouseStatus } from '../../types/greenhouse'
+
+import GreenhouseConnections from './GreenhouseConnections'
+import tomatoImage from '../../marketing_v2/scenarios/assets/images/scene-tomato.png'
+import seedlingImage from '../../assets/pure-scenes/seedling-wide.png'
+import greenhouseImage from '../../assets/pure-scenes/greenhouse-wide.webp'
+import './greenhouse-management.css'
+
 
 const statusMeta: Record<GreenhouseStatus, { label: string; color: string }> = {
   active: { label: '运行中', color: 'green' },
@@ -27,8 +33,15 @@ const cropMeta: Record<CropType, { label: string; color: string; rules: string }
 type GreenhouseFormValues = GreenhouseInput
 type BatchFormValues = CropBatchInput
 
-export default function GreenhouseManagementPage({ embedded = false }: { embedded?: boolean } = {}) {
+export default function GreenhouseManagementPage() {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const requestedGreenhouse = Number(searchParams.get('greenhouse_id')) || null
+  const requestedConnection = searchParams.get('tab') === 'connection'
+  const [expanded, setExpanded] = useState<number | null | undefined>(undefined)
+  const [directPanel, setDirectPanel] = useState<{id: number; panel: 'data' | 'devices'} | null>(null)
+  const [summary, setSummary] = useState<GreenhouseManagementSummary | null>(null)
+  const [summaryError, setSummaryError] = useState(false)
   const [items, setItems] = useState<Greenhouse[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
@@ -51,17 +64,38 @@ export default function GreenhouseManagementPage({ embedded = false }: { embedde
     setLoading(true)
     setError(null)
     try {
-      const list = await getGreenhouses({ page, page_size: 10, status: statusFilter, keyword: keyword || undefined })
+      const list = await getGreenhouses({ page, page_size: 4, status: statusFilter, keyword: keyword || undefined })
       setItems(list.items)
       setTotal(list.total)
+      setExpanded(current => current === undefined ? (list.items.find(g => g.id === requestedGreenhouse)?.id ?? list.items[0]?.id ?? null) : current)
     } catch (requestError) {
       setError(getApiErrorMessage(requestError))
     } finally {
       setLoading(false)
     }
-  }, [keyword, page, statusFilter])
+  }, [keyword, page, statusFilter, requestedGreenhouse])
 
   useEffect(() => { void loadData() }, [loadData])
+  const loadSummary = useCallback(async () => {
+    try { setSummary(await getManagementSummary()); setSummaryError(false) }
+    catch { setSummaryError(true) }
+  }, [])
+  useEffect(() => { void loadSummary() }, [loadSummary])
+  useEffect(() => {
+    const refresh = () => { void loadData(); void loadSummary() }
+    window.addEventListener('greenhouses-changed', refresh)
+    return () => window.removeEventListener('greenhouses-changed', refresh)
+  }, [loadData, loadSummary])
+  const refreshConnections = () => { void loadData(); void loadSummary() }
+  const closeConnection = () => {
+    setDirectPanel(null)
+    if (requestedConnection) {
+      const next = new URLSearchParams(searchParams); next.delete('tab'); setSearchParams(next, {replace:true})
+    }
+  }
+  const openConnection = (record: Greenhouse, panel: 'data' | 'devices') => {
+    setExpanded(record.id); setDirectPanel({id: record.id, panel})
+  }
 
   const openCreate = () => {
     setEditing(null)
@@ -143,34 +177,33 @@ export default function GreenhouseManagementPage({ embedded = false }: { embedde
     })
   }
 
-  const columns: ColumnsType<Greenhouse> = [
-    { title: '大棚名称', key: 'greenhouse', width: 180, render: (_, record) => <div className="v17-gh-name"><strong>{record.name}</strong><span>{record.code}</span></div> },
-    { title: '面积', dataIndex: 'area_mu', width: 90, render: (value: string) => `${value} 亩` },
-    { title: '作物类型', key: 'crop', width: 110, render: (_, record) => record.active_batch?.variety ?? '—' },
-    { title: '档案状态', dataIndex: 'status', width: 130, render: (value: GreenhouseStatus) => value === 'active' ? <span className="v17-device-status is-online"><i />运行中</span> : <span className="v17-device-status"><i />{statusMeta[value].label}</span> },
-    { title: '最近同步', key: 'sync', width: 170, render: (_, record) => <div className="v17-sync-cell"><strong>{record.last_recorded_at ? new Date(record.last_recorded_at).toLocaleString('zh-CN') : '尚未采集'}</strong><span>{record.data_status === 'current' ? '有效数据' : record.data_status === 'historical' ? '历史记录 / 待同步' : record.data_status === 'suspect' ? '需检查数据质量' : '未接入环境数据'}</span></div> },
-    { title: '当前批次', key: 'batch', width: 190, render: (_, record) => record.active_batch ? <div className="v17-batch-cell"><strong>{record.active_batch.variety} · {record.active_batch.batch_code}</strong><span>{record.active_batch.growth_stage} · 第 {record.active_batch.growth_day} 天</span></div> : <Typography.Text type="secondary">暂无批次</Typography.Text> },
-    { title: '操作', key: 'actions', fixed: 'right', width: 190, render: (_, record) => <Space size={2}><Button type="link" size="small" onClick={() => void openDetail(record)}>查看</Button><Button type="link" size="small" disabled={!canManage()} onClick={() => openEdit(record)}>编辑</Button>{!record.active_batch && record.status !== 'closed' && <Button type="link" size="small" disabled={!canManage()} onClick={() => openBatch(record)}>创建批次</Button>}<Button danger type="link" size="small" disabled={!canManage()} onClick={() => removeGreenhouse(record)}>删除</Button></Space> },
-  ]
+  return <div className="gh-management-page">
+    {messageContext}{modalContext}
+    <section className="gh-management-hero" aria-label="大棚管理概况">
+      <div className="gh-hero-copy"><span className="gh-hero-eyebrow">GREENHOUSE MANAGEMENT</span><h1>每一座大棚，管理有序</h1><p>创建大棚、接入数据、绑定设备，一处完成。</p>
+        <dl className="gh-hero-metrics"><div><dt>大棚总数</dt><dd>{summaryError ? '—' : summary?.total ?? '—'}</dd></div><div><dt>已接入数据</dt><dd>{summaryError ? '—' : summary?.connected ?? '—'}</dd></div><div title="最近2小时有采集记录的设备；按大棚与设备编号统计"><dt>在线设备</dt><dd>{summaryError ? '—' : summary?.online_devices ?? '—'}</dd></div></dl>
+      </div><Button className="gh-create-button" type="primary" icon={<PlusOutlined />} disabled={!canManage()} onClick={openCreate}>创建大棚</Button>
+    </section>
+    {summaryError && <Alert type="warning" message="接入概况暂时无法读取" action={<Button size="small" onClick={() => void loadSummary()}>重试</Button>} />}
+    <section className="gh-inventory" aria-labelledby="gh-inventory-heading">
+      <div className="gh-list-heading"><div><h2 id="gh-inventory-heading">我的大棚</h2><span>{keyword || statusFilter ? `筛选结果 ${total} 座` : `共 ${total} 座`}{summary && !summaryError ? ` · ${summary.total - summary.connected} 座待接入` : ''}</span></div><div className="gh-list-tools"><Input.Search aria-label="搜索大棚" prefix={<SearchOutlined />} allowClear placeholder="搜索大棚" onSearch={value => { setPage(1); setKeyword(value.trim()) }} /><Select<GreenhouseStatus> aria-label="筛选大棚状态" allowClear placeholder="全部状态" value={statusFilter} onChange={value => { setPage(1); setStatusFilter(value) }} options={Object.entries(statusMeta).map(([value, meta]) => ({value:value as GreenhouseStatus,label:meta.label}))} /><Button type="text" aria-label="刷新大棚" icon={<ReloadOutlined />} onClick={refreshConnections} /></div></div>
+      {error ? <Alert type="error" showIcon message="大棚数据加载失败" description={error} action={<Button onClick={() => void loadData()}>重试</Button>} /> : <Spin spinning={loading}><div className="gh-inventory-list">{items.map(record => {
+        const opened = expanded === record.id
+        const crop = record.active_batch?.crop_type
+        const stage = record.active_batch?.growth_stage
+        const image = stage === '苗期' ? seedlingImage : crop === 'tomato' ? tomatoImage : crop === 'muskmelon' ? '/images/greenhouse-management/muskmelon.png' : greenhouseImage
+        const connected = Boolean(record.last_recorded_at)
+        const dataState = record.data_status === 'current' ? '数据已接入' : record.data_status === 'historical' ? '已接入 · 待同步' : record.data_status === 'suspect' ? '已接入 · 需复查' : '尚未接入数据'
+        return <article className="gh-inventory-item" key={record.id}>
+          <div className="gh-inventory-row"><img className="gh-crop-photo" src={image} alt="作物场景示意" loading="lazy" /><div className="gh-row-copy"><div className="gh-row-title"><h3>{record.name}</h3><Tag color={record.status === 'active' && !connected ? 'default' : statusMeta[record.status].color}>{record.status === 'active' && !connected ? '待接入' : statusMeta[record.status].label}</Tag></div><p className="gh-crop-meta">{record.active_batch ? `${cropMeta[record.active_batch.crop_type].label} · ${record.active_batch.growth_stage}` : '暂未创建种植批次'}<span>·</span>{Number(record.area_mu).toLocaleString('zh-CN')} 亩</p><div className="gh-data-meta"><span><i className={`gh-state-dot ${record.data_status === 'current' ? 'is-current' : ''}`} />{dataState}</span><span>{record.device_count ? `${record.online_device_count ?? 0} / ${record.device_count} 台设备在线` : '暂无绑定设备'}</span><time>{record.last_recorded_at ? `最近上报 ${new Date(record.last_recorded_at).toLocaleString('zh-CN', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}` : record.code}</time></div></div><div className="gh-row-actions"><Button onClick={() => void openDetail(record)}>查看大棚</Button>{connected ? <Button aria-expanded={opened} aria-controls={`gh-access-${record.id}`} onClick={() => {setDirectPanel(null);setExpanded(opened ? null : record.id)}}>管理接入 {opened ? <UpOutlined /> : <DownOutlined />}</Button> : <><Button type="primary" onClick={() => openConnection(record,'data')}>接入数据</Button><Button onClick={() => openConnection(record,'devices')}>绑定设备</Button></>}<Dropdown trigger={['click']} menu={{items:[{key:'edit',label:'编辑大棚',disabled:!canManage()},{key:'batch',label:'创建种植批次',disabled:!canManage() || Boolean(record.active_batch) || record.status==='closed'},{key:'delete',label:'删除大棚',danger:true,disabled:!canManage()}],onClick:({key})=>{if(key==='edit')openEdit(record);if(key==='batch')openBatch(record);if(key==='delete')removeGreenhouse(record)}}}><Button type="text" aria-label={`更多操作：${record.name}`} icon={<MoreOutlined />} /></Dropdown></div></div>
+          {opened && <GreenhouseConnections greenhouse={record} onPanelClose={closeConnection} onChange={refreshConnections} openRequest={directPanel?.id === record.id ? directPanel : undefined} initialPanel={requestedConnection && record.id === requestedGreenhouse ? 'data' : undefined} />}
+        </article>
+      })}{!loading && !items.length && <Empty description={keyword || statusFilter ? '没有符合条件的大棚，请调整筛选' : '还没有大棚，从创建第一座开始'}>{!keyword && !statusFilter && <Button type="primary" disabled={!canManage()} onClick={openCreate}>创建大棚</Button>}</Empty>}</div></Spin>}
+      <div className="gh-list-footer"><Pagination current={page} pageSize={4} total={total} hideOnSinglePage={false} showSizeChanger={false} onChange={setPage} showTotal={count=>`共 ${count} 座`} /><small>场景配图为示意 · 在线按最近2小时上报统计</small></div>
+    </section>
 
-  return <div className="business-page">
-    {messageContext}
-    {modalContext}
-    {!embedded && <div className="page-intro"><div><h1>大棚档案</h1><p>管理大棚基础信息与种植批次。</p></div><Button type="primary" icon={<PlusOutlined />} disabled={!canManage()} onClick={openCreate}>新建大棚</Button></div>}
-    {embedded && <div className="v17-asset-head"><div><strong>大棚资产与连接状态</strong><span>管理名下所有大棚的设备连接状态、数据同步情况和运行健康度。</span></div><div className="v17-asset-actions"><Input prefix={<SearchOutlined />} allowClear placeholder="搜索大棚名称、全局编码或位置" onPressEnter={(event) => { setPage(1); setKeyword(event.currentTarget.value.trim()) }} /><Button icon={<ReloadOutlined />} onClick={() => void loadData()}>刷新数据</Button><Button type="primary" icon={<PlusOutlined />} disabled={!canManage()} onClick={openCreate}>新建大棚</Button></div></div>}
-    <div className="v17-greenhouse-summary">
-      <div><span className="v17-summary-icon"><ApartmentOutlined /></span><span><small>大棚总数</small><strong>{total}<em>座</em></strong></span></div>
-      <div><span className="v17-summary-icon"><LinkOutlined /></span><span><small>本页接入设备</small><strong>{items.filter(item => (item.device_count ?? 0) > 0).length}<em>座</em></strong></span><i className="v17-mini-progress"><b style={{ width: `${total ? Math.round(items.filter(item => (item.device_count ?? 0) > 0).length / Math.max(items.length, 1) * 100) : 0}%` }} /></i></div>
-      <div><span className="v17-summary-icon"><CheckCircleOutlined /></span><span><small>本页有效数据</small><strong>{items.filter(item => item.data_status === 'current').length}<em>座</em></strong></span><i className="v17-mini-progress"><b style={{ width: `${total ? Math.round(items.filter(item => item.data_status === 'current').length / Math.max(items.length, 1) * 100) : 0}%` }} /></i></div>
-      <div className="is-warning"><span className="v17-summary-icon"><WarningOutlined /></span><span><small>本页待检查</small><strong>{items.filter(item => item.data_status !== 'current').length}<em>座</em></strong></span><i className="v17-mini-progress"><b style={{ width: `${total ? Math.round(items.filter(item => item.data_status !== 'current').length / Math.max(items.length, 1) * 100) : 0}%` }} /></i></div>
-    </div>
-    <Card className="business-card v17-greenhouse-table-card" bordered={false}><p className="table-scroll-hint">编码在部署环境中全局唯一；可左右滑动查看完整档案，右侧操作保持可见。</p>
-      {!embedded && <div className="toolbar"><Input.Search allowClear placeholder="搜索编号、名称或位置" onSearch={(value) => { setPage(1); setKeyword(value.trim()) }} /><Select<GreenhouseStatus> allowClear placeholder="全部状态" value={statusFilter} onChange={(value) => { setPage(1); setStatusFilter(value) }} options={Object.entries(statusMeta).map(([value, meta]) => ({ value: value as GreenhouseStatus, label: meta.label }))} /><Button icon={<ReloadOutlined />} onClick={() => void loadData()}>刷新</Button></div>}
-      {error ? <Alert type="error" showIcon message="大棚数据加载失败" description={error} action={<Button size="small" onClick={() => void loadData()}>重试</Button>} /> : <Table<Greenhouse> rowKey="id" rowSelection={{ columnWidth: 42 }} columns={columns} dataSource={items} loading={loading} scroll={{ x: 980 }} locale={{ emptyText: <Empty description="暂无大棚，请先创建大棚档案" /> }} pagination={{ current: page, pageSize: 10, total, showSizeChanger: false, onChange: setPage, showTotal: (count) => `共 ${count} 条记录` }} />}
-    </Card>
-
-    <Modal title={editing ? '编辑大棚' : '新建大棚'} open={formOpen} confirmLoading={saving} onCancel={() => setFormOpen(false)} onOk={() => form.submit()} destroyOnHidden>
-      <Form form={form} layout="vertical" onFinish={(values) => void submitGreenhouse(values)}>
+    <Modal title={editing ? '编辑大棚' : '创建大棚'} open={formOpen} confirmLoading={saving} onCancel={() => setFormOpen(false)} onOk={() => form.submit()} destroyOnHidden>
+      <Form name="gh-profile" form={form} layout="vertical" onFinish={(values) => void submitGreenhouse(values)}>
         <Row gutter={12}><Col span={12}><Form.Item name="code" label="全局大棚编码" rules={[{ required: true, message: '请输入大棚编号' }, { max: 32 }]}><Input placeholder="GH-001" /></Form.Item></Col><Col span={12}><Form.Item name="name" label="大棚名称" rules={[{ required: true, message: '请输入大棚名称' }, { max: 80 }]}><Input /></Form.Item></Col></Row>
         <Form.Item name="location" label="位置" rules={[{ required: true, message: '请输入位置' }, { max: 160 }]}><Input /></Form.Item>
         <Row gutter={12}><Col span={12}><Form.Item name="area_mu" label="面积（亩）" rules={[{ required: true, message: '请输入面积' }]}><InputNumber min={0.01} precision={2} className="full-width" /></Form.Item></Col><Col span={12}><Form.Item name="status" label="状态" rules={[{ required: true }]}><Select options={Object.entries(statusMeta).map(([value, meta]) => ({ value, label: meta.label }))} /></Form.Item></Col></Row>
@@ -180,7 +213,7 @@ export default function GreenhouseManagementPage({ embedded = false }: { embedde
 
     <Modal title={`为${batchGreenhouse?.name || ''}创建种植批次`} open={Boolean(batchGreenhouse)} confirmLoading={saving} onCancel={() => setBatchGreenhouse(null)} onOk={() => batchForm.submit()} destroyOnHidden>
       <Alert className="form-note" type="info" showIcon message="生育期按作物和定植日期计算，并支持人工修正。" />
-      <Form form={batchForm} layout="vertical" onFinish={(values) => void submitBatch(values)}>
+      <Form name="gh-batch" form={batchForm} layout="vertical" onFinish={(values) => void submitBatch(values)}>
         <Form.Item name="batch_code" label="批次编号" rules={[{ required: true, message: '请输入批次编号' }, { max: 40 }]}><Input placeholder="TOMATO-2026-001" /></Form.Item>
         <Form.Item name="crop_type" label="作物类型" rules={[{ required: true, message: '请选择作物类型' }]}><Select options={Object.entries(cropMeta).map(([value, meta]) => ({ value, label: meta.label }))} /></Form.Item>
         <Form.Item name="variety" label="品种" rules={[{ required: true, message: '请输入品种' }, { max: 80 }]}><Input placeholder="请输入作物品种" /></Form.Item>
@@ -189,7 +222,7 @@ export default function GreenhouseManagementPage({ embedded = false }: { embedde
       </Form>
     </Modal>
 
-    <Drawer title="大棚详情" width={520} open={Boolean(detail)} onClose={() => setDetail(null)} extra={detail && !detail.active_batch && detail.status !== 'closed' ? <Button type="primary" onClick={() => openBatch(detail)}>创建批次</Button> : null}>
+    <Drawer title="大棚详情" width={520} open={Boolean(detail)} onClose={() => setDetail(null)} extra={detail && canManage() && !detail.active_batch && detail.status !== 'closed' ? <Button type="primary" onClick={() => openBatch(detail)}>创建批次</Button> : null}>
       <Spin spinning={detailLoading}>{detail && <><Descriptions column={1} bordered size="small" items={[
         { key: 'code', label: '编号', children: detail.code }, { key: 'name', label: '名称', children: detail.name }, { key: 'location', label: '位置', children: detail.location }, { key: 'area', label: '面积', children: `${detail.area_mu} 亩` }, { key: 'manager', label: '负责人', children: detail.manager_name || '未设置' }, { key: 'status', label: '状态', children: <Tag color={statusMeta[detail.status].color}>{statusMeta[detail.status].label}</Tag> },
       ]} /><Space className="detail-nav" wrap><Button onClick={() => navigate(`/platform/environment?greenhouse_id=${detail.id}&batch_id=${detail.active_batch?.id ?? ''}`)}>环境研判</Button><Button onClick={() => navigate(`/platform/production?greenhouse_id=${detail.id}&batch_id=${detail.active_batch?.id ?? ''}`)}>生产决策</Button></Space><Card className="detail-batch-card" size="small" title="当前种植批次">{detail.active_batch ? <Descriptions column={1} size="small" items={[

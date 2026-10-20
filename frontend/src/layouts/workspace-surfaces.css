@@ -1,0 +1,102 @@
+/* Workspace content uses typography and rules for grouping. Overlays and the
+   three-dimensional scene retain their own surfaces and positioning. */
+.pz-ui.wb-shell .pz-workspace-page :is(.surface-card, .exact-panel, .ant-card, .v17-panel, .v17-connect-card, .dtm-panel) {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.pz-ui.wb-shell .pz-workspace-page :is(.surface-card, .exact-panel) { padding: 24px 0 !important; }
+.pz-ui.wb-shell .pz-workspace-page .ant-card-head {
+  padding: 0;
+  min-height: 52px;
+  border-bottom: 1px solid var(--pz-line);
+}
+.pz-ui.wb-shell .pz-workspace-page .ant-card-body { padding: 22px 0; }
+.pz-ui.wb-shell .pz-workspace-page .ant-card .ant-card { margin-top: 16px; }
+.pz-ui.wb-shell .pz-workspace-page .ant-card .ant-card > .ant-card-body { border-top: 1px solid var(--pz-line); }
+.pz-ui.wb-shell .wb-assistant-rail { border-left: 1px solid var(--pz-line); }
+.pz-ui.wb-shell .wb-assistant-rail :is(.wb-assistant-card, .wb-todo-card) { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+.pz-ui.wb-shell .wb-assistant-rail .wb-todo-card { border-top: 1px solid var(--pz-line) !important; }
+
+/* Secondary navigation is a tab rail, rather than a box containing pills. */
+.pz-ui.wb-shell .pz-section-nav { background: transparent; border: 0; border-radius: 0; box-shadow: none; margin-bottom: 24px; }
+.pz-ui.wb-shell .pz-section-heading { padding: 0 0 12px; }
+.pz-ui.wb-shell .pz-section-symbol { background: transparent; border-radius: 0; width: 26px; }
+.pz-ui.wb-shell .pz-section-links { background: transparent; border: 0; border-bottom: 1px solid var(--pz-line); padding: 0; gap: 22px; }
+.pz-ui.wb-shell .pz-section-links a { background: transparent; border: 0; border-radius: 0; box-shadow: none; padding: 12px 0; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.pz-ui.wb-shell .pz-section-links a[aria-current="page"] { background: transparent; border-color: var(--pz-forest); box-shadow: none; color: var(--pz-forest); }
+.pz-ui.wb-shell .pz-section-links a:hover { background: transparent; color: var(--pz-forest); }
+.pz-ui.wb-shell .pz-workspace-page :is(.ant-tabs-nav, .wb-section-tabs, .ag-workbench .ant-tabs-nav) { background: transparent !important; border: 0 !important; border-radius: 0 !important; padding: 0 !important; box-shadow: none !important; }
+
+/* Overview: an open introduction, a single data strip, then working sections. */
+.pz-ui.wb-shell .pz-command-hero.exact-welcome-banner { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; padding: 12px 0 32px !important; gap: 36px; border-bottom: 1px solid var(--pz-line) !important; }
+.pz-ui.wb-shell .pz-today-focus { background: transparent; border: 0; border-left: 2px solid #b2c5a3; border-radius: 0; box-shadow: none; padding: 8px 0 8px 26px; }
+.pz-ui.wb-shell .pz-today-focus h2 { font-size: 21px; }
+.pz-ui.wb-shell .exact-metric-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; gap: 0 !important; border-top: 1px solid var(--pz-line); border-bottom: 1px solid var(--pz-line); padding: 20px 0; }
+.pz-ui.wb-shell .exact-metric-card { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; min-height: 120px !important; padding: 8px 18px !important; border-right: 1px solid var(--pz-line) !important; }
+.pz-ui.wb-shell .exact-metric-card:first-child { padding-left: 0 !important; }
+.pz-ui.wb-shell .exact-metric-card:last-child { border-right: 0 !important; }
+.pz-ui.wb-shell .exact-metric-top { flex-wrap: wrap; gap: 6px; }
+.pz-ui.wb-shell .exact-metric-icon { background: transparent !important; width: 22px; height: 24px; border-radius: 0; font-size: 19px; }
+.pz-ui.wb-shell .exact-metric-label { font-size: 12px; }
+.pz-ui.wb-shell .exact-metric-main { margin: 15px 0 10px; }
+.pz-ui.wb-shell .exact-metric-main strong { font-size: clamp(26px, 2.5vw, 40px); }
+.pz-ui.wb-shell .exact-metric-bottom { font-size: 11px; }
+.pz-ui.wb-shell .exact-primary-grid { gap: 32px; }
+.pz-ui.wb-shell .exact-primary-grid > :last-child { border-left: 1px solid var(--pz-line) !important; padding-left: 28px !important; }
+.pz-ui.wb-shell .exact-task-row { background: transparent; border-radius: 0; box-shadow: none; border: 0; border-bottom: 1px solid var(--pz-line); }
+.pz-ui.wb-shell .exact-task-row:hover { background: #edf3e870; }
+.pz-ui.wb-shell .exact-insight-grid { gap: 28px; border-top: 1px solid var(--pz-line); border-bottom: 1px solid var(--pz-line); }
+.pz-ui.wb-shell .exact-insight-card { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; padding: 22px 0 !important; }
+.pz-ui.wb-shell .exact-insight-card:hover { transform: none; }
+.pz-ui.wb-shell .exact-insight-icon { background: transparent; border-radius: 0; }
+.pz-ui.wb-shell .wb-process-strip { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--pz-line) !important; border-radius: 0 !important; padding: 16px 0; }
+.pz-ui.wb-shell .wb-process-strip button { background: transparent; border-radius: 0; }
+.pz-ui.wb-shell .exact-date-switch { background: transparent; border: 0; border-radius: 0; }
+
+/* Documents, community posts and research records read as a continuous page. */
+.pz-ui.wb-shell .pz-workspace-page :is(.community-filter, .community-stats, .ag-stats, .ag-workbench-stats) { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none; padding: 16px 0 !important; border-bottom: 1px solid var(--pz-line) !important; }
+.pz-ui.wb-shell .community-stats > div { background: transparent; border: 0; border-right: 1px solid var(--pz-line); border-radius: 0; padding: 8px 20px; }
+.pz-ui.wb-shell .community-stats > div:first-child { padding-left: 0; }
+.pz-ui.wb-shell .community-stats > div:last-child { border-right: 0; }
+.pz-ui.wb-shell :is(.community-post-list, .ag-record-list) { gap: 0; }
+.pz-ui.wb-shell :is(.community-post-list, .ag-record-list) > * { border-bottom: 1px solid var(--pz-line) !important; }
+.pz-ui.wb-shell .community-page .ant-tabs-tabpane { gap: 22px; }
+.pz-ui.wb-shell :is(.ag-candidate-grid, .ag-goal-steps) > div { background: transparent; border: 0; border-left: 2px solid #c6d3bd; border-radius: 0; padding-left: 16px; }
+.pz-ui.wb-shell .community-agriculture span { background: transparent; border-radius: 0; border-bottom: 1px solid var(--pz-line); padding: 12px 0; }
+
+/* Diagnosis retains one accent for the current result, not a box per fact. */
+.pz-ui.wb-shell .pz-investigation-setup { background: transparent; border: 0; border-top: 1px solid var(--pz-line); border-radius: 0; }
+.pz-ui.wb-shell .pz-investigation-setup > summary { padding-left: 0; padding-right: 0; }
+.pz-ui.wb-shell .pz-investigation-steps { background: transparent; border-radius: 0; border-bottom: 1px solid var(--pz-line); }
+.pz-ui.wb-shell .pz-investigation-steps li { border-radius: 0; box-shadow: none; }
+.pz-ui.wb-shell .pz-investigation-result { border: 0; border-left: 3px solid #799660; border-radius: 0; background: #edf3e870; }
+.pz-ui.wb-shell .pz-investigation-result.has-change { border-left-color: #b39250; background: #f3f0df80; }
+.pz-ui.wb-shell .investigate-candidate { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--pz-line) !important; border-radius: 0 !important; padding: 18px 0 !important; }
+.pz-ui.wb-shell .investigate-columns > section:last-child > .ant-card { border-top: 0 !important; }
+.pz-ui.wb-shell .pz-workspace-page :is(.investigate-visual-card, .environment-status-card, .environment-control-card) { background: transparent !important; border-radius: 0 !important; box-shadow: none !important; }
+.pz-ui.wb-shell .pz-workspace-page :is(.environment-status-panel, .analysis-control-strip, .farm-ai-advisor, .ai-decision-panel) { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--pz-line) !important; border-radius: 0 !important; box-shadow: none !important; padding: 18px 0 !important; }
+
+@media (min-width: 1280px) and (max-width: 1599px) {
+  .pz-ui.wb-shell.has-assistant-rail .exact-metric-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+  .pz-ui.wb-shell.has-assistant-rail .exact-metric-card { padding: 8px 10px !important; }
+  .pz-ui.wb-shell.has-assistant-rail .exact-metric-top .exact-metric-icon { display: none; }
+  .pz-ui.wb-shell.has-assistant-rail .exact-primary-grid > :last-child { border-left: 0 !important; padding-left: 0 !important; border-top: 1px solid var(--pz-line) !important; }
+}
+@media (max-width: 1000px) {
+  .pz-ui.wb-shell .exact-primary-grid > :last-child { border-left: 0 !important; padding-left: 0 !important; border-top: 1px solid var(--pz-line) !important; }
+}
+@media (max-width: 760px) {
+  .pz-ui.wb-shell .pz-command-hero.exact-welcome-banner { padding: 4px 0 24px !important; gap: 22px; }
+  .pz-ui.wb-shell .pz-today-focus { padding: 4px 0 4px 18px; }
+  .pz-ui.wb-shell .exact-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; padding: 0; }
+  .pz-ui.wb-shell .exact-metric-card { padding: 18px 12px !important; border-bottom: 1px solid var(--pz-line) !important; }
+  .pz-ui.wb-shell .exact-metric-card:nth-child(odd) { padding-left: 0 !important; }
+  .pz-ui.wb-shell .exact-metric-card:nth-child(even) { border-right: 0 !important; }
+  .pz-ui.wb-shell .exact-metric-card:last-child { border-bottom: 0 !important; }
+  .pz-ui.wb-shell .exact-insight-grid { gap: 0; }
+  .pz-ui.wb-shell .exact-insight-card + .exact-insight-card { border-top: 1px solid var(--pz-line) !important; }
+  .pz-ui.wb-shell .pz-section-links { gap: 16px; }
+  .pz-ui.wb-shell .pz-section-links a { font-size: 12px; }
+}

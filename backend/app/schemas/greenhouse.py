@@ -57,3 +57,4 @@ class GreenhouseData(BaseModel):
     last_recorded_at: datetime | None = None
     data_status: str = "no_data"
     device_count: int = 0
+    online_device_count: int = 0

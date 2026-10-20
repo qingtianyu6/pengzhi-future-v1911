@@ -44,12 +44,13 @@ for(let i=0;i<300;i++)reset.update('idle',1/60,undefined,true)
 const folder=new URL('../public/assistant/',import.meta.url);await mkdir(folder,{recursive:true})
 const binary=await new GLTFExporter().parseAsync(rig.root,{binary:true,animations:clips})
 await writeFile(new URL('pengxiaozhi-rigged.glb',folder),Buffer.from(binary))
-let meshes=0,triangles=0,bones=0
+let meshes=0,triangles=0,bones=0,skinnedMeshes=0
 rig.root.traverse(item=>{
  if(item.isMesh){meshes++;triangles+=(item.geometry.index?.count??item.geometry.attributes.position.count)/3}
  if(item.isBone)bones++
+ if(item.isSkinnedMesh)skinnedMeshes++
 })
-const report={name:'棚小智',type:'Original 3D mechanical character with hierarchical bone joints',meshes,triangles,bones,bytes:binary.byteLength,animations:clips.map(c=>({name:c.name,duration:c.duration,tracks:c.tracks.length})),source:'src/features/assistant3d/pengxiaozhiModel.ts',runtimeAnimation:'src/features/assistant3d/pengxiaozhiAnimation.ts',notes:'GLB animations are editable offline samples of the live blended joint controller. The app uses that same model source for continuous mouse tracking and interruptible movements.'}
+const report={name:'棚小智',type:'Original rigged character with continuous skinned limbs',meshes,skinnedMeshes,triangles,bones,bytes:binary.byteLength,animations:clips.map(c=>({name:c.name,duration:c.duration,tracks:c.tracks.length})),source:'src/features/assistant3d/pengxiaozhiModel.ts',runtimeAnimation:'src/features/assistant3d/pengxiaozhiAnimation.ts',notes:'GLB animations are editable offline samples of the live blended joint controller. The app uses that same model source for continuous mouse tracking and interruptible movements.'}
 await writeFile(new URL('pengxiaozhi-model.json',folder),JSON.stringify(report,null,2))
 rig.dispose()
 console.log(JSON.stringify(report))

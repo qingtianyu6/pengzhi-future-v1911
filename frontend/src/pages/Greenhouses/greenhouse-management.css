@@ -1,0 +1,138 @@
+.gh-management-page { color: #193f34; min-width: 0; display: grid; gap: 26px; }
+.gh-inventory, .gh-inventory-list, .gh-list-heading, .gh-list-tools { min-width: 0; }
+.gh-management-hero { min-height: 248px; position: relative; overflow: hidden; border-radius: 9px; padding: 29px 42px 26px; background: linear-gradient(90deg, #dce5cf 0%, #e2e8d9f5 27%, #e5eaddc7 43%, #e5eadd00 70%), url('/images/greenhouse-management/hero.png') center 52% / cover; }
+.gh-hero-copy { position: relative; z-index: 1; max-width: 650px; }
+.gh-hero-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .18em; }
+.gh-management-hero h1 { margin: 14px 0 7px; color: #103a2f; font-size: clamp(28px, 2.8vw, 40px); font-weight: 650; letter-spacing: -.035em; line-height: 1.35; }
+.gh-management-hero p { margin: 0; font-size: 15px; color: #435e50; }
+.gh-hero-metrics { display: flex; gap: 0; margin: 26px 0 0; }
+.gh-hero-metrics > div { display: flex; flex-direction: column-reverse; padding: 0 33px; border-right: 1px solid #788e7860; }
+.gh-hero-metrics > div:first-child { padding-left: 0; }
+.gh-hero-metrics > div:last-child { border-right: 0; }
+.gh-hero-metrics dt { font-size: 12px; color: #3e584b; }
+.gh-hero-metrics dd { margin: 0 0 3px; font-size: 30px; line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; }
+.gh-create-button { position: absolute; top: 20px; right: 22px; height: 42px; padding-inline: 22px; background: #153f32; z-index: 2; }
+.gh-list-heading { display: flex; gap: 18px; align-items: center; justify-content: space-between; padding-bottom: 15px; border-bottom: 1px solid #dce1d6; }
+.gh-list-heading > div:first-child { display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px; }
+.gh-list-heading h2 { margin: 0; font-size: 23px; font-weight: 650; color: #172e24; }
+.gh-list-heading > div > span { color: #7a8176; font-size: 12px; }
+.gh-list-tools { display: flex; align-items: center; gap: 12px; }
+.gh-list-tools .ant-input-search { width: 225px; }
+.gh-list-tools .ant-select { width: 135px; }
+.gh-list-tools .ant-input-search-button { display: none; }
+.gh-list-tools .ant-input-group-addon { display: none; }
+.gh-list-tools .ant-input-affix-wrapper { border-radius: 4px !important; }
+.gh-list-tools .ant-input-affix-wrapper .ant-input { min-height: 0 !important; }
+.gh-inventory-item { padding: 12px 0; border-bottom: 1px solid #dce1d6; min-width: 0; }
+.gh-inventory-row { display: grid; grid-template-columns: 184px minmax(0, 1fr) auto; align-items: center; gap: 25px; min-height: 93px; }
+.gh-crop-photo { width: 184px; height: 93px; object-fit: cover; border-radius: 4px; }
+.gh-row-copy { min-width: 0; }
+.gh-row-title { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.gh-row-title h3 { margin: 0; color: #142d24; font-size: 19px; line-height: 1.5; font-weight: 650; overflow-wrap: anywhere; }
+.gh-row-title .ant-tag { border-radius: 4px; margin: 0; line-height: 22px; }
+.gh-row-title .ant-tag-green { background: #e0eed5; border-color: #c2d6b5; color: #39713b; }
+.gh-crop-meta { color: #626e63; font-size: 12px; margin: 7px 0 8px; }
+.gh-crop-meta > span { margin: 0 10px; }
+.gh-data-meta { display: flex; flex-wrap: wrap; row-gap: 5px; color: #788073; font-size: 11px; line-height: 1.6; }
+.gh-data-meta > * { padding: 0 14px; border-left: 1px solid #c8d0c2; }
+.gh-data-meta > :first-child { padding-left: 0; border-left: 0; }
+.gh-state-dot { display: inline-block; width: 8px; height: 8px; margin-right: 9px; background: #a6aaa0; border-radius: 50%; }
+.gh-state-dot.is-current { background: #258345; }
+.gh-row-actions { display: flex; align-items: center; gap: 10px; position: relative; z-index: 3; }
+.gh-row-actions .ant-btn { border-radius: 4px; font-size: 12px; padding-inline: 18px; box-shadow: none; }
+.gh-row-actions .ant-btn-default { background: #f5f4ed; }
+.gh-row-actions .ant-btn-text { padding: 0; width: 24px; }
+.gh-access-strip { display: grid; grid-template-columns: 145px minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 28px; margin-top: 12px; padding: 18px 28px; min-height: 78px; border-radius: 4px; background: #e8eddf; }
+.gh-access-label { padding-right: 22px; border-right: 1px solid #b9c6b0; font-size: 14px; }
+.gh-access-source, .gh-access-devices { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 7px 12px; }
+.gh-access-devices { padding-left: 24px; border-left: 1px solid #c6d0bc; }
+.gh-access-strip span:not(.anticon) { font-size: 11px; color: #6a7c60; }
+.gh-access-strip p { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin: 0; color: #35513b; font-size: 12px; grid-column: 1; }
+.gh-access-strip p > .anticon { font-size: 18px; }
+.gh-access-strip .ant-btn { position: relative; z-index: 3; background: #e8eddf; padding: 0; height: auto; grid-column: 2; grid-row: 2; font-size: 12px; white-space: nowrap; }
+.gh-list-footer { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 18px; padding: 20px 0; }
+.gh-list-footer small { font-size: 10px; color: #94998e; margin-left: auto; }
+.gh-list-footer .ant-pagination { margin-left: auto; }
+.gh-connection-drawer .ant-drawer-body { background: #fffefa; }
+.gh-drawer-section { border-bottom: 1px solid #e2e7db; padding-bottom: 24px; margin-bottom: 24px; }
+.gh-drawer-section h3 { font-size: 17px; color: #234b39; margin: 6px 0 15px; }
+.gh-drawer-section p, .gh-ingest-details p { color: #6b7a65; line-height: 1.8; }
+.gh-drawer-section > small { display: block; color: #8b9481; font-size: 11px; margin-top: 12px; }
+.gh-drawer-note { font-size: 12px; color: #7d8972; line-height: 1.8; }
+.gh-device-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 18px 0; border-bottom: 1px solid #e2e7db; }
+.gh-device-row > div { display: grid; gap: 7px; min-width: 0; }
+.gh-device-row code { font-size: 12px; overflow-wrap: anywhere; }
+.gh-device-row small { font-size: 11px; color: #829076; }
+.gh-ingest-details { margin-top: 20px; padding: 16px 0; border-top: 1px solid #e2e7db; font-size: 12px; }
+.gh-ingest-details summary { cursor: pointer; color: #335e42; }
+.gh-ingest-details pre { background: #f1f4eb; padding: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* This management workspace uses the full canvas shown in the approved design. */
+.pz-ui.wb-shell.greenhouse-management-shell .exact-content.wb-content { display: block; padding: 18px 28px 45px !important; }
+.pz-ui.wb-shell.greenhouse-management-shell .pz-menu-caption, .pz-ui.wb-shell.greenhouse-management-shell .pz-sider-note { display: none; }
+.pz-ui.wb-shell.greenhouse-management-shell .pz-sider-search { display: none; }
+.pz-ui.wb-shell.greenhouse-management-shell .exact-header { height: 60px !important; min-height: 60px !important; }
+.pz-ui.wb-shell.greenhouse-management-shell .wb-current-page { font-size: 15px; font-weight: 600; order: -1; color: #243c30; }
+.pz-ui.wb-shell.greenhouse-management-shell .wb-workspace-selector { order: 2; margin-left: auto; }
+.pz-ui.wb-shell.greenhouse-management-shell .header-spacer { display: none; }
+.pz-ui.wb-shell.greenhouse-management-shell .exact-header > :is(.pz-command-trigger, .exact-header-divider, .service-status, .exact-header-clock) { display: none !important; }
+.pz-ui.wb-shell.greenhouse-management-shell .header-account-button { order: 4; }
+.pz-ui.wb-shell.greenhouse-management-shell .wb-demo-label { order: 3; }
+.pz-ui.wb-shell.greenhouse-management-shell .exact-side-menu { padding-top: 15px !important; }
+.pz-ui.wb-shell.greenhouse-management-shell .wb-floating-host { height: auto; padding-top: 16px; }
+.pz-ui.wb-shell.greenhouse-management-shell .pengxiaozhi-dock { position: relative; right: auto !important; bottom: auto !important; margin: 0 0 0 auto; z-index: 2; }
+
+@media (max-width: 1200px) {
+  .gh-inventory-row { grid-template-columns: 135px minmax(0, 1fr) auto; gap: 18px; }
+  .gh-crop-photo { width: 135px; height: 88px; }
+  .gh-row-actions { gap: 5px; }
+  .gh-row-actions .ant-btn { padding-inline: 11px; }
+  .gh-data-meta { font-size: 10px; }
+  .gh-data-meta > * { padding-inline: 8px; }
+  .gh-access-strip { grid-template-columns: 90px minmax(0, 1fr) minmax(0, 1fr); gap: 16px; padding-inline: 18px; }
+}
+@media (max-width: 900px) {
+  .gh-inventory-row { grid-template-columns: 115px minmax(0, 1fr); gap: 15px; }
+  .gh-crop-photo { width: 115px; height: 86px; grid-row: 1 / 3; }
+  .gh-row-actions { grid-column: 2; }
+  .gh-list-heading { align-items: flex-start; flex-wrap: wrap; }
+  .gh-list-tools { flex: 1; justify-content: flex-end; }
+  .gh-management-hero { padding-inline: 26px; }
+  .gh-management-hero h1 { font-size: 29px; }
+  .gh-create-button { position: static; margin-top: 20px; }
+  .gh-access-strip { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .gh-access-label { grid-column: 1 / -1; border: 0; }
+}
+@media (max-width: 620px) {
+  .pz-ui.wb-shell.greenhouse-management-shell .exact-content.wb-content { padding: 16px 16px 100px !important; }
+  .gh-management-page { gap: 22px; }
+  .gh-management-hero { min-height: 0; padding: 24px 20px; background-position: 58% center; }
+  .gh-management-hero h1 { font-size: 25px; max-width: 260px; }
+  .gh-management-hero p { font-size: 12px; line-height: 1.8; max-width: 240px; }
+  .gh-hero-eyebrow { font-size: 8px; }
+  .gh-hero-metrics { margin-top: 24px; }
+  .gh-hero-metrics > div { padding: 0 17px; }
+  .gh-hero-metrics dd { font-size: 26px; }
+  .gh-hero-metrics dt { font-size: 10px; }
+  .gh-list-heading h2 { font-size: 21px; }
+  .gh-list-heading { flex-direction: column; align-items: stretch; }
+  .gh-list-tools { width: 100%; gap: 8px; flex: 0 0 auto; }
+  .gh-list-tools .ant-input-search { flex: 1; min-width: 0; }
+  .gh-list-tools .ant-select { width: 105px; }
+  .gh-row-title { gap: 7px; }
+  .gh-row-title h3 { font-size: 15px; }
+  .gh-crop-meta { font-size: 11px; line-height: 1.8; }
+  .gh-inventory-row { grid-template-columns: 80px minmax(0, 1fr); gap: 8px 12px; }
+  .gh-crop-photo { width: 80px; height: 80px; grid-row: 1; align-self: start; }
+  .gh-row-actions { grid-column: 1 / -1; justify-content: flex-end; margin-top: 4px; }
+  .gh-data-meta { gap: 3px 10px; }
+  .gh-data-meta > * { padding: 0; border: 0; }
+  .gh-data-meta time { width: 100%; }
+  .gh-access-strip { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 16px; }
+  .gh-access-devices { border-left: 0; border-top: 1px solid #c6d0bc; padding: 15px 0 0; }
+  .gh-list-footer { justify-content: flex-start; }
+  .gh-list-footer small, .gh-list-footer .ant-pagination { margin-left: 0; }
+  .pz-ui.wb-shell.greenhouse-management-shell .wb-workspace-selector small { display: none; }
+  .pz-ui.wb-shell.greenhouse-management-shell .wb-floating-host { height: auto; padding-top: 16px; }
+  .pz-ui.wb-shell.greenhouse-management-shell .pengxiaozhi-dock { position: relative; right: auto !important; bottom: auto !important; margin: 0 auto; }
+}

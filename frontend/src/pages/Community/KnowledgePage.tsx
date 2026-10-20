@@ -1,0 +1,78 @@
+import { useCallback, useEffect, useState } from 'react'
+import { App, Alert, Button, Card, Checkbox, Empty, Form, Input, List, Modal, Pagination, Select, Space, Spin, Tag, Upload } from 'antd'
+import { communityRequest as request, uploadCommunity } from '../../api/communityApi'
+import { getApiErrorMessage } from '../../api/client'
+import { getStoredUser } from '../../api/authApi'
+import { isGuestMode } from '../../api/guestMode'
+import type { KnowledgeDocument, Reference } from '../../types/community'
+import './community.css'
+import './forum-refresh.css'
+import './knowledge-reference.css'
+import { ArrowRightOutlined, DownOutlined, FileTextOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import KnowledgeDocumentReader from './KnowledgeDocumentReader'
+import greenhouseScene from '../../assets/pure-scenes/greenhouse-wide-1920.webp'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+
+const topics = [{key:'cultivation',label:'栽培管理',categories:['育苗与定植','整枝与授粉','采收与品质']},{key:'disease',label:'病害防治',categories:['病害与虫害']},{key:'environment',label:'环境调控',categories:['环境与气象']},{key:'nutrition',label:'水肥管理',categories:['水肥与土壤']}]
+const cropOptions = [{ value: 'tomato', label: '番茄' }, { value: 'muskmelon', label: '甜瓜' }]
+export default function KnowledgePage() { return <App><Knowledge /></App> }
+function Knowledge() {
+  const { message, modal } = App.useApp(), guest = isGuestMode(), role = getStoredUser()?.role
+  const navigate=useNavigate(),[params]=useSearchParams()
+  const [scope,setScope]=useState<'public'|'organization'>('public'),[sort,setSort]=useState('recent'),[directory,setDirectory]=useState(false)
+  const [category,setCategory]=useState<string>(),[page,setPage]=useState(1)
+  const [catalog,setCatalog]=useState<Reference[]>([]),[searched,setSearched]=useState(false),[docQuery,setDocQuery]=useState(''),[docStatus,setDocStatus]=useState('all')
+  const [focusedChunk,setFocusedChunk]=useState<number>()
+  const openDocument=async(id:number,chunkId?:number)=>{try{const result=await request<KnowledgeDocument>('knowledge/documents/'+id);setFocusedChunk(chunkId);setDetail(result)}catch(e){message.error(getApiErrorMessage(e))}}
+  const canImport = !guest && ['admin', 'agronomist'].includes(role || '')
+  const [documents, setDocuments] = useState<KnowledgeDocument[]>([]), [items, setItems] = useState<Reference[]>([])
+  const [error, setError] = useState(''), [busy, setBusy] = useState(false), [loading, setLoading] = useState(false), [query, setQuery] = useState('')
+  const [crop, setCrop] = useState<string>(), [stage, setStage] = useState(''), [detail, setDetail] = useState<KnowledgeDocument | null>(null)
+  const [open, setOpen] = useState(false), [file, setFile] = useState<File | null>(null), [form] = Form.useForm()
+  const load = useCallback(async () => {
+    setLoading(true)
+    try { const [docs,refs]=await Promise.all([request<KnowledgeDocument[]>('knowledge/documents'),request<{items:Reference[]}>('knowledge/catalog')]);setDocuments(docs);setCatalog(refs.items); setError('') } catch (e) { setError(getApiErrorMessage(e)) } finally { setLoading(false) }
+  }, [])
+  useEffect(() => { void load() }, [load])
+  const act = async (fn: () => Promise<unknown>, success: string) => {
+    setBusy(true)
+    try { await fn(); message.success(success); await load() } catch (e) { message.error(getApiErrorMessage(e)) } finally { setBusy(false) }
+  }
+  const search = (value=query) => {
+    if(scope==='organization'){setDocQuery(value);return}
+    if (!value.trim()) { message.info('请输入检索问题'); return }
+    void act(async () => { const r = await request<{ items: Reference[] }>('knowledge/search', 'get', { q: value, crop, stage: stage || undefined }); setQuery(value);setSearched(true);setCategory(undefined);setItems(r.items) }, '检索完成')
+  }
+  const categories=Array.from(new Set(catalog.map(i=>i.category).filter((c):c is string=>!!c)))
+  const visibleItems=(searched?items:catalog).filter(i=>(!crop||i.crops?.includes(crop))&&(!category||i.category===category||topics.find(t=>t.key===category)?.categories.includes(i.category||''))&&(!stage||!i.stages?.length||i.stages.includes(stage))).sort((a,b)=>sort==='title'?a.title.localeCompare(b.title,'zh-CN'):(b.updated_at||'').localeCompare(a.updated_at||''))
+  useEffect(()=>{setPage(1)},[crop,stage,category,searched,items,sort])
+  const visibleDocuments=documents.filter(d=>(!docQuery||(d.title+d.filename).toLowerCase().includes(docQuery.toLowerCase()))&&(!crop||d.crops.includes(crop))&&(!stage||!d.stages.length||d.stages.includes(stage))&&(docStatus==='all'||d.status===docStatus||d.source_quality===docStatus)).sort((a,b)=>sort==='title'?a.title.localeCompare(b.title,'zh-CN'):b.updated_at.localeCompare(a.updated_at))
+  return <div className="community-page knowledge-page">
+    <header className="community-hero"><div><span className="community-eyebrow">AGRICULTURAL KNOWLEDGE</span><h1>农业知识库</h1><p>查阅农艺资料，让每一次判断有据可循。</p></div><Button type="primary" aria-label="导入文档" icon={<PlusOutlined/>} disabled={!canImport} title={!canImport?'登录管理员或农艺师账号后可导入文档':undefined} onClick={()=>{setFile(null);form.resetFields();setOpen(true)}}>导入文档</Button></header>
+    {error&&<Alert type="error" message={error} action={<Button onClick={()=>void load()}>重试</Button>}/>}
+    <section className="knowledge-search-band" aria-label="知识搜索"><h2>今天想了解什么？</h2><form className="knowledge-search-form" onSubmit={e=>{e.preventDefault();search()}}><Input aria-label="农业知识问题" prefix={<SearchOutlined/>} placeholder="搜索作物、病害或种植管理问题" allowClear value={query} onChange={e=>setQuery(e.target.value)}/><Button type="primary" htmlType="submit" loading={busy}>检索知识</Button></form><div className="knowledge-quick-search"><span>推荐搜索：</span>{['番茄叶片异常','温室通风','甜瓜水肥'].map(q=><button type="button" key={q} onClick={()=>{setQuery(q);search(q)}}>{q}</button>)}</div></section>
+    <div className="knowledge-navigation"><nav className="knowledge-topics" aria-label="知识分类">{[{key:'',label:'全部资料'},...topics].map(t=><button type="button" key={t.key} aria-pressed={(category||'')===t.key} onClick={()=>{setCategory(t.key||undefined);setScope('public');setPage(1)}}>{t.label}</button>)}</nav><div className="knowledge-scope" role="group" aria-label="资料范围"><button type="button" aria-pressed={scope==='public'} onClick={()=>setScope('public')}>公共资料</button><button type="button" aria-pressed={scope==='organization'} onClick={()=>{setScope('organization');setCategory(undefined)}}>组织文档</button></div></div>
+    <div className="knowledge-toolbar"><Select aria-label="知识作物" allowClear placeholder="全部作物" value={crop} options={cropOptions} onChange={value=>{setCrop(value);setSearched(false)}}/><Select aria-label="知识生育阶段" allowClear placeholder="生育阶段" value={stage||undefined} options={['苗期','定植期','缓苗期','开花期','坐果期','结果期','膨果期','转色期','采收期'].map(s=>({value:s,label:s}))} onChange={value=>{setStage(value||'');setSearched(false)}}/><Select aria-label="资料排序" value={sort} options={[{value:'recent',label:'最近更新'},{value:'title',label:'标题排序'}]} onChange={setSort}/>{searched&&<Button type="text" onClick={()=>{setSearched(false);setQuery('')}}>返回参考目录</Button>}<Button type="text" className="knowledge-directory" aria-label="资料目录" icon={<FileTextOutlined/>} onClick={()=>setDirectory(true)}>资料目录</Button></div>
+    <Spin spinning={loading}>{scope==='public'?<><div className="knowledge-results" aria-label="知识资料列表" aria-busy={loading||busy}>{visibleItems.length?visibleItems.slice((page-1)*3,page*3).map(item=><KnowledgeRow key={item.id} item={item} onDocument={(id,chunkId)=>void openDocument(id,chunkId)} onDiscuss={()=>{const next=new URLSearchParams(params);next.set('topic',item.title);const url=item.sources.find(s=>s.url)?.url;if(url)next.set('reference_url',url);navigate('/platform/forum?'+next.toString())}}/>):<div className="knowledge-empty"><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={searched?'没有找到相关资料，请尝试其他关键词':'没有符合筛选条件的资料'}/><Button onClick={()=>{setCrop(undefined);setStage('');setCategory(undefined);setSearched(false);setQuery('')}}>清除筛选条件</Button></div>}</div><div className="knowledge-pagination"><Pagination current={page} pageSize={3} total={visibleItems.length} showSizeChanger={false} onChange={setPage} hideOnSinglePage showTitle showLessItems responsive/><span>{visibleItems.length} 条资料</span></div></>:<div className="knowledge-documents"><Card title={'组织文档 · ' + documents.length}><div className="community-filter"><Input.Search aria-label="查找组织文档" placeholder="按标题或文件名查找" value={docQuery} onChange={e=>setDocQuery(e.target.value)}/><Select aria-label="文档状态" value={docStatus} onChange={setDocStatus} options={[{value:'all',label:'全部文档'},{value:'ready',label:'解析成功'},{value:'failed',label:'解析失败'},{value:'reviewed',label:'已审核'},{value:'unverified',label:'待审核'}]}/></div><List dataSource={visibleDocuments} locale={{ emptyText: '上传有权使用的PDF、DOCX、Markdown或文本，建立本组织知识资料' }} renderItem={d => <List.Item actions={[<Button key="detail" onClick={() => void openDocument(d.id)}>查看片段</Button>, ...(role === 'admin' && d.status === 'ready' ? [<Button key="review" loading={busy} onClick={() => void act(() => request('knowledge/documents/' + d.id + '/review', 'put', { approved: d.source_quality !== 'reviewed' }), '来源审核状态已更新')}>{d.source_quality === 'reviewed' ? '撤销可信标记' : '审核为可信参考'}</Button>] : []), ...(canImport && d.can_delete ? [<Button key="delete" danger onClick={() => modal.confirm({ title: '删除文档及检索片段？', onOk: () => act(() => request('knowledge/documents/' + d.id, 'delete'), '文档已删除') })}>删除</Button>] : [])]}><List.Item.Meta title={<Space wrap><strong>{d.title}</strong><Tag color={d.status === 'ready' ? 'green' : 'orange'}>{d.status === 'ready' ? '解析成功' : '解析失败'}</Tag><Tag>{d.source_quality === 'reviewed' ? '已审核' : '待审核'}</Tag></Space>} description={<><p>{d.filename} · {d.chunk_count} 个片段 · {d.parser}</p><p>{d.crops.map(c => cropOptions.find(o => o.value === c)?.label || c).join('、')} {d.stages.join('、')}</p>{d.error && <p className="community-error">{d.error}</p>}<p>更新时间：{new Date(d.updated_at).toLocaleString('zh-CN')}</p></>} /></List.Item>} /></Card></div>}</Spin>
+    <Modal title="资料目录" open={directory} onCancel={()=>setDirectory(false)} footer={null}><p className="community-muted">共 {catalog.length} 条公共资料 · {documents.length} 份组织文档</p><div className="knowledge-directory-topics">{categories.map(c=><Button key={c} onClick={()=>{setCategory(c);setSearched(false);setScope('public');setDirectory(false)}}>{c} · {catalog.filter(i=>i.category===c).length}</Button>)}</div></Modal>
+    <Modal title="导入农业文档" open={open} onCancel={() => setOpen(false)} footer={null}><Form name="knowledge-import" form={form} layout="vertical" onFinish={values => void act(async () => {
+      if (!file) throw new Error('请选择文档')
+      const data = new FormData(); data.append('file', file); data.append('title', values.title || file.name)
+      data.append('crops', (values.crops || []).join(',')); data.append('stages', values.stages || ''); data.append('source_url', values.source_url || ''); data.append('applicability', values.applicability || ''); data.append('rights_confirmed', String(!!values.rights_confirmed))
+      const result = await uploadCommunity<KnowledgeDocument>('knowledge/documents', data)
+      if (result.status === 'failed') { message.warning(result.error || '解析失败'); setOpen(false); return }
+      setOpen(false)
+    }, '文档处理记录已保存')}><Form.Item label="文档文件" required><Upload accept=".pdf,.docx,.md,.txt" maxCount={1} beforeUpload={f => { setFile(f); return false }} onRemove={() => setFile(null)}><Button>选择文档（不超过15MB）</Button></Upload></Form.Item><Form.Item name="title" label="文档标题"><Input maxLength={200} /></Form.Item><Form.Item name="crops" label="适用作物"><Select mode="multiple" options={cropOptions} /></Form.Item><Form.Item name="stages" label="适用阶段（多个用英文逗号分隔）"><Input /></Form.Item><Form.Item name="source_url" label="原始出处网址"><Input placeholder="可选；保留机构网页或论文出处" /></Form.Item><Form.Item name="applicability" label="适用条件"><Input.TextArea rows={2} maxLength={3000} /></Form.Item><Form.Item name="rights_confirmed" valuePropName="checked" rules={[{ validator: (_, v) => v ? Promise.resolve() : Promise.reject(new Error('请确认使用权限')) }]}><Checkbox>我有权导入此文档用于组织内部检索</Checkbox></Form.Item><p className="community-muted">新文档先进入待审核状态；扫描PDF无有效文字时会明确报错，不编造解析结果。</p><Button htmlType="submit" type="primary" loading={busy}>导入并解析</Button></Form></Modal>
+    <Modal title={detail?.title} open={!!detail} onCancel={() => setDetail(null)} footer={null} width={800}>{detail&&<KnowledgeDocumentReader key={detail.id+':'+(focusedChunk??'all')} record={detail} chunkId={focusedChunk}/>}</Modal>
+  </div>
+}
+
+function KnowledgeRow({item,onDocument,onDiscuss}:{item:Reference;onDocument:(id:number,chunkId?:number)=>void;onDiscuss:()=>void}){
+  const [expanded,setExpanded]=useState(false)
+  const environment=/环境|气象/.test(item.category||'')
+  const scene=environment?greenhouseScene:item.crops?.length===1&&item.crops.includes('muskmelon')?'/images/greenhouse-management/muskmelon.png':'/homepage-v11/scene-tomato.jpg'
+  return <article className={`knowledge-row${expanded?' is-expanded':''}`}>
+    <div className="knowledge-row-main"><img className="knowledge-thumbnail" src={scene} alt="" title="作物场景示意" loading="lazy"/><div className="knowledge-row-content"><h2><button type="button" onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded}>{item.title}</button></h2><p className="knowledge-summary">{item.summary}</p><div className="knowledge-tags">{item.crops?.filter(c=>cropOptions.some(o=>o.value===c)).map(c=><span key={c}>{cropOptions.find(o=>o.value===c)?.label}</span>)}{item.category&&<span>{item.category}</span>}{item.stages?.slice(0,2).map(s=><span key={s}>{s}</span>)}</div><div className="knowledge-source-line"><span>来源：{item.sources[0]?.name||'未标明出处'}</span>{item.updated_at&&<time dateTime={item.updated_at}>{item.updated_at.slice(0,10)} 更新</time>}</div></div><div className="knowledge-row-actions"><Button onClick={()=>setExpanded(v=>!v)} aria-expanded={expanded}>{expanded?'收起资料':'查看资料'} <ArrowRightOutlined/></Button><button type="button" className="knowledge-expand" aria-label={(expanded?'收起':'展开')+'资料：'+item.title} aria-expanded={expanded} onClick={()=>setExpanded(v=>!v)}><DownOutlined/></button></div></div>
+    {expanded&&<section className="knowledge-reference-detail" aria-label={item.title+'详情'}>{!!item.guidance?.length&&<><h3>参考管理要点</h3><ul>{item.guidance.map((g,i)=><li key={i}>{g}</li>)}</ul></>}{item.applicability&&<p><strong>适用条件：</strong>{item.applicability}</p>}<p className="community-muted">{item.position&&<>{item.position} · </>}{item.source_quality==='reviewed'?'已人工审核':'参考资料'}</p><h3>原文与引用位置</h3>{item.sources.map((s,i)=><p key={i} className="knowledge-source-entry"><span className="knowledge-source-kind">{s.document_id?'文档片段':/^参考主题/.test(s.position||'')?'主题参考':'原文出处'}</span>{s.url&&/^https?:\/\//i.test(s.url)?<a href={s.url} target="_blank" rel="noopener noreferrer">{s.name} ↗</a>:<span>{s.name}</span>}{s.position&&<span> · {s.position}</span>}{s.document_id&&<Button type="link" onClick={()=>onDocument(s.document_id!,s.chunk_id)}>查看原文片段</Button>}</p>)}<Button type="link" onClick={onDiscuss}>带着这条资料去论坛提问 <ArrowRightOutlined/></Button></section>}
+  </article>
+}

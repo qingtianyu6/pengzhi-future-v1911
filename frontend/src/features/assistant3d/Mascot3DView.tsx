@@ -18,7 +18,7 @@ function RobotScene({action,quiet,paused,look}: Props) {
     const room=new RoomEnvironment()
     const target=generator.fromScene(room,.04)
     scene.environment=target.texture
-    scene.environmentIntensity=.6
+    scene.environmentIntensity=.8
     generator.dispose();room.dispose()
     return ()=>{scene.environment=null;target.dispose()}
   },[gl,scene])
@@ -27,9 +27,11 @@ function RobotScene({action,quiet,paused,look}: Props) {
     if(quiet) for(let i=0;i<180;i++) animator.update('idle',1/60,undefined,true)
     invalidate()
     if(quiet||paused) return
-    // The companion uses a small independent 30fps viewport; no full-page animation renders.
-    const timer=window.setInterval(invalidate,1000/30)
-    return ()=>window.clearInterval(timer)
+    // Vsync keeps the small independent viewport smooth; paused/quiet views render once.
+    let frame=0
+    const render=()=>{invalidate();frame=window.requestAnimationFrame(render)}
+    frame=window.requestAnimationFrame(render)
+    return ()=>window.cancelAnimationFrame(frame)
   },[quiet,paused,action,animator,invalidate])
   useFrame((_,delta)=>{
     if(!quiet&&!paused) animator.update(action,delta,look.current)
@@ -52,11 +54,11 @@ export default function Mascot3DView(props:Props) {
     canvas.addEventListener('webglcontextlost',lost)
     return ()=>canvas.removeEventListener('webglcontextlost',lost)
   },[canvas,lost])
-  return <Canvas shadows orthographic camera={{position:[.2,2.7,7],zoom:43,near:.1,far:30}} dpr={[1,1.75]} frameloop="demand"
+  return <Canvas shadows orthographic camera={{position:[.2,2.45,7],zoom:43,near:.1,far:30}} dpr={[1,1.75]} frameloop="demand"
     gl={{alpha:true,antialias:true,powerPreference:'low-power'}} style={{pointerEvents:'none'}} tabIndex={-1} aria-hidden="true"
     onCreated={({gl,camera})=>{
     gl.setClearColor(0x000000,0);gl.toneMapping=ACESFilmicToneMapping;gl.toneMappingExposure=.95;gl.outputColorSpace=SRGBColorSpace
-      camera.lookAt(0,1.5,0)
+      camera.lookAt(0,1.4,0)
       gl.domElement.addEventListener('webglcontextlost',lost)
       setCanvas(gl.domElement)
       props.onReady()
@@ -68,7 +70,7 @@ export default function Mascot3DView(props:Props) {
 function FitCamera() {
   const {camera,size,invalidate}=useThree()
   useEffect(()=>{
-    if('zoom' in camera) camera.zoom=size.height/3.25
+    if('zoom' in camera) camera.zoom=size.height/3.05
     camera.updateProjectionMatrix();invalidate()
   },[camera,size.height,invalidate])
   return null

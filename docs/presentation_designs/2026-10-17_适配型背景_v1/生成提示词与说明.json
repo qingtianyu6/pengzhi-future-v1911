@@ -1,0 +1,30 @@
+{
+  "tool": "内置 image_gen",
+  "shared_prompt": "Create a beautiful professional 16:9 landscape PowerPoint BACKGROUND PLATE ONLY for a sophisticated agricultural AI presentation. A coherent family palette of forest green #103C31, muted jade/sage #9FBDA4, warm ivory #F6F3EA and a very restrained natural gold accent. Harmonious, mature, premium visual design, spacious and refined, useful with white or dark green slide text as specified. Composition must reserve at least 65 percent uncluttered, low contrast negative space for real slide content; visual detail hugs the right and lower edges. No words, no letters, no numbers, no logos, no watermark, no mascot, no human, no infographic, no charts, no labels, no UI panels, no device mockup, no presentation title. High resolution full-bleed flat image. This is concept background art, never an actual farm photograph or deployment record.",
+  "images": [
+    {
+      "n": 1,
+      "name": "01_雾感田野_章节与结束页",
+      "prompt": "DIRECTION A: ATMOSPHERIC AGRICULTURAL LANDSCAPE, refined contemporary editorial illustration combining realistic lighting with soft sculpted terrain. Lower-right shows graceful rolling emerald agricultural fields and fine parallel crop rows, soft pale-jade mist, distant low mountains and a tiny restrained glass greenhouse silhouette. Not tourist scenery, no buildings cluster, no people. Beautiful long horizontal layers, quiet sweeping rhythm and spacious upper-left 72 percent in almost uniform warm ivory haze that softly fades to pale sage toward edges. Very subtle warm sunrise at far upper-right, no large glaring sun. Calm, optimistic, poetic but modern; clean enough for a title and large closing sentence on left. Avoid decorative clouds, ink calligraphy, cartoon landscape, dark green overlay, or photo collage. Main background is LIGHT, usable with dark green typography.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-a0fad5d6-aaa9-4c02-8bdb-bc26ce39aa81.png"
+    },
+    {
+      "n": 2,
+      "name": "02_叶脉光影_封面与核心创新页",
+      "prompt": "DIRECTION B: BOTANICAL MACRO LIGHT STUDY. Entire left 68 percent deep dark forest-green gradient, smooth and exceptionally calm, usable with ivory text. On far right, one beautiful large fresh tomato leaf seen close up with elegant translucent veins and a few tiny realistic dew drops; leaf curves from upper-right to lower-right, warm natural light passes through it, rich jade luminous edge. Soft abstract shadow of a second leaf on lower border only. Premium botanical luxury editorial photograph, sculptural organic form, cinematic chiaroscuro, restrained realistic materials. The leaf is a focal object restricted to right quarter, not a wall of foliage. No greenhouse, no visible fruit, no insects, no literal luminous circuit patterns, no sci-fi. Distinctly more refined and abstract than a greenhouse aisle scene.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-523aa96d-f77a-472f-9b47-1812d8ed0e8e.png"
+    },
+    {
+      "n": 3,
+      "name": "03_轻盈玻璃_正文与数据页",
+      "prompt": "DIRECTION C: AIRY TRANSLUCENT GLASS AND SAGE. Predominantly warm ivory / very pale sage studio background, very smooth and extremely quiet, usable with dark forest-green typography. Lower-right 25 percent features ONE graceful broad curved translucent glass ribbon with muted jade green tint, beveled smooth edges, soft natural refraction, a delicate light-caustic curve on ground. The curve faintly evokes a greenhouse roof or a leaf fold without literal object illustration. Upper-left 80 percent entirely blank spacious warm white with subtle illumination, no objects there. Premium industrial design / high-end technology brand campaign background, balanced asymmetric composition, beautiful calm light, not overly glossy, no rainbow. NO glass cards, no interface rectangles, no icons, no charts, no grids. Subtle botanical color associations only; no foliage required.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-a41407f8-8a21-42b8-82c7-640f811f0130.png"
+    },
+    {
+      "n": 4,
+      "name": "04_温室建筑线稿_架构与技术页",
+      "prompt": "DIRECTION D: ELEGANT ARCHITECTURAL LINE STUDY ON DARK GREEN. Deep forest-green nearly uniform matte background throughout, optimized for white presentation text. In LOWER RIGHT 28 percent, a delicate precise single greenhouse structure rendered as thin muted-sage architectural perspective wireframe lines, minimal transparent glazing geometry, tiny subtle warm-gold edge glints. A few horizontal ground-plane lines and a very faint isolated plant silhouette confined to greenhouse base. Architectural gallery drawing meets premium agricultural technology identity; restrained and beautifully composed, no busy engineering annotations. Large central and upper-left 75 percent empty quiet dark green. No all-over blueprint grid, no dimensions, no measurement text, no numbers, no glowing neon, no blue, no inset border. The drawing is purely atmospheric design, not a construction plan.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-02e3f24e-acc5-4f38-81a6-069174a3a8cf.png"
+    }
+  ]
+}

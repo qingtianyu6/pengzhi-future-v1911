@@ -188,16 +188,16 @@ export default function DashboardPage() {
     {error && <Alert className="page-alert" type="error" showIcon message="种植总览数据加载失败" description={error} action={<Button size="small" onClick={() => selectedId ? void loadSummary() : void loadGreenhouses()}>重试</Button>} />}
 
     {!summary && !error ? <SaasEmptyState title="还没有可用的大棚工作区" description="先创建大棚和种植批次，系统会自动汇总环境、风险、建议和农事任务。" actionLabel="进入大棚管理" onAction={() => navigate('/platform/data')} /> : summary && <>
-      <section className="exact-welcome-banner">
+      <section className="exact-welcome-banner pz-command-hero">
         <div className="exact-welcome-copy">
           <span>{greeting()}</span>
-          <div className="exact-welcome-title"><h1>今日生产概览</h1><Tag color={hasWarning ? 'orange' : hasEnvironment ? 'green' : 'default'}>{stale ? '历史数据 / 待同步' : hasWarning ? '存在预警' : hasEnvironment ? '监测中' : '待接入'}</Tag></div>
-          <p>{stale ? '最近采集已超过2小时，以下为历史记录，请检查设备连接。' : hasWarning ? `当前有 ${summary.warning_summary.open_warning_count} 项待处理预警，请查看风险详情。` : hasEnvironment ? '环境数据已接入，点击下方卡片查看监测和决策详情。' : '尚无环境数据，接入传感器或导入历史数据后可查看监测结果。'}</p>
+          <div className="exact-welcome-title"><h1>让每一棚生长，<br />都有据可循。</h1><Tag color={hasWarning ? 'orange' : hasEnvironment ? 'green' : 'default'}>{stale ? '待同步' : hasWarning ? '需关注' : hasEnvironment ? '监测中' : '待接入'}</Tag></div>
+          <p>{stale ? '最近采集已超过2小时，以下为历史记录，请检查设备连接。' : hasWarning ? `当前有 ${summary.warning_summary.open_warning_count} 项待处理预警，请查看风险详情。` : hasEnvironment ? '环境数据已接入，可继续查看监测趋势与处理建议。' : '尚无环境数据，接入传感器或导入历史数据后可查看监测结果。'}</p>
         </div>
-        <div className="wb-overview-actions"><Button onClick={() => navigate(`/platform/3d?greenhouse_id=${selectedId}`)}>查看三维大棚</Button><Button type="primary" onClick={() => navigate(`/platform/production?greenhouse_id=${selectedId}`)}>查看待办 <ArrowRightOutlined /></Button><Button type="link" onClick={() => setModelCenterOpen(true)}>模型说明</Button></div>
+        <div className="pz-today-focus"><span className="pz-focus-eyebrow">今日重点 · {summary.greenhouse.name}</span><h2>{stale ? '先核实数据，再判断棚况' : !hasEnvironment ? '为大棚连接第一份数据' : summary.warning_summary.latest_warning_title || (todayTasks.length ? '把今日农事，逐项落实' : '棚况已就绪，开始日常巡检')}</h2><p>{stale ? '最近采集已超过 2 小时，请先检查设备或采样记录。' : summary.warning_summary.latest_recommendation_title || summary.risk.reasons[0] || '结合环境变化与现场观察，安排今天的工作。'}</p><div className="pz-focus-counts"><span><b>{summary.warning_summary.open_warning_count}</b> 项预警</span><span><b>{todayTasks.length}</b> 项最近待办</span></div><Button type="primary" onClick={() => navigate(!hasEnvironment ? `/platform/data?tab=connection&greenhouse_id=${selectedId}` : stale ? `/platform/environment?tab=monitoring&greenhouse_id=${selectedId}` : hasWarning ? `/platform/environment?tab=alerts&greenhouse_id=${selectedId}` : `/platform/production?tab=tasks&greenhouse_id=${selectedId}`)}>{!hasEnvironment ? '连接环境数据' : stale ? '核实采样记录' : hasWarning ? '查看预警与建议' : '安排今日农事'} <ArrowRightOutlined /></Button></div>
       </section>
 
-      {(hasWarning || stale || !hasEnvironment) && <div className="wb-priority-notice"><span>{stale ? '数据待同步' : hasWarning ? `${summary.warning_summary.open_warning_count} 项需关注` : '等待数据接入'}</span><strong>{stale ? '最近采集已超过 2 小时，请先核实数据时效。' : summary.warning_summary.latest_warning_title || '接入本棚数据后，开始监测和风险分析。'}</strong><Button type="link" onClick={() => navigate(hasEnvironment ? `/platform/environment?greenhouse_id=${selectedId}&tab=alerts` : '/platform/data?tab=connection&greenhouse_id='+selectedId)}>{hasEnvironment ? '查看依据与建议' : '前往数据接入'} <ArrowRightOutlined /></Button></div>}
+      <div className="pz-monitor-heading"><div><span className="pz-section-kicker">大棚实况</span><h2>环境的每一次变化，都看得见</h2><p>{summary.data_updated_at ? `最近采集 ${formatDueTime(summary.data_updated_at)}` : '等待环境采样'}{stale ? ' · 历史记录' : ''}</p></div><div className="pz-monitor-actions"><Button type="link" aria-label="现场异常排查" icon={<ExperimentOutlined />} onClick={() => navigate(`/platform/investigate?greenhouse_id=${selectedId}`)}>现场异常排查</Button><Button onClick={() => navigate(`/platform/3d?greenhouse_id=${selectedId}`)}>走进三维大棚 <ArrowRightOutlined /></Button><Button type="text" onClick={() => setModelCenterOpen(true)}>模型说明</Button></div></div>
 
       <section className="exact-metric-grid">
         {metrics.map((metric) => {
@@ -209,8 +209,6 @@ export default function DashboardPage() {
           </article>
         })}
       </section>
-
-      <section className="wb-priority-card"><div><span className="wb-kicker">当前重点</span><h2>{summary.warning_summary.latest_recommendation_title || (hasWarning ? '先核实风险，再安排现场处理' : hasEnvironment ? '了解当前棚况，安排日常农事' : '完善本棚的数据采集')}</h2><p>{summary.risk.reasons[0] || (hasEnvironment ? '结合实时监测、预警依据与现场情况，形成可追踪的生产安排。' : '当前数据不足，接入环境记录后再进行风险研判。')}</p><div className="wb-source-tags"><span>环境记录</span><span>风险依据</span><span>人工确认</span></div></div><Button type="primary" onClick={() => navigate(hasEnvironment ? `/platform/production?greenhouse_id=${selectedId}` : `/platform/data?greenhouse_id=${selectedId}&tab=connection`)}>{hasEnvironment ? '查看处理方案' : '接入环境数据'} <ArrowRightOutlined /></Button></section>
 
       <section className="exact-primary-grid">
         <article className="exact-panel exact-chart-card">
@@ -234,9 +232,9 @@ export default function DashboardPage() {
 
       <section className="wb-process-strip" aria-label="生产处理流程">{[
         ['01', '监测发现', '环境记录与风险预警', '/platform/environment'],
-        ['02', '辅助研判', '结合本棚信息理解问题', '/platform/diagnosis'],
+        ['02', '主动探因', '收集证据，逐步缩小原因', '/platform/investigate'],
         ['03', '人工确认', '安排农事任务与执行', '/platform/production'],
-        ['04', '反馈复查', '记录处理后的变化', '/platform/production?tab=tasks'],
+        ['04', '经验积累', '记录观察，沉淀生产经验', '/platform/research'],
       ].map(([step,title,description,path]) => <button key={step} type="button" onClick={() => navigate(`${path}${path.includes('?') ? '&' : '?'}greenhouse_id=${selectedId}`)}><b>{step}</b><strong>{title}</strong><small>{description}</small></button>)}</section>
 
       <section className="exact-panel exact-activity-card">

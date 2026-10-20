@@ -1,0 +1,25 @@
+{
+  "tool": "built-in image_gen",
+  "reference": "C:/Users/wumin/Desktop/棚智未来_v1.9.11_滚轮滚动_改变区错位修复_完整运行源码/棚智未来_v1.9.11_滚轮滚动_改变区错位修复_完整运行源码/docs/presentation_designs/2026-10-17_01-06_v2/01_封面.png",
+  "base_prompt": "Generate a single high-resolution 16:9 landscape PPT BACKGROUND ONLY, full bleed. Match the reference cover's beautiful cinematic agricultural aesthetic: rich forest green #103C31, deep emerald gradients, realistic modern glass greenhouse, lush vegetation, soft natural golden daylight and understated sophisticated photographic depth. This must be a CLEAN reusable background plate. REMOVE ALL typography, Chinese letters, English letters, numerals, logos, watermarks, gold rules, page numbers, AI footer, mascot, robot, people, graphical icons, charts, cards and interface elements. No text of any kind, no character. Preserve premium material realism, natural light, green-and-warm-gold palette. No blue neon or science-fiction holograms. Do not make the busy image compete with future slide text. 16:9 landscape. This is designed background imagery, not documentation of a real deployment.",
+  "images": [
+    {
+      "n": 1,
+      "name": "01_封面_左侧留白",
+      "prompt": "COVER BACKGROUND. Composition matching the reference as closely as possible, but without ANY text or mascot. Left 60 percent is an extremely quiet deep forest-green gradient, almost smooth but with very faint soft greenhouse foliage texture, ready for large ivory title. On right 40 percent, show realistic sunlit greenhouse glass roof and structural frames with verdant rows of crops; the greenhouse aisle and foreground floor in lower right are EMPTY so a separate mascot can be placed later. Bright warm sunlight concentrated toward upper-right and subtle softly blurred vegetation along bottom edge. Smooth seamless fade from dark quiet left to detailed luminous right. No dividing line.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-36906099-ec32-447d-a585-071c9c291963.png"
+    },
+    {
+      "n": 2,
+      "name": "02_正文_深绿留白",
+      "prompt": "CONTENT SLIDE BACKGROUND. Entire canvas mostly deep calm emerald green. CENTRAL 80 percent and upper-left must be smooth, low-contrast, dark and exceptionally uncluttered to receive several paragraphs or diagrams. Greenhouse steel/glass framing only subtly visible at far-right edge and top-right corner, out-of-focus green leaves hugging the bottom-right and lower-left outer edges. Restrained soft warm natural rim light at far upper-right, no bright white center. Elegant cinematic atmospheric depth. More quiet negative space than reference. No panel boundaries, no ornaments.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-fa35c695-4a67-4861-b717-de134b0bee4a.png"
+    },
+    {
+      "n": 3,
+      "name": "03_图表_中央留白",
+      "prompt": "DATA AND WORKFLOW SLIDE BACKGROUND. Realistic wide greenhouse architectural perspective framing a spacious, quiet deep-green center. All bright leafy details restricted to bottom 12 percent and far right 15 percent; faint overhead greenhouse rafters can appear near top edge. Main central 75 percent and left are DARK low-contrast forest green with very subtle organic texture and ample negative space for white charts or screenshots. Warm sunlight gently illuminates distant right-side glass structure and a strip of floor. Rich and refined, harmonious with reference cover, but extremely sparse. Absolutely no drawn chart, no data, no inset rectangles.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-140b41ef-5d3a-47db-91d6-96411fd35d0f.png"
+    }
+  ]
+}

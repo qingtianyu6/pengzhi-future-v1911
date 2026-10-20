@@ -189,9 +189,10 @@ def _profile_coefficients(db: Session, greenhouse_id: int) -> dict[str, float]:
     }
 
 
-def run_simulation(db: Session, payload: SimulationRequest, *, persist: bool = True) -> SimulationData:
-    records = _latest_records(db, payload.greenhouse_id, 24)
-    latest = records[-1] if records else None
+def run_simulation(db: Session, payload: SimulationRequest, *, persist: bool = True,
+                   baseline_record: SensorData | None = None) -> SimulationData:
+    records = _latest_records(db, payload.greenhouse_id, 24) if baseline_record is None else []
+    latest = baseline_record if baseline_record is not None else (records[-1] if records else None)
     if latest is None:
         raise ServiceError(422, "暂无环境数据，无法推演")
     coeff = _profile_coefficients(db, payload.greenhouse_id)

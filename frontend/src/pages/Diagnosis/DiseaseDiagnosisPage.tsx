@@ -23,7 +23,7 @@ const reviewLabels: Record<ReviewStatus, { label: string; color: string }> = {
 }
 type ReviewFormValues = DiseaseReviewInput
 
-export default function DiseaseDiagnosisPage() {
+export default function DiseaseDiagnosisPage({viewOverride}:{viewOverride?:'history'|'identify'} = {}) {
   const navigate = useNavigate(); const [searchParams] = useSearchParams()
   const [status, setStatus] = useState<DiseaseModelStatus | null>(null)
   const [greenhouses, setGreenhouses] = useState<Greenhouse[]>([])
@@ -106,11 +106,11 @@ export default function DiseaseDiagnosisPage() {
   ]
 
   if (loading) return <div className="v18-disease-page"><ProductSkeleton rows={7} /></div>
-  return <div className="business-page disease-page commercial-disease-page v18-disease-page" data-view={searchParams.get('view') === 'history' ? 'history' : 'identify'}>{messageContext}
+  return <div className="business-page disease-page commercial-disease-page v18-disease-page" data-view={(viewOverride ?? searchParams.get('view')) === 'history' ? 'history' : 'identify'}>{messageContext}
     <div className="page-intro commercial-page-intro">
       <div>
         <span className="eyebrow">AI DISEASE ASSISTANT</span>
-        <h1>{searchParams.get('view') === 'history' ? '识别与复核记录' : '病害辅助识别'}</h1>
+        <h1>{(viewOverride ?? searchParams.get('view')) === 'history' ? '识别与复核记录' : '病害辅助识别'}</h1>
         <p>上传叶片照片，AI 给出候选结果，再由人工复核后进入现场任务闭环。</p>
       </div>
       <Space wrap><Tag color={status?.model_status === 'ready' ? 'green' : 'orange'}>{status?.model_status === 'under_evaluation' ? '辅助识别模式' : status?.model_status === 'ready' ? '模型已就绪' : '模型状态异常'}</Tag></Space>

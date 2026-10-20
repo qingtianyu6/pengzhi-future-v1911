@@ -1,6 +1,6 @@
 import { apiClient } from './client'
 import type { ApiResponse, PaginatedData } from '../types/api'
-import type { Greenhouse, GreenhouseInput, GreenhouseStatus } from '../types/greenhouse'
+import type { DeviceBinding, GreenhouseDevice, GreenhouseManagementSummary, Greenhouse, GreenhouseInput, GreenhouseStatus } from '../types/greenhouse'
 
 export interface GreenhouseQuery {
   page?: number
@@ -31,4 +31,17 @@ export async function updateGreenhouse(id: number, payload: Partial<GreenhouseIn
 
 export async function deleteGreenhouse(id: number): Promise<void> {
   await apiClient.delete<ApiResponse<null>>(`/greenhouses/${id}`)
+}
+
+export async function getManagementSummary(): Promise<GreenhouseManagementSummary> {
+  return (await apiClient.get<ApiResponse<GreenhouseManagementSummary>>('/greenhouses/management-summary')).data.data
+}
+export async function getGreenhouseDevices(id: number): Promise<GreenhouseDevice[]> {
+  return (await apiClient.get<ApiResponse<GreenhouseDevice[]>>(`/greenhouses/${id}/devices`)).data.data
+}
+export async function bindGreenhouseDevice(id: number, data: DeviceBinding): Promise<void> {
+  await apiClient.post(`/greenhouses/${id}/devices`, data)
+}
+export async function unbindGreenhouseDevice(id: number, deviceId: string): Promise<void> {
+  await apiClient.delete(`/greenhouses/${id}/devices/${encodeURIComponent(deviceId)}`)
 }

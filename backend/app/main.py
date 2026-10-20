@@ -23,12 +23,26 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     from app.agent.scheduler import worker, recover_interrupted
     recover_interrupted()
     scheduler_task = asyncio.create_task(worker())
+    from app.services.news_service import worker as news_worker
+    news_task = asyncio.create_task(news_worker())
+    from app.greenhouse_sim.runtime import worker as simulation_worker
+    simulation_task = asyncio.create_task(simulation_worker())
     try:
         yield
     finally:
+        simulation_task.cancel()
+        try:
+            await simulation_task
+        except asyncio.CancelledError:
+            pass
         scheduler_task.cancel()
         try:
             await scheduler_task
+        except asyncio.CancelledError:
+            pass
+        news_task.cancel()
+        try:
+            await news_task
         except asyncio.CancelledError:
             pass
 

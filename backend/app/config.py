@@ -28,6 +28,7 @@ class Settings:
     ai_api_key: str = os.getenv("AI_API_KEY", "").strip()
     ai_base_url: str = os.getenv("AI_BASE_URL", "").strip()
     ai_model: str = os.getenv("AI_MODEL", "").strip()
+    investigation_vision_enabled: bool = os.getenv("INVESTIGATION_VISION_ENABLED", "false").lower() == "true"
     sensor_ingest_key: str = os.getenv("SENSOR_INGEST_KEY", "").strip()
     agent_software_approval: bool = os.getenv("AGENT_SOFTWARE_APPROVAL", "false").lower() == "true"
 

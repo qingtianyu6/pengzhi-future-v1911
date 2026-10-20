@@ -1,0 +1,29 @@
+{
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "n": 1,
+      "name": "01_米白植物极简",
+      "prompt": "Create a finished 16:9 widescreen PowerPoint BACKGROUND ONLY. A distinctly LIGHT, warm ivory minimalist botanical design for a sophisticated Chinese agricultural AI presentation. Main 82% of canvas is clean matte warm white #F7F5ED, very subtle natural paper texture, spacious empty center and left for dark-green text. At far bottom-right and upper-right corners, a few elegant photorealistic fresh green tomato leaves with a tiny yellow blossom, softly lit and neatly cropped by the edge; a faint soft leaf shadow at far lower-left. Extremely restrained composition, premium Japanese editorial stationery aesthetic with natural agricultural character. Pale sage accents only, no panels or framing border. NO words, letters, numerals, logo, watermark, mascot, people, chart, icons, decorative gold rules, or data. Flat slide image, no device mockup. High resolution.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-dd42837e-fe71-4139-acd0-f09d71c935c1.png"
+    },
+    {
+      "n": 2,
+      "name": "02_抽象青绿曲面",
+      "prompt": "Create a finished 16:9 widescreen PowerPoint BACKGROUND ONLY, distinctly ABSTRACT contemporary brand design for an agricultural AI product. Entire canvas a sophisticated flowing gradient of deep emerald #103C31 into muted jade and sage green. One or two broad smooth satin-like abstract curved surfaces sweep diagonally near lower-right and far right, inspired by the fold of a leaf but NOT literal leaves. Subtle matte translucent material, quiet soft lighting, tasteful depth, modern premium product presentation. Left two-thirds dark, calm, almost uniform and entirely empty for ivory titles and diagrams. Curves occupy edges rather than center. Restrained green palette, no electric neon, no blue, no cyber grid, no detailed greenhouse photograph. NO text, numbers, logos, watermarks, robot, person, panel, chart, icons or UI. Flat slide image, no screen mockup. High resolution.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-e581b491-1684-4bed-9449-345c22c784e8.png"
+    },
+    {
+      "n": 3,
+      "name": "03_三维温室模型",
+      "prompt": "Create a finished 16:9 widescreen PowerPoint BACKGROUND ONLY. Minimal premium 3D architectural miniature / isometric GREENHOUSE concept on a warm ivory and very pale sage seamless studio background, completely different from a cinematic photo. A single beautifully crafted small realistic glass greenhouse model sits in the LOWER RIGHT 30% of composition on a thin clean soil/green plot base: fine metal framing, translucent clear roof, orderly green crop beds visible, subtle warm sunlight and clean soft contact shadow. Elegant architectural visualization with believable glass, delicate details, mature professional style, no cute toy clutter. Vast clean blank warm-white area across LEFT 65% and upper half for title, diagrams and text. No objects scattered across empty area. NO mascot, people, text, letters, numerals, labels, logos, watermarks, arrows, graphs, grids, cards, UI or device mockup. Flat background plate only, high resolution.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-c1a8d2ef-1b7b-4a74-b9fd-12bc6008db04.png"
+    },
+    {
+      "n": 4,
+      "name": "04_日落田园航拍",
+      "prompt": "Create a finished 16:9 widescreen PowerPoint BACKGROUND ONLY, photorealistic cinematic aerial landscape of a modern agricultural greenhouse complex at gentle golden-hour sunset. A graceful repeating arrangement of low glass greenhouses and orderly green fields extends into distant tree-lined rural hills, attractive believable agriculture, calm evening atmosphere, no city towers, no fake futuristic megastructures. Composition: detailed greenhouse roofs concentrated in LOWER RIGHT quadrant, distant horizon across upper-right, warm golden sky visible on right third. Entire LEFT 60% seamlessly fades under a deep forest-green tinted atmospheric overlay, dark and almost smooth with low detail to receive white presentation text. Make this an OUTDOOR bird's-eye scene distinctly different from an indoor greenhouse aisle. Warm amber sunset accents, deep green brand palette, natural depth, premium and understated. NO text, numbers, logo, watermark, mascot, people, charts, panels, devices or interface elements. High resolution flat slide background.",
+      "source": "C:\\Users\\wumin\\.codex\\generated_images\\01a13adb-1e6d-73e1-b25b-d4be258e58f8\\exec-8d0229cb-f521-4dff-9f60-6ca9d3511424.png"
+    }
+  ]
+}

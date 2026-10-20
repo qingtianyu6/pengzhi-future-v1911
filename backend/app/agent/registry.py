@@ -105,6 +105,35 @@ def compact(value):
     return jsonable_encoder(value)
 
 
+class AgronomyContextArgs(GreenhouseArgs):
+    crop_batch_id: int | None = Field(default=None, gt=0)
+
+
+class AgronomyGoalArgs(AgronomyContextArgs):
+    goal: str = Field(min_length=2, max_length=500)
+    # The task Agent can supply its own steps in one model turn.
+    plan_steps: list[dict[str, Any]] | None = None
+
+
+@register("get_growth_archive", "查看当前大棚或指定批次的生长档案、真实观察、环境统计和生产时间线。", AgronomyContextArgs)
+def growth_archive(db, run, args):
+    from app.services.agronomist_service import archive
+    return archive(db, args.greenhouse_id, args.crop_batch_id)
+
+
+@register("list_agronomy_research", "查询方案比较、生产研究、农事技能和目标计划，包含状态和关联农事任务。", AgronomyContextArgs)
+def agronomy_research(db, run, args):
+    from app.services.agronomist_service import goal_progress
+    return goal_progress(db, args.greenhouse_id, args.crop_batch_id)
+
+
+@register("create_agronomy_goal", "将用户提出的生产目标整理为分步计划，保存在AI研究台；不自动下发任务。", AgronomyGoalArgs, risk="SOFTWARE_ACTION")
+def agronomy_goal(db, run, args):
+    from app.schemas.agronomist import GoalCreate
+    from app.services.agronomist_service import create_goal, serialize
+    return serialize(create_goal(db, GoalCreate(**args.model_dump())))
+
+
 @register("list_greenhouses", "列出可访问的大棚，支持名称/编号搜索与分页；返回真实ID。", ListArgs)
 def greenhouses(db, run, args):
     page = greenhouse_service.list_greenhouses(db, args.page, 30, None, args.keyword or None)
@@ -150,7 +179,11 @@ def risk(db, run, args):
 
 @register("search_agriculture_knowledge", "检索现有本地农业知识库并返回来源。", QueryArgs)
 def knowledge(db, run, args):
-    return {"items": search_knowledge(args.query, limit=4)}
+    crop = None
+    if run and run.greenhouse_id:
+        batch = db.scalar(select(CropBatch).where(CropBatch.greenhouse_id == run.greenhouse_id, CropBatch.status == "growing"))
+        crop = batch.crop_type if batch else None
+    return {"items": search_knowledge(args.query, limit=4, db=db, crop=crop)}
 
 
 @register("search_similar_cases", "有预警ID时调用现有相似案例算法，否则列出该棚最近案例；两者明确区分。", CaseSearchArgs)
@@ -247,3 +280,12 @@ def report(db, run, args):
     return {"greenhouse_id": args.greenhouse_id, "goal": run.goal,
             "observations": [item for item in run.context_json.get("observations", [])
                              if item.get("arguments", {}).get("greenhouse_id") == args.greenhouse_id][-12:]}
+
+
+@register("get_investigation_summary", "读取本棚最新棚智探因的候选解释、冲突证据与下一项观察；规则分不是病害概率。", GreenhouseArgs)
+def investigation_summary(db, run, args):
+    from app.models.agronomist import AgronomyRecord
+    row = db.scalar(select(AgronomyRecord).where(AgronomyRecord.greenhouse_id == args.greenhouse_id,
+        AgronomyRecord.kind == "investigation").order_by(AgronomyRecord.updated_at.desc()).limit(1))
+    return {"investigation": None} if row is None else {"record_id": row.id, "question": row.payload["question"],
+        "analysis": row.payload["analysis"], "final_note": row.payload.get("final_note")}
