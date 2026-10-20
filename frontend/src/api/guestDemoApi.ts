@@ -358,7 +358,7 @@ function taskDetail(task = tasks[0]) {
     crop_batch: greenhouse.active_batch,
     source_warning: task.source_warning_id ? currentGuestWarning(task.greenhouse_id) : null,
     source_disease_record: null,
-    source_recommendation: task.source_recommendation_id ? recommendation : null,
+    source_recommendation: task.source_recommendation_id ? { ...recommendation, steps: demoRecommendation(task.greenhouse_id).action_steps_json, rationale: recommendation.recommendation_text } : null,
     events: [
       { id: 1, task_id: task.id, event_type: 'created', from_status: null, to_status: task.status, operator: '游客演示', note: '临时体验数据，不会存档', payload_json: {}, created_at: task.created_at },
     ],

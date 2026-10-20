@@ -33,16 +33,22 @@ import './product-polish.css'
 import './workspace-surfaces.css'
 import './knowledge-navigation.css'
 import './navigation-refresh.css'
+import './operations-design.css'
+import './unified-navigation.css'
 
 const AccountSettings = lazy(() => import('../components/AccountSettings'))
 const { Header, Sider, Content } = Layout
 
 function makeMenuItems(unread: number, knowledge: {
   collapsed: boolean; expanded: boolean; toggle: () => void; openDefault: () => void
-}): MenuProps['items'] {
+}, production: { toggle: () => void }): MenuProps['items'] {
   const items = workspaceGroups.map(group => {
     const item={key:group.id,'aria-label':group.label,icon:group.icon,
       label:group.id==='knowledge'?<Badge count={unread} size="small" offset={[10,0]}>{group.label}</Badge>:group.label}
+    if (group.id === 'production' && !knowledge.collapsed) return {
+      ...item, children: group.items.map(child => ({ key:child.key, label:child.label })),
+      onTitleClick:production.toggle, className:'pz-production-design-nav',
+    }
     if(group.id!=='knowledge'||knowledge.collapsed)return item
     return {...item,className:'pz-knowledge-nav',
       children:group.items.map(child=>({key:child.key,label:child.label})),
@@ -54,12 +60,7 @@ function makeMenuItems(unread: number, knowledge: {
       id:'knowledge-community-pages',
     }
   })
-  if (knowledge.collapsed) return items
-  return [
-    { type: 'group', key: 'production-space', label: '生产空间', children: items.slice(0, 4) },
-    { type: 'group', key: 'agronomy-space', label: '智能农艺', children: items.slice(4, 6) },
-    { type: 'group', key: 'community-space', label: '知识与交流', children: items.slice(6) },
-  ]
+  return items
 }
 
 function formatHeaderTime(value: Date) {
@@ -85,6 +86,7 @@ export function AppLayout() {
   const [navigatorOpen, setNavigatorOpen] = useState(false)
   const [navigationQuery, setNavigationQuery] = useState('')
   const [knowledgeExpanded,setKnowledgeExpanded]=useState(() => ['/platform/forum','/platform/knowledge','/platform/news'].includes(window.location.pathname))
+  const [productionExpanded, setProductionExpanded] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
   const checkHealth = useSystemStore((state) => state.checkHealth)
@@ -93,6 +95,7 @@ export function AppLayout() {
   const isGreenhouseManagement = location.pathname === '/platform/data'
   const isEnvironmentWorkspace = location.pathname === '/platform/environment'
   const isInvestigationWorkspace = location.pathname === '/platform/investigate'
+  const isOperationsDesign = ['/platform/production','/platform/autonomy'].includes(location.pathname)
   const { item: currentItem, group: currentGroup } = resolveWorkspace(location.pathname, location.search)
   const currentPageName = currentItem?.label ?? '页面未找到'
 
@@ -204,7 +207,7 @@ export function AppLayout() {
   ]
 
   const openWorkspace = (key: string) => {
-    const child=workspaceGroups.find(group=>group.id==='knowledge')?.items.find(item=>item.key===key)
+    const child=workspaceGroups.flatMap(group=>group.items).find(item=>item.key===key)
     if(child){navigate(workspaceHref(child.key,location.search));if(isMobile)setCollapsed(true);return}
     const group = workspaceGroups.find(group => group.id === key)
     if (!group) return
@@ -219,7 +222,7 @@ export function AppLayout() {
 
   return (
     <ConfigProvider theme={platformTheme}>
-    <Layout id="pengzhi-platform" className={`app-shell commercial-app-shell exact-shell wb-shell pz-ui${['/platform/forum','/platform/knowledge','/platform/news'].includes(location.pathname) ? ' forum-workspace-shell' : ''}${location.pathname === '/platform/knowledge' ? ' knowledge-library-shell' : ''}${location.pathname === '/platform/news' ? ' news-editorial-shell' : ''}${isGreenhouseManagement ? ' greenhouse-management-shell' : ''}${isEnvironmentWorkspace ? ' environment-unified-shell' : ''}${isInvestigationWorkspace ? ' investigation-unified-shell' : ''}`}>
+    <Layout id="pengzhi-platform" className={`app-shell commercial-app-shell exact-shell wb-shell pz-ui unified-navigation-shell${['/platform/forum','/platform/knowledge','/platform/news'].includes(location.pathname) ? ' forum-workspace-shell' : ''}${location.pathname === '/platform/knowledge' ? ' knowledge-library-shell' : ''}${location.pathname === '/platform/news' ? ' news-editorial-shell' : ''}${isGreenhouseManagement ? ' greenhouse-management-shell' : ''}${isEnvironmentWorkspace ? ' environment-unified-shell' : ''}${isInvestigationWorkspace ? ' investigation-unified-shell' : ''}${isOperationsDesign ? ' operations-reference-shell' : ''}`}>
       <Sider
         className={`app-sider commercial-sider exact-sider ${collapsed ? 'is-collapsed' : ''}`}
         width={240}
@@ -229,14 +232,14 @@ export function AppLayout() {
       >
         <div className="brand commercial-brand exact-brand" onClick={() => navigate('/platform')} role="button" tabIndex={0} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') navigate('/platform') }}>
           <div className="brand-symbol commercial-brand-symbol exact-brand-symbol">棚</div>
-          {!collapsed && <div className="commercial-brand-copy exact-brand-copy"><strong>棚智未来</strong><span>会积累生产经验的 AI 农艺师</span></div>}
+          {!collapsed && <div className="commercial-brand-copy exact-brand-copy"><strong>棚智未来</strong><span>让大棚更聪明</span></div>}
         </div>
 
         {!collapsed && <button className="pz-sider-search" type="button" onClick={() => setNavigatorOpen(true)}><SearchOutlined /><span>查找功能</span><kbd>Ctrl K</kbd></button>}
         <Menu className="side-menu commercial-side-menu exact-side-menu" mode="inline" inlineCollapsed={collapsed}
-          selectedKeys={currentGroup ? [currentGroup.id==='knowledge'&&!collapsed?(currentItem?.key||'/platform/knowledge'):currentGroup.id] : []}
-          openKeys={!collapsed&&knowledgeExpanded?['knowledge']:[]}
-          items={makeMenuItems(newsUnread,{collapsed,expanded:knowledgeExpanded,toggle:()=>setKnowledgeExpanded(value=>!value),openDefault:()=>openWorkspace('knowledge')})}
+          selectedKeys={currentGroup ? [(['knowledge','production'].includes(currentGroup.id))&&!collapsed?(currentItem?.key||currentGroup.id):currentGroup.id] : []}
+          openKeys={collapsed ? [] : [...(knowledgeExpanded ? ['knowledge'] : []), ...(productionExpanded ? ['production'] : [])]}
+          items={makeMenuItems(newsUnread,{collapsed,expanded:knowledgeExpanded,toggle:()=>setKnowledgeExpanded(value=>!value),openDefault:()=>openWorkspace('knowledge')},{toggle:()=>setProductionExpanded(value=>!value)})}
           onClick={({ key }) => openWorkspace(key)} />
 
         <div className={`sider-bottom exact-sider-bottom ${collapsed ? 'is-collapsed' : ''}`}>
@@ -270,7 +273,7 @@ export function AppLayout() {
         </Header>
         <Content className={`app-content commercial-content exact-content wb-content${is3DPage ? ' is-3d-content' : ''}`}>
           <div className="wb-route-body">
-            {currentGroup && <WorkspaceSectionNav group={currentGroup} current={currentItem} search={location.search} newsUnread={newsUnread} />}
+            {currentGroup && currentGroup.id !== 'production' && <WorkspaceSectionNav group={currentGroup} current={currentItem} search={location.search} newsUnread={newsUnread} />}
             <div className="pz-workspace-page"><Outlet key={greenhouseFromUrl ?? 'empty'} /></div>
           </div>
         </Content>

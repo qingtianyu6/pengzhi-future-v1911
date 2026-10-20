@@ -2,7 +2,7 @@ import { getStoredUser } from '../../api/authApi'
 import { EvidenceSummary } from '../../components/EvidenceSummary'
 import { canOperate } from '../../utils/permissions'
 import { label } from '../../utils/labels'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import { Alert, Avatar, Button, Card, Col, Descriptions, Drawer, Empty, Form, Input, List, Modal, Row, Select, Space, Table, Tag, Timeline, Upload, message } from 'antd'
 import type { UploadFile } from 'antd/es/upload/interface'
@@ -66,6 +66,7 @@ export default function FarmTaskManagementPage() {
   const [detail, setDetail] = useState<TaskDetail | null>(null); const [trace, setTrace] = useState<TaskTrace | null>(null)
   const [loading, setLoading] = useState(true); const [error, setError] = useState<string | null>(null)
   const [createOpen, setCreateOpen] = useState(false); const [actionKind, setActionKind] = useState<ActionKind | null>(null)
+  const createRequestConsumed = useRef(false)
   const [saving, setSaving] = useState(false); const [feedbackFiles, setFeedbackFiles] = useState<UploadFile[]>([])
   const [createForm] = Form.useForm<ManualTaskInput>(); const [actionForm] = Form.useForm<ActionValues>()
   const [messageApi, messageContext] = message.useMessage()
@@ -104,7 +105,9 @@ export default function FarmTaskManagementPage() {
     return () => window.removeEventListener('guest-tasks-changed', refresh)
   }, [load])
   useEffect(() => {
-    if (searchParams.get('create') !== '1' || createOpen || !greenhouses.length) return
+    if (searchParams.get('create') !== '1') { createRequestConsumed.current = false; return }
+    if (createOpen || !greenhouses.length || createRequestConsumed.current) return
+    createRequestConsumed.current = true
     const greenhouse = Number(searchParams.get('greenhouse_id')) || greenhouseId || greenhouses[0]?.id
     const batch = Number(searchParams.get('batch_id')) || batchId || batches.find((item) => item.status === 'growing')?.id
     createForm.setFieldsValue({

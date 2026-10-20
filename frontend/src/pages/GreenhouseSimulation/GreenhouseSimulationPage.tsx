@@ -1,174 +1,101 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Alert, Button, Card, Col, Descriptions, Input, InputNumber, Row, Select, Slider, Space, Spin, Statistic, Switch, Table, Tag, Typography, message } from 'antd'
-import { ExperimentOutlined, PauseOutlined, PlayCircleOutlined, ReloadOutlined, StopOutlined } from '@ant-design/icons'
-import * as echarts from 'echarts/core'
-import { LineChart } from 'echarts/charts'
-import { GridComponent, LegendComponent, TooltipComponent } from 'echarts/components'
-import { CanvasRenderer } from 'echarts/renderers'
-echarts.use([LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer])
-import { simulationRequest as request, type Actions, type Comparison, type Environment, type Mode, type Scenario, type Snapshot } from '../../api/greenhouseSimulationApi'
+import { Alert, Button, Drawer, Empty, Skeleton, Tooltip, message } from 'antd'
+import { ArrowRightOutlined, CheckOutlined, ClockCircleOutlined, ControlOutlined, ExperimentOutlined, FileTextOutlined, BulbOutlined, PauseCircleOutlined, PlayCircleOutlined, PoweroffOutlined, SlidersOutlined, SwapOutlined } from '@ant-design/icons'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { simulationRequest as request, type Actions, type Snapshot } from '../../api/greenhouseSimulationApi'
 import { getApiErrorMessage } from '../../api/client'
-import { isGuestMode } from '../../api/guestMode'
-import './simulation.css'
+import { canOperate } from '../../utils/permissions'
+import { workspaceHref } from '../../layouts/workspaceNavigation'
+import SimulationControls from './SimulationControls'
+import './autonomy-design.css'
 
-const metrics: { key: keyof Environment; label: string; unit: string; min: number; max: number; step: number }[] = [
-  { key: 'air_temperature', label: '空气温度', unit: '℃', min: -10, max: 60, step: .1 },
-  { key: 'air_humidity', label: '空气湿度', unit: '%', min: 0, max: 100, step: .1 },
-  { key: 'soil_temperature', label: '土壤温度', unit: '℃', min: -10, max: 60, step: .1 },
-  { key: 'soil_moisture', label: '土壤含水率', unit: '%', min: 0, max: 100, step: .1 },
-  { key: 'light_lux', label: '光照强度', unit: 'lux', min: 0, max: 100000, step: 100 },
+const deviceNames: { key: keyof Actions; name: string; icon: typeof ControlOutlined }[] = [
+  { key:'fan', name:'通风风扇', icon:ControlOutlined }, { key:'pump', name:'灌溉泵', icon:ExperimentOutlined }, { key:'lamp', name:'补光灯', icon:BulbOutlined },
 ]
-const devices: { key: keyof Actions; label: string }[] = [{ key: 'fan', label: '通风风扇' }, { key: 'pump', label: '灌溉水泵' }, { key: 'lamp', label: '补光灯' }, { key: 'led', label: '指示灯' }]
-const modeNames = { manual: '手动接管', threshold: '基础自动 · 规则控制', predictive: '预测优化 · 候选动作搜索' }
-const statusNames: Record<string, string> = { planned: '计划执行', sent: '命令已发送', mock_confirmed: '虚拟 GPIO 已确认', gpio_confirmed: 'STM32 GPIO 已确认', failed: '发送失败 / 状态未知', expired: '租约结束 / 输出待查询' }
-const defaults: Environment = { air_temperature: 26, air_humidity: 65, soil_temperature: 24, soil_moisture: 55, light_lux: 16000 }
+const eventNames: Record<string,string> = { created:'建立调控会话', input_updated:'更新环境与调控目标', decision:'分析环境并计算控制方案', paused:'暂停自动托管', reset:'重置调控会话', emergency_stop:'触发紧急停止', fault_changed:'更新虚拟设备连接状态' }
+const commandNames: Record<string,string> = { planned:'等待下发指令', sent:'指令已发送', mock_confirmed:'收到虚拟设备回执', gpio_confirmed:'收到 GPIO 回执', expired:'指令租约结束', failed:'指令未确认' }
+function formatTime(at: number) { return new Date(at * 1000).toLocaleTimeString('zh-CN', { hour12:false }) }
 
-function Trend({ rows }: { rows: (Environment & { time: number })[] }) {
-  const element = useRef<HTMLDivElement>(null)
+function HumidityTrend({ state }: { state: Snapshot }) {
+  const element = useRef<SVGSVGElement>(null), [width, setWidth] = useState(760)
   useEffect(() => {
     if (!element.current) return
-    const chart = echarts.init(element.current)
-    chart.setOption({ tooltip: { trigger: 'axis' }, legend: { data: metrics.map(m => m.label), top: 0 },
-      grid: { left: 55, right: 65, top: 60, bottom: 40 }, xAxis: { type: 'category', name: '秒', data: rows.map(r => r.time) },
-      yAxis: [{ type: 'value', name: '℃ / %' }, { type: 'value', name: 'lux' }],
-      series: metrics.map(m => ({ name: m.label, type: 'line', showSymbol: false, smooth: true, yAxisIndex: m.key === 'light_lux' ? 1 : 0, data: rows.map(r => r[m.key]) })) })
-    const observer = new ResizeObserver(() => chart.resize()); observer.observe(element.current)
-    return () => { observer.disconnect(); chart.dispose() }
-  }, [rows])
-  return <div className="simulation-trend" ref={element} aria-label="模拟环境变化曲线" />
+    const observer = new ResizeObserver(entries => setWidth(Math.max(240, Math.round(entries[0].contentRect.width))))
+    observer.observe(element.current)
+    return () => observer.disconnect()
+  }, [])
+  const rows = state.history, height = 112, end = width - 20, currentX = 42 + (end - 42) * .79
+  const points = rows.map((row, i) => [42 + (i / Math.max(1, rows.length - 1)) * (currentX - 42), 90 - row.air_humidity * .72])
+  const line = points.map((p,i) => (i ? 'L' : 'M') + p.join(',')).join(' ')
+  const ty = 90 - state.target.air_humidity * .72
+  return <svg ref={element} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label="全棚模拟湿度历史与目标线">
+    <defs><linearGradient id="humidity-fill" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#b9d7bb" stopOpacity=".65"/><stop offset="1" stopColor="#e7efe4" stopOpacity=".1"/></linearGradient></defs>
+    {[40,60,80,100].map(v => <g key={v}><line x1="42" y1={90-v*.72} x2={end} y2={90-v*.72} stroke="#e2e8de"/><text x="28" y={94-v*.72} textAnchor="end">{v}%</text></g>)}
+    {[0,1,2,3,4,5].map(i => <line key={i} x1={42+(end-42)*i/5} y1="18" x2={42+(end-42)*i/5} y2="90" stroke="#e8ece4"/>)}
+    <line x1="42" x2={end} y1={ty} y2={ty} stroke="#74aa82" strokeDasharray="6 5"/>
+    <text x={end} y={ty-6} textAnchor="end" fill="#51946a">目标 {state.target.air_humidity}%</text>
+    {!!points.length && <><path d={line + ` L${points[points.length-1][0]},90 L42,90 Z`} fill="url(#humidity-fill)"/><path d={line} fill="none" stroke="#006147" strokeWidth="2"/><circle cx={points[points.length-1][0]} cy={points[points.length-1][1]} r="4" fill="#008c5c"/></>}
+    {!rows.length && <text x={(end+42)/2} y="54" textAnchor="middle">启动托管后记录模拟变化</text>}
+    <line x1="42" y1="90" x2={end} y2="90" stroke="#bbc9c2"/>
+    <text x="42" y="108">0 秒</text><text x={currentX} y="108" textAnchor="middle">当前 · {state.simulation_time} 秒</text>
+  </svg>
 }
 
 export default function GreenhouseSimulationPage() {
-  const [state, setState] = useState<Snapshot | null>(null)
-  const [scenarios, setScenarios] = useState<Scenario[]>([])
-  const [draft, setDraft] = useState<Environment>(defaults)
-  const [target, setTarget] = useState<Environment>(defaults)
-  const [manual, setManual] = useState<Actions>({ fan: false, pump: false, lamp: false, led: false })
-  const [mode, setMode] = useState<Mode>('threshold')
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
-  const [demo, setDemo] = useState(true)
-  const [sceneName, setSceneName] = useState('我的演示场景')
-  const [seed, setSeed] = useState(42)
-  const [steps, setSteps] = useState(120)
-  const [comparison, setComparison] = useState<Comparison | null>(null)
+  const [state, setState] = useState<Snapshot>(), [error, setError] = useState(''), [busy, setBusy] = useState(false)
+  const [panel, setPanel] = useState<'controls'|'records'|null>(null)
   const [msg, context] = message.useMessage()
-  const accept = useCallback((s: Snapshot, sync = false) => {
-    setState(s); setError('')
-    if (sync) { setDraft(s.environment); setTarget(s.target); setMode(s.mode); setManual(s.planned) }
+  const navigate = useNavigate(), location = useLocation(), requestVersion = useRef(0), mutating = useRef(false)
+  const refresh = useCallback(async () => {
+    if (mutating.current) return
+    const version = ++requestVersion.current
+    try { const result = await request<Snapshot>('/state'); if (version === requestVersion.current) { setState(result); setError('') } }
+    catch (e) { if (version === requestVersion.current) setError(getApiErrorMessage(e)) }
   }, [])
-  useEffect(() => {
-    let alive = true
-    let loading = false
-    const load = async (initial = false) => {
-      if (loading) return
-      loading = true
-      try {
-        const s = await request<Snapshot>('/state')
-        if (alive) accept(s, initial)
-        if (initial) { const list = await request<Scenario[]>('/scenarios'); if (alive) setScenarios(list) }
-      } catch (e) { if (alive) setError(getApiErrorMessage(e)) }
-      finally { loading = false }
-    }
-    void load(true)
-    const timer = window.setInterval(() => void load(), 2000)
-    return () => { alive = false; window.clearInterval(timer) }
-  }, [accept])
-  async function act(fn: () => Promise<void>) {
-    if (busy) return
-    setBusy(true)
-    try { await fn() } catch (e) { setError(getApiErrorMessage(e)) } finally { setBusy(false) }
+  useEffect(() => { const requests = requestVersion; void refresh(); const timer = window.setInterval(() => void refresh(), 2000); return () => { clearInterval(timer); requests.current++ } }, [refresh])
+  const action = async (fn: () => Promise<Snapshot>) => {
+    if (mutating.current || !canOperate()) return
+    mutating.current = true; requestVersion.current++; setBusy(true)
+    try { setState(await fn()); setError('') }
+    catch (e) { msg.error(getApiErrorMessage(e)) }
+    finally { mutating.current = false; setBusy(false) }
   }
-  async function operation(action: string) { accept(await request<Snapshot>('/operation', 'POST', { action }), action === 'reset') }
-  async function apply(start: boolean) {
-    accept(await request<Snapshot>('/state', 'PUT', { environment: draft, target, mode, ...(mode === 'manual' ? { manual } : {}) }))
-    if (start) await operation('start')
-    else { await operation('evaluate'); msg.success('后端已重新计算并下发；单次指令租约为4秒') }
+  const operation = (name: string) => action(() => request<Snapshot>('/operation','POST',{ action:name }))
+  const manual = async () => {
+    await action(() => request<Snapshot>('/state','PUT',{ mode:'manual', manual:{ fan:false,pump:false,lamp:false,led:false } }))
+    setPanel('controls')
   }
-  const chartRows = state?.history ?? []
-  return <div className="greenhouse-simulation">
+  const confirmed = state?.device.confirmed, running = !!state?.running
+  const activeDevices = deviceNames.filter(d => confirmed?.[d.key])
+  const deviation = state ? Math.abs(state.environment.air_humidity - state.target.air_humidity) : 0
+  const atTarget = deviation <= 2
+  const initialDeviation = state?.history.length ? Math.abs(state.history[0].air_humidity - state.target.air_humidity) : 0
+  const goalProgress = !state?.history.length ? 0 : atTarget ? 100 : initialDeviation > 0 ? Math.max(0, Math.min(100, (1 - deviation / initialDeviation) * 100)) : 0
+  const cycle = !state?.decision ? 0 : !state.device.confirmed ? 3 : state.running && state.history.length ? 4 : 3
+  const cycleItems = [{name:'感知',description:'采集环境数据'}, {name:'分析',description:'识别问题与成因'}, {name:'决策',description:'选择最优方案'}, {name:'执行',description:'发送控制指令'}, {name:'复核',description:'验证效果反馈'}]
+  return <div className="autonomy-design">
     {context}
-    <div className="simulation-hero"><div><Tag color="green">棚智自治</Tag><Tag>SIMULATION INPUT</Tag>
-      <Typography.Title level={2}>AI 温室模拟调控</Typography.Title>
-      <Typography.Paragraph>设定环境，观察决策，追踪每一条设备指令。</Typography.Paragraph></div>
-      <Space direction="vertical"><Tag color={state?.device.mode === 'real' ? 'orange' : 'cyan'}>{state?.device.mode === 'real' ? '真实串口模式' : '虚拟设备模式'}</Tag>
-        <Space><span>演示引导</span><Switch checked={demo} onChange={setDemo} /></Space></Space></div>
-    <Alert showIcon type="info" message="全部环境参数为模拟输入；示例目标仅用于演示，不是农业生产标准。GPIO 回执不代表实体设备已运转。" />
-    {isGuestMode() && <Alert type="success" message="游客演示使用独立虚拟会话，通过真实后端计算；无法访问实体串口。" />}
-    {demo && <Card size="small"><Space wrap><Tag>01 选择异常场景</Tag>→<Tag>02 调整参数与目标</Tag>→<Tag>03 启动自动调控</Tag>→<Tag>04 查看候选动作与虚拟反馈</Tag>→<Tag>05 观察变化 / 暂停 / 重置</Tag></Space></Card>}
-    {(error || state?.error) && <Alert type="error" showIcon message={error || state?.error} />}
-    {!state && !error && <Spin />}
-    <Row gutter={[16,16]}>{metrics.map(m => <Col xs={12} lg={m.key === 'light_lux' ? 8 : 4} key={m.key}>
-      <Card size="small"><Statistic title={m.label + ' · 模拟'} value={state?.environment[m.key] ?? 0} precision={m.key === 'light_lux' ? 0 : 1} suffix={m.unit} /></Card></Col>)}</Row>
-    <Row gutter={[16,16]}><Col xs={24} xl={11}>
-      <Card title="模拟环境与调控目标" extra={<Tag>后端统一校验</Tag>}>
-        <Select aria-label="模拟场景" placeholder="选择模拟场景" value={state?.scenario_id} style={{ width: '100%', marginBottom: 20 }} disabled={busy}
-          options={[...scenarios.map(s => ({ value: s.id, label: s.name })), { value: 'custom', label: '自定义环境' }]}
-          onChange={id => void act(async () => { accept(await request<Snapshot>('/state','PUT',{ scenario_id: id }),true) })} />
-        <div className="simulation-parameter-head"><span>模拟输入</span><span>环境目标 · 提交后生效</span></div>
-        {metrics.map(m => <div className="simulation-parameter" key={m.key}>
-          <label>{m.label} <small>{m.unit}</small></label><div className="simulation-inputs">
-            <InputNumber aria-label={m.label + '输入'} min={m.min} max={m.max} step={m.step} value={draft[m.key]} onChange={v => v !== null && setDraft(d => ({ ...d, [m.key]: v }))} />
-            <InputNumber aria-label={m.label + '目标'} min={m.min} max={m.max} step={m.step} value={target[m.key]} onChange={v => v !== null && setTarget(d => ({ ...d, [m.key]: v }))} /></div>
-          <Slider aria-label={m.label + '滑块'} min={m.min} max={m.max} step={m.step} value={draft[m.key]} onChange={v => setDraft(d => ({ ...d, [m.key]: v }))} /></div>)}
-        <Space.Compact style={{ width:'100%', marginBottom:16 }}><Input aria-label="自定义场景名称" value={sceneName} maxLength={60} onChange={e => setSceneName(e.target.value)} />
-          <Button disabled={busy || !sceneName.trim()} onClick={() => void act(async () => {
-            const saved = await request<Scenario>('/scenarios','POST',{ name:sceneName,environment:draft })
-            setScenarios(await request<Scenario[]>('/scenarios'))
-            accept(await request<Snapshot>('/state','PUT',{ scenario_id:saved.id }),true)
-            msg.success('自定义场景已保存')
-          })}>保存自定义场景</Button></Space.Compact>
-        <Select aria-label="控制模式" value={mode} style={{ width: '100%', marginBottom: 16 }} onChange={setMode}
-          options={Object.entries(modeNames).map(([value,label]) => ({ value,label }))} />
-        {mode === 'manual' && <Space wrap className="simulation-manual">{devices.map(d => <Space key={d.key}>{d.label}<Switch aria-label={d.label + '手动开关'} checked={manual[d.key]} onChange={v => setManual(a => ({ ...a, [d.key]: v }))} /></Space>)}</Space>}
-        <Space wrap><Button type="primary" icon={<PlayCircleOutlined />} disabled={busy || state?.emergency} onClick={() => void act(() => apply(true))}>启动{mode === 'manual' ? '手动控制' : '自动调控'}</Button>
-          <Button disabled={busy || state?.emergency} onClick={() => void act(() => apply(false))}>提交并单次计算</Button>
-          <Button aria-label="暂停" icon={<PauseOutlined />} disabled={busy} onClick={() => void act(() => operation('pause'))}>暂停</Button>
-          <Button aria-label="重置" icon={<ReloadOutlined />} disabled={busy} onClick={() => void act(() => operation('reset'))}>重置</Button>
-          <Button aria-label="紧急停止" danger icon={<StopOutlined />} onClick={() => void operation('estop').catch(e => setError(getApiErrorMessage(e)))}>紧急停止</Button></Space>
-      </Card></Col><Col xs={24} xl={13}>
-      <Card title="控制链路与执行证据" extra={<Tag color={state?.running ? 'green' : 'default'}>{state?.running ? '运行中' : state?.emergency ? '急停锁定' : '已暂停'}</Tag>}>
-        <Descriptions size="small" column={{ xs: 1, md: 2 }} items={[
-          { key:'mode',label:'当前模式',children:state && modeNames[state.mode] },
-          { key:'clock',label:'模拟时间',children:`${state?.simulation_time ?? 0} 秒` },
-          { key:'link',label:'连接',children:state?.device.connected ? '协议已连接' : '未连接 / 待确认' },
-          { key:'status',label:'命令状态',children:statusNames[state?.device.status ?? 'planned'] },
-          { key:'seq',label:'最近回执编号',children:state?.device.last_ack?.sequence ?? '—' },
-          { key:'physical',label:'实体运行验证',children:<Tag>HARDWARE_PENDING</Tag> },
-        ]} />
-        <Typography.Paragraph type="secondary">当前已提交目标：{metrics.map(m => `${m.label} ${state?.target[m.key] ?? '—'}${m.unit}`).join(' / ')}</Typography.Paragraph>
-        <Table size="small" pagination={false} rowKey="key" dataSource={devices} columns={[
-          { title:'设备',dataIndex:'label' },
-          { title:'控制器计划',render:(_,d) => state?.planned[d.key] ? '开启' : '关闭' },
-          { title:state?.device.mode === 'real' ? 'GPIO 回执' : '虚拟 GPIO 回执',render:(_,d) => state?.device.confirmed ? (state.device.confirmed[d.key] ? '设置为开' : '设置为关') : '未知' },
-        ]} />
-        <Typography.Paragraph className="simulation-reason">{state?.decision?.reason ?? '等待提交环境并启动控制。'}</Typography.Paragraph>
-        {state?.decision?.constraints.map(c => <Tag key={c}>{c}</Tag>)}
-        <Typography.Paragraph type="secondary">控制每2秒评估；页面离开15秒自动暂停。急停后需要重置。无加热、除湿或遮阳设备时，部分目标可能无法达到。</Typography.Paragraph>
-        {state?.device.mode === 'mock' && <Space wrap><span>故障注入</span>{[{value:'disconnect',label:'模拟断连'},{value:'timeout',label:'模拟超时'},{value:'none',label:'恢复连接'}].map(f => <Button key={f.value} disabled={busy} onClick={() => void act(async () => accept(await request<Snapshot>('/fault','POST',{fault:f.value}))) }>{f.label}</Button>)}</Space>}
-        {state?.device.oled && <pre className="simulation-oled">虚拟 OLED · SIM INPUT{'\n'}{metrics.map(m => `${m.label}: ${state.device.oled?.[m.key]} ${m.unit}`).join('\n')}</pre>}
-      </Card>
-      <Card title="模拟环境变化曲线"><Trend rows={chartRows} /></Card>
-    </Col></Row>
-    <Card title="最近一次可行候选动作" extra={<Tag>每次重新计算</Tag>}><Table size="small" rowKey={r => JSON.stringify(r.action)} pagination={false} dataSource={state?.decision?.candidates ?? []} columns={[
-      { title:'风扇', render:(_,r) => r.action.fan ? '开' : '关' },{ title:'水泵',render:(_,r) => r.action.pump ? '开' : '关' },{ title:'补光灯',render:(_,r) => r.action.lamp ? '开' : '关' },
-      { title:'预测总代价（越小越好）',dataIndex:'score',render:(v: number | null) => v === null ? '规则/手动不计算代价' : v.toFixed(5) },
-    ]} /></Card>
-    <Card title="控制策略对比实验" extra={<ExperimentOutlined />}>
-      <Alert type="warning" message="软件仿真对比结果，非真实温室实验。相同初值、目标和扰动序列；不保证预测优化优于规则控制。" />
-      <Space wrap className="simulation-experiment"><span>随机种子</span><InputNumber aria-label="随机种子" min={0} max={2147483647} value={seed} onChange={v => v !== null && setSeed(v)} />
-        <span>步数（每步2秒）</span><InputNumber aria-label="实验步数" min={10} max={600} value={steps} onChange={v => v !== null && setSteps(v)} />
-        <Button loading={busy} onClick={() => void act(async () => setComparison(await request<Comparison>('/experiment','POST',{initial:draft,target,seed,steps})))}>运行对比实验</Button></Space>
-      <Table size="small" rowKey="mode" pagination={false} dataSource={comparison?.results ?? []} scroll={{x:800}} columns={[
-        {title:'策略',dataIndex:'mode',render:(m:Mode) => modeNames[m]},
-        {title:'平均归一化目标偏差',dataIndex:'mean_target_deviation',render:(v:number) => v.toFixed(4)},
-        {title:'控制步数',dataIndex:'control_steps'}, {title:'开启时长 / 秒',render:(_,r) => `风扇${r.on_seconds.fan} / 泵${r.on_seconds.pump} / 灯${r.on_seconds.lamp}`},
-        {title:'启停次数',dataIndex:'switches'}, {title:'能耗代理（非kWh）',dataIndex:'energy_proxy',render:(v:number) => v.toFixed(3)}, {title:'灌溉秒数',dataIndex:'irrigation_seconds'},
-      ]} />
-      {comparison && <Typography.Text type="secondary">已运行：seed={comparison.parameters.seed}，steps={comparison.parameters.steps}。这是当前模型与参数下的结果，不构成实棚性能结论。</Typography.Text>}
-    </Card>
-    <Row gutter={[16,16]}><Col xs={24} xl={12}><Card title="设备执行与决策日志"><Table size="small" rowKey={(_,i) => String(i)} dataSource={state?.events ?? []} pagination={{pageSize:6}} columns={[
-      {title:'时间',dataIndex:'at',render:(v:number) => new Date(v*1000).toLocaleTimeString()}, {title:'事件',dataIndex:'event'}, {title:'状态',dataIndex:'command_status',render:(v:string) => statusNames[v] ?? v}, {title:'异常',dataIndex:'error'},
-    ]} /></Card></Col><Col xs={24} xl={12}><Card title="串口协议收发日志"><div className="simulation-wire">{state?.wire_logs.slice(-24).map((l,i) => <div key={i}><Tag>{l.direction}</Tag><code>{l.frame}</code></div>)}</div></Card></Col></Row>
+    <header className="autonomy-design-title"><h1>棚智自治</h1><p>围绕目标，持续感知、执行与复核。</p></header>
+    {error && <Alert type="error" showIcon message="调控状态读取失败" description={error} action={<Button onClick={() => void refresh()}>重试</Button>} />}
+    {!state ? !error && <Skeleton active paragraph={{ rows:12 }} /> : <>
+      <div className={'autonomy-status-bar' + (state.emergency ? ' is-emergency' : '')}><div className="autonomy-pulse">ϟ</div><strong>{state.emergency ? '急停已锁定' : running ? '托管运行中' : state.mode === 'manual' ? '人工接管中' : '托管已暂停'}</strong><span className="autonomy-status-divider"/><span className="autonomy-mode-label">{state.device.mode === 'real' ? '串口控制' : '仿真运行'}</span><span className="autonomy-run-summary">近期 {state.events.filter(e => e.event === 'decision').length} 次决策 <i>·</i> 已运行 {state.simulation_time < 60 ? state.simulation_time + ' 秒' : Math.floor(state.simulation_time / 60) + ' 分钟'}</span><div className="autonomy-status-actions"><Button aria-label={running ? '暂停托管' : state.mode === 'manual' ? '启动手动控制' : '启动托管'} disabled={busy || state.emergency || !canOperate()} icon={running ? <PauseCircleOutlined/> : <PlayCircleOutlined/>} onClick={() => void operation(running ? 'pause' : 'start')}>{running ? '暂停托管' : state.mode === 'manual' ? '启动手动控制' : '启动托管'}</Button><Button aria-label="人工接管" type="primary" icon={<ControlOutlined/>} disabled={busy || !canOperate()} onClick={() => void manual()}>人工接管</Button></div></div>
+      <div className="autonomy-main-grid">
+        <aside className="autonomy-goals"><h2>当前生产目标</h2><button type="button" className="autonomy-target-card" onClick={() => setPanel('controls')}><span className="autonomy-drop">♧</span><span><b>稳定环境湿度</b><strong>{state.target.air_humidity}<small>%</small></strong><small>保持作物适宜的生长环境。</small></span></button><h3>约束条件</h3><ul className="autonomy-constraints"><li><ExperimentOutlined/><span>水泵连续运行</span><b>≤ 8 秒</b></li><li><SwapOutlined/><span>停机冷却间隔</span><b>≥ 12 秒</b></li><li><ClockCircleOutlined/><span>复核间隔</span><b>{state.decision?.next_evaluation_seconds ?? 2} 秒</b></li></ul>
+          <div className="autonomy-device-heading"><h3>控制对象</h3><small>（{state.device.mode === 'mock' ? '虚拟设备回执' : 'GPIO 回执'}）</small></div><div className="autonomy-device-list">{deviceNames.map(({key,name,icon:Icon}) => <button type="button" key={key} onClick={() => setPanel('controls')}><Icon/><span>{name}</span><b className={confirmed?.[key] ? 'active' : ''}><i/>{confirmed ? confirmed[key] ? '已确认开启' : '已确认关闭' : '等待回执'}</b><ArrowRightOutlined/></button>)}</div>
+        </aside>
+        <section className="autonomy-cycle" aria-label="自主调控循环"><div className="autonomy-section-heading"><h2>当前自主循环</h2><span className="autonomy-outline-badge">{state.emergency ? '已停止' : running ? '正在执行' : '等待启动'}</span></div><ol className="autonomy-cycle-steps">{cycleItems.map((s,i) => <li key={s.name} className={(state.decision && i < cycle ? 'completed ' : '') + (running && i === cycle ? 'active' : '')}><span>{state.decision && i < cycle ? <CheckOutlined/> : ''}</span><strong>{s.name}</strong><small>{s.description}</small></li>)}</ol>
+          <div className="autonomy-greenhouse-scene"><div className="autonomy-scene-command">{activeDevices.length ? activeDevices.map(d => d.name).join('、') + '已开启' : '等待调控指令'}</div><img src="/images/autonomy/greenhouse-cutaway-v1.png" alt="温室空间示意图，非实时设备画面"/><span className="autonomy-north">北<br/>♧</span><Tooltip title="当前仿真使用全棚环境模型，没有独立分区测量值"><div className="autonomy-zone-value west"><small>西侧</small><strong>—</strong></div></Tooltip><div className={'autonomy-zone-value center' + (deviation > 5 ? ' warning' : '')}><small>全棚模拟</small><strong>{state.environment.air_humidity.toFixed(1)}%</strong></div><Tooltip title="未接入独立东侧测量值"><div className="autonomy-zone-value east"><small>东侧</small><strong>—</strong></div></Tooltip><div className="autonomy-scene-zones"><span>西侧区域</span><span>中央区域</span><span>东侧区域</span></div></div>
+          <div className="autonomy-current-action"><div className="autonomy-action-icon"><ControlOutlined/></div><div><h3>{state.emergency ? '已紧急停止' : running ? activeDevices.length ? '正在执行：' + activeDevices.map(d => d.name).join('、') : '正在执行：持续监测' : '等待启动自动托管'}</h3><p>{state.decision?.reason || '依据环境与目标计算调控方案。'}</p></div><span>{running ? '下次复核' : '复核间隔'}<b>{state.decision?.next_evaluation_seconds ?? 2}</b> 秒</span><div className="autonomy-action-track" role="progressbar" aria-label="湿度接近目标进度" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(goalProgress)}><i style={{width: goalProgress + '%'}}/></div></div>
+          <div className="autonomy-action-note"><ClockCircleOutlined/><span>{state.error || (running ? '持续比较目标与模拟环境；满足条件后重新计算控制动作。' : '设置目标后启动托管，观察决策与设备反馈。')}</span></div>
+        </section>
+        <aside className="autonomy-records"><div className="autonomy-section-heading"><h2>自主运行记录</h2><span><i/>{error ? '连接异常' : '实时更新'}</span></div><ol>{state.events.slice(0,5).reverse().map((event,i) => <li key={event.at + ':' + i} className={event.error ? 'failed' : ''}><i/><time>{formatTime(event.at)}</time><div><strong>{eventNames[event.event] || event.event}</strong><p>{event.error || commandNames[event.command_status] || event.command_status}</p></div></li>)}{running && <li className="waiting"><i/><time>{state.events[0] ? formatTime(state.events[0].at) : '—'}</time><div><strong>等待复测反馈</strong><p>复核间隔 {state.decision?.next_evaluation_seconds ?? 2} 秒 · 软件仿真</p></div></li>}</ol><button className="autonomy-record-link" type="button" onClick={() => setPanel('records')}>查看完整运行记录 <ArrowRightOutlined/></button></aside>
+      </div>
+      <section className="autonomy-trend-card"><div><h2>目标与变化</h2><p>全棚环境湿度变化<br/><small>（模拟数据）</small></p></div><HumidityTrend state={state}/><div className="autonomy-current-reading"><small>当前模拟</small><strong>{state.environment.air_humidity.toFixed(1)}%</strong><span className={atTarget ? 'reached' : ''}>{atTarget ? '已接近目标' : '目标尚未达成'}</span></div></section>
+      <footer className="autonomy-bottom-links">{[{name:'观察档案',tab:'archive'},{name:'方案比较',tab:'controls'},{name:'研究记录',tab:'studies'},{name:'农艺技能',tab:'skills'},{name:'目标编排',tab:'goals'}].map(({name,tab}) => <button type="button" key={tab} aria-label={name} onClick={() => tab === 'controls' ? setPanel('controls') : navigate(workspaceHref('/platform/research?tab='+tab,location.search))}><FileTextOutlined/>{name}</button>)}<button type="button" onClick={() => setPanel('controls')}><SlidersOutlined/>调控设置</button><span>软件仿真 · 设备回执不代表实物已运转</span></footer>
+    </>}
+    <Drawer title={panel === 'records' ? '自主运行记录' : '调控设置与方案比较'} width="min(1240px,98vw)" push={false} open={panel !== null} onClose={() => { setPanel(null); void refresh() }} destroyOnHidden>
+      {panel === 'controls' && <SimulationControls/>}
+      {panel === 'records' && <div className="autonomy-full-records">{state?.events.length ? state.events.map((event,i) => <article key={event.at+':'+i}><time>{formatTime(event.at)}</time><strong>{eventNames[event.event] || event.event}</strong><p>{event.error || event.decision?.reason || commandNames[event.command_status]}</p></article>) : <Empty description="暂无运行记录"/>}<Button icon={<PoweroffOutlined/>} danger disabled={busy || !canOperate()} onClick={() => void operation('estop')}>紧急停止</Button></div>}
+    </Drawer>
   </div>
 }

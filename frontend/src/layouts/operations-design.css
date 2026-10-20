@@ -1,0 +1,7 @@
+/* Content layout specific to the two production reference pages. */
+#pengzhi-platform.operations-reference-shell{background:#f8f7f1!important}
+#pengzhi-platform.operations-reference-shell .exact-content{padding:18px 28px 0 30px!important;background:#f8f7f1!important}
+#pengzhi-platform.operations-reference-shell .pz-workspace-page{max-width:none!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#pengzhi-platform.operations-reference-shell .wb-route-body{max-width:none!important;gap:0!important}
+@media(max-width:1200px){#pengzhi-platform.operations-reference-shell .exact-content{padding:20px!important}}
+@media(max-width:620px){#pengzhi-platform.operations-reference-shell .exact-content{padding:20px 18px!important}}
