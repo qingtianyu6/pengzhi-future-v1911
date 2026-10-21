@@ -25,7 +25,8 @@ function HumidityTrend({ state }: { state: Snapshot }) {
     return () => observer.disconnect()
   }, [])
   const rows = state.history, height = 112, end = width - 20, currentX = 42 + (end - 42) * .79
-  const points = rows.map((row, i) => [42 + (i / Math.max(1, rows.length - 1)) * (currentX - 42), 90 - row.air_humidity * .72])
+  const start = rows[0]?.time ?? 0, finish = rows.at(-1)?.time ?? state.simulation_time
+  const points = rows.map(row => [42 + ((row.time - start) / Math.max(1, finish - start)) * (currentX - 42), 90 - row.air_humidity * .72])
   const line = points.map((p,i) => (i ? 'L' : 'M') + p.join(',')).join(' ')
   const ty = 90 - state.target.air_humidity * .72
   return <svg ref={element} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label="全棚模拟湿度历史与目标线">
@@ -37,26 +38,46 @@ function HumidityTrend({ state }: { state: Snapshot }) {
     {!!points.length && <><path d={line + ` L${points[points.length-1][0]},90 L42,90 Z`} fill="url(#humidity-fill)"/><path d={line} fill="none" stroke="#006147" strokeWidth="2"/><circle cx={points[points.length-1][0]} cy={points[points.length-1][1]} r="4" fill="#008c5c"/></>}
     {!rows.length && <text x={(end+42)/2} y="54" textAnchor="middle">启动托管后记录模拟变化</text>}
     <line x1="42" y1="90" x2={end} y2="90" stroke="#bbc9c2"/>
-    <text x="42" y="108">0 秒</text><text x={currentX} y="108" textAnchor="middle">当前 · {state.simulation_time} 秒</text>
+    <text x="42" y="108">{start} 秒</text><text x={currentX} y="108" textAnchor="middle">当前 · {state.simulation_time} 秒</text>
   </svg>
 }
 
 export default function GreenhouseSimulationPage() {
   const [state, setState] = useState<Snapshot>(), [error, setError] = useState(''), [busy, setBusy] = useState(false)
   const [panel, setPanel] = useState<'controls'|'records'|null>(null)
+  const [updatedAt, setUpdatedAt] = useState<number>()
+  const inFlight = useRef<Promise<void> | null>(null), failures = useRef(0)
   const [msg, context] = message.useMessage()
   const navigate = useNavigate(), location = useLocation(), requestVersion = useRef(0), mutating = useRef(false)
-  const refresh = useCallback(async () => {
-    if (mutating.current) return
+  const refresh = useCallback((): Promise<void> => {
+    if (mutating.current) return Promise.resolve()
+    if (inFlight.current) return inFlight.current
     const version = ++requestVersion.current
-    try { const result = await request<Snapshot>('/state'); if (version === requestVersion.current) { setState(result); setError('') } }
-    catch (e) { if (version === requestVersion.current) setError(getApiErrorMessage(e)) }
+    const pending = (async () => {
+      try {
+        const result = await request<Snapshot>('/state')
+        if (version === requestVersion.current) { setState(result); setError(''); setUpdatedAt(Date.now()); failures.current = 0 }
+      } catch (e) {
+        if (version === requestVersion.current) { setError(getApiErrorMessage(e)); failures.current++ }
+      } finally { inFlight.current = null }
+    })()
+    inFlight.current = pending
+    return pending
   }, [])
-  useEffect(() => { const requests = requestVersion; void refresh(); const timer = window.setInterval(() => void refresh(), 2000); return () => { clearInterval(timer); requests.current++ } }, [refresh])
+  useEffect(() => {
+    let active = true, timer: number | undefined
+    const poll = async () => {
+      await refresh()
+      if (active) timer = window.setTimeout(() => void poll(), Math.min(8000, 2000 * 2 ** Math.min(failures.current, 2)))
+    }
+    void poll()
+    const requests = requestVersion
+    return () => { active = false; window.clearTimeout(timer); requests.current++ }
+  }, [refresh])
   const action = async (fn: () => Promise<Snapshot>) => {
     if (mutating.current || !canOperate()) return
     mutating.current = true; requestVersion.current++; setBusy(true)
-    try { setState(await fn()); setError('') }
+    try { setState(await fn()); setError(''); setUpdatedAt(Date.now()); failures.current = 0 }
     catch (e) { msg.error(getApiErrorMessage(e)) }
     finally { mutating.current = false; setBusy(false) }
   }
@@ -69,13 +90,14 @@ export default function GreenhouseSimulationPage() {
   const activeDevices = deviceNames.filter(d => confirmed?.[d.key])
   const deviation = state ? Math.abs(state.environment.air_humidity - state.target.air_humidity) : 0
   const atTarget = deviation <= 2
-  const initialDeviation = state?.history.length ? Math.abs(state.history[0].air_humidity - state.target.air_humidity) : 0
+  const initialDeviation = state?.humidity_baseline ?? 0
   const goalProgress = !state?.history.length ? 0 : atTarget ? 100 : initialDeviation > 0 ? Math.max(0, Math.min(100, (1 - deviation / initialDeviation) * 100)) : 0
   const cycle = !state?.decision ? 0 : !state.device.confirmed ? 3 : state.running && state.history.length ? 4 : 3
   const cycleItems = [{name:'感知',description:'采集环境数据'}, {name:'分析',description:'识别问题与成因'}, {name:'决策',description:'选择最优方案'}, {name:'执行',description:'发送控制指令'}, {name:'复核',description:'验证效果反馈'}]
   return <div className="autonomy-design">
     {context}
     <header className="autonomy-design-title"><h1>棚智自治</h1><p>围绕目标，持续感知、执行与复核。</p></header>
+    <div className="autonomy-data-status" role="status"><span>独立仿真实验 · 不随顶部大棚切换</span><span>{updatedAt ? `最近更新 ${new Date(updatedAt).toLocaleTimeString('zh-CN', { hour12: false })}${error ? ' · 数据可能已过期' : ''}` : '正在连接仿真服务'}</span></div>
     {error && <Alert type="error" showIcon message="调控状态读取失败" description={error} action={<Button onClick={() => void refresh()}>重试</Button>} />}
     {!state ? !error && <Skeleton active paragraph={{ rows:12 }} /> : <>
       <div className={'autonomy-status-bar' + (state.emergency ? ' is-emergency' : '')}><div className="autonomy-pulse">ϟ</div><strong>{state.emergency ? '急停已锁定' : running ? '托管运行中' : state.mode === 'manual' ? '人工接管中' : '托管已暂停'}</strong><span className="autonomy-status-divider"/><span className="autonomy-mode-label">{state.device.mode === 'real' ? '串口控制' : '仿真运行'}</span><span className="autonomy-run-summary">近期 {state.events.filter(e => e.event === 'decision').length} 次决策 <i>·</i> 已运行 {state.simulation_time < 60 ? state.simulation_time + ' 秒' : Math.floor(state.simulation_time / 60) + ' 分钟'}</span><div className="autonomy-status-actions"><Button aria-label={running ? '暂停托管' : state.mode === 'manual' ? '启动手动控制' : '启动托管'} disabled={busy || state.emergency || !canOperate()} icon={running ? <PauseCircleOutlined/> : <PlayCircleOutlined/>} onClick={() => void operation(running ? 'pause' : 'start')}>{running ? '暂停托管' : state.mode === 'manual' ? '启动手动控制' : '启动托管'}</Button><Button aria-label="人工接管" type="primary" icon={<ControlOutlined/>} disabled={busy || !canOperate()} onClick={() => void manual()}>人工接管</Button></div></div>
@@ -85,12 +107,12 @@ export default function GreenhouseSimulationPage() {
         </aside>
         <section className="autonomy-cycle" aria-label="自主调控循环"><div className="autonomy-section-heading"><h2>当前自主循环</h2><span className="autonomy-outline-badge">{state.emergency ? '已停止' : running ? '正在执行' : '等待启动'}</span></div><ol className="autonomy-cycle-steps">{cycleItems.map((s,i) => <li key={s.name} className={(state.decision && i < cycle ? 'completed ' : '') + (running && i === cycle ? 'active' : '')}><span>{state.decision && i < cycle ? <CheckOutlined/> : ''}</span><strong>{s.name}</strong><small>{s.description}</small></li>)}</ol>
           <div className="autonomy-greenhouse-scene"><div className="autonomy-scene-command">{activeDevices.length ? activeDevices.map(d => d.name).join('、') + '已开启' : '等待调控指令'}</div><img src="/images/autonomy/greenhouse-cutaway-v1.png" alt="温室空间示意图，非实时设备画面"/><span className="autonomy-north">北<br/>♧</span><Tooltip title="当前仿真使用全棚环境模型，没有独立分区测量值"><div className="autonomy-zone-value west"><small>西侧</small><strong>—</strong></div></Tooltip><div className={'autonomy-zone-value center' + (deviation > 5 ? ' warning' : '')}><small>全棚模拟</small><strong>{state.environment.air_humidity.toFixed(1)}%</strong></div><Tooltip title="未接入独立东侧测量值"><div className="autonomy-zone-value east"><small>东侧</small><strong>—</strong></div></Tooltip><div className="autonomy-scene-zones"><span>西侧区域</span><span>中央区域</span><span>东侧区域</span></div></div>
-          <div className="autonomy-current-action"><div className="autonomy-action-icon"><ControlOutlined/></div><div><h3>{state.emergency ? '已紧急停止' : running ? activeDevices.length ? '正在执行：' + activeDevices.map(d => d.name).join('、') : '正在执行：持续监测' : '等待启动自动托管'}</h3><p>{state.decision?.reason || '依据环境与目标计算调控方案。'}</p></div><span>{running ? '下次复核' : '复核间隔'}<b>{state.decision?.next_evaluation_seconds ?? 2}</b> 秒</span><div className="autonomy-action-track" role="progressbar" aria-label="湿度接近目标进度" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(goalProgress)}><i style={{width: goalProgress + '%'}}/></div></div>
+          <div className="autonomy-current-action"><div className="autonomy-action-icon"><ControlOutlined/></div><div><h3>{state.emergency ? '已紧急停止' : running ? activeDevices.length ? '正在执行：' + activeDevices.map(d => d.name).join('、') : '正在执行：持续监测' : '等待启动自动托管'}</h3><p>{state.decision?.reason || '依据环境与目标计算调控方案。'}</p></div><span>{running ? '下次复核' : '复核间隔'}<b>{state.decision?.next_evaluation_seconds ?? 2}</b> 秒</span><div className="autonomy-action-track" role="progressbar" aria-label="相对本轮设置起点的湿度接近目标进度" title="相对本轮环境与目标设置起点计算，不代表生产任务完成率" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(goalProgress)}><i style={{width: goalProgress + '%'}}/></div></div>
           <div className="autonomy-action-note"><ClockCircleOutlined/><span>{state.error || (running ? '持续比较目标与模拟环境；满足条件后重新计算控制动作。' : '设置目标后启动托管，观察决策与设备反馈。')}</span></div>
         </section>
         <aside className="autonomy-records"><div className="autonomy-section-heading"><h2>自主运行记录</h2><span><i/>{error ? '连接异常' : '实时更新'}</span></div><ol>{state.events.slice(0,5).reverse().map((event,i) => <li key={event.at + ':' + i} className={event.error ? 'failed' : ''}><i/><time>{formatTime(event.at)}</time><div><strong>{eventNames[event.event] || event.event}</strong><p>{event.error || commandNames[event.command_status] || event.command_status}</p></div></li>)}{running && <li className="waiting"><i/><time>{state.events[0] ? formatTime(state.events[0].at) : '—'}</time><div><strong>等待复测反馈</strong><p>复核间隔 {state.decision?.next_evaluation_seconds ?? 2} 秒 · 软件仿真</p></div></li>}</ol><button className="autonomy-record-link" type="button" onClick={() => setPanel('records')}>查看完整运行记录 <ArrowRightOutlined/></button></aside>
       </div>
-      <section className="autonomy-trend-card"><div><h2>目标与变化</h2><p>全棚环境湿度变化<br/><small>（模拟数据）</small></p></div><HumidityTrend state={state}/><div className="autonomy-current-reading"><small>当前模拟</small><strong>{state.environment.air_humidity.toFixed(1)}%</strong><span className={atTarget ? 'reached' : ''}>{atTarget ? '已接近目标' : '目标尚未达成'}</span></div></section>
+      <section className="autonomy-trend-card" data-assistant-clearance><div><h2>目标与变化</h2><p>全棚环境湿度变化<br/><small>（模拟数据）</small></p></div><HumidityTrend state={state}/><div className="autonomy-current-reading"><small>当前模拟</small><strong>{state.environment.air_humidity.toFixed(1)}%</strong><span className={atTarget ? 'reached' : ''}>{atTarget ? '已接近目标' : '目标尚未达成'}</span></div></section>
       <footer className="autonomy-bottom-links">{[{name:'观察档案',tab:'archive'},{name:'方案比较',tab:'controls'},{name:'研究记录',tab:'studies'},{name:'农艺技能',tab:'skills'},{name:'目标编排',tab:'goals'}].map(({name,tab}) => <button type="button" key={tab} aria-label={name} onClick={() => tab === 'controls' ? setPanel('controls') : navigate(workspaceHref('/platform/research?tab='+tab,location.search))}><FileTextOutlined/>{name}</button>)}<button type="button" onClick={() => setPanel('controls')}><SlidersOutlined/>调控设置</button><span>软件仿真 · 设备回执不代表实物已运转</span></footer>
     </>}
     <Drawer title={panel === 'records' ? '自主运行记录' : '调控设置与方案比较'} width="min(1240px,98vw)" push={false} open={panel !== null} onClose={() => { setPanel(null); void refresh() }} destroyOnHidden>

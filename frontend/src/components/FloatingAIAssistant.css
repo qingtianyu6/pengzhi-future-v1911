@@ -132,3 +132,8 @@
   .assistant-live-companion strong { font-size: 14px; }
 }
 @media(max-height:620px) { .assistant-live-companion { flex-basis: 74px; }.assistant-live-companion .mascot-three-view { width: 65px; height: 72px; } }
+
+/* Persistent, easy-to-hit controls; manual placement preferences stay untouched. */
+.pengxiaozhi-dock .assistant-dock-controls{height:auto;min-height:32px;flex-wrap:wrap}
+.pengxiaozhi-dock .assistant-dock-controls>button:not(.assistant-warning-pill){width:32px;height:32px;opacity:1}
+@media(max-width:620px){.pengxiaozhi-dock .assistant-dock-controls{gap:4px;justify-content:center}.pengxiaozhi-dock .assistant-dock-controls>button:not(.assistant-warning-pill){width:44px;height:44px}.pengxiaozhi-dock .assistant-dock-controls .assistant-warning-pill{margin:0 auto;max-width:100%}}

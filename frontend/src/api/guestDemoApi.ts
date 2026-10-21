@@ -228,8 +228,17 @@ function guestTaskPage(config: InternalAxiosRequestConfig) {
     (!filters.status || task.status === filters.status) &&
     (!filters.priority || task.priority === filters.priority) &&
     (!filters.source_type || task.source_type === filters.source_type) &&
-    (!filters.assignee_name || task.assignee_name?.includes(String(filters.assignee_name)))
+    (!filters.assignee_name || task.assignee_name?.includes(String(filters.assignee_name))) &&
+    (!filters.crop_batch_id || task.crop_batch_id === Number(filters.crop_batch_id)) &&
+    (!filters.status_group || ['draft', 'pending'].includes(task.status)) &&
+    (!filters.q || `${task.title} ${task.description} ${task.assignee_name ?? ''} ${task.task_code}`.includes(String(filters.q).trim())) &&
+    (!filters.start_time || new Date(task.created_at) >= new Date(String(filters.start_time))) &&
+    (!filters.end_time || new Date(task.created_at) <= new Date(String(filters.end_time))) &&
+    (!filters.scheduled_start || !!(task.planned_start_at || task.due_at) && new Date((task.planned_start_at || task.due_at)!) >= new Date(String(filters.scheduled_start))) &&
+    (!filters.scheduled_end || !!(task.planned_start_at || task.due_at) && new Date((task.planned_start_at || task.due_at)!) < new Date(String(filters.scheduled_end)))
   )
+  const scheduledTime = (task: FarmTask) => task.planned_start_at || task.due_at ? new Date((task.planned_start_at || task.due_at)!).getTime() : Infinity
+  filtered.sort((a, b) => filters.sort === 'schedule' ? scheduledTime(a) - scheduledTime(b) || a.id - b.id : new Date(b.created_at).getTime() - new Date(a.created_at).getTime() || b.id - a.id)
   const number = Number(filters.page) || 1
   const size = Number(filters.page_size) || 10
   return { items: filtered.slice((number - 1) * size, number * size), total: filtered.length, page: number, page_size: size }
@@ -238,6 +247,7 @@ function guestTaskPage(config: InternalAxiosRequestConfig) {
 function guestTaskSummary(greenhouseId?: number) {
   const current = tasks.filter((task) => !greenhouseId || task.greenhouse_id === greenhouseId)
   return {
+    total: current.length, completed_total: current.filter(task => task.status === 'completed').length,
     draft_total: current.filter((task) => task.status === 'draft').length,
     pending_total: current.filter((task) => task.status === 'pending').length,
     in_progress_total: current.filter((task) => task.status === 'in_progress').length,

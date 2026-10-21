@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { communityRequest } from '../../api/communityApi'
-import { newsCategory, newsImage, newsUrl, type NewsItem } from './newsPresentation'
+import { newsCategory, newsUrl, type NewsItem } from './newsPresentation'
 
 type Result = { status: string; image_url: string | null; article_url?: string; alt?: string }
 const cache = new Map<string, { expires: number; result: Promise<Result> }>()
@@ -45,10 +45,11 @@ export default function NewsArtwork({ item }: { item?: NewsItem }) {
     if (host.current) observer.observe(host.current)
     return () => { alive = false; observer.disconnect() }
   }, [key, id, preview])
-  const original = result?.key === key && result.data.status === 'found' ? newsUrl(result.data.image_url ?? '') : undefined
-  const image = original && failed !== original ? original : !item ? newsImage(item) : undefined
+  const verified = item?.image_article_url === key ? newsUrl(item?.image_url ?? '') : undefined
+  const original = verified || (result?.key === key && result.data.status === 'found' ? newsUrl(result.data.image_url ?? '') : undefined)
+  const image = original && failed !== original ? original : undefined
   const visible = image && failed !== image
-  return <div ref={host} className="news-artwork" data-image-kind={visible ? original ? 'original' : 'illustration' : 'category'}>
-    {visible ? <img src={image} alt={original ? result?.data.alt || item?.title || '新闻原文配图' : ''} title={original ? '原文配图 · ' + item?.source : '农业场景示意'} loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(image)} /> : <div className="news-category-art" role="img" aria-label={newsCategory(item) + '分类配图'} data-category={newsCategory(item)}><span>棚智农讯</span><strong>{newsCategory(item)}</strong><i aria-hidden="true" /><small>FIELD NOTES</small></div>}
+  return <div ref={host} className="news-artwork" data-image-state={verified ? 'found' : result?.key === key ? result.data.status : 'pending'} data-image-kind={visible ? original ? 'original' : 'illustration' : 'category'}>
+    {visible ? <><img key={image} src={image} alt={original ? result?.data.alt || item?.title || '新闻原文配图' : ''} title={original ? '原文配图 · ' + item?.source : '农业场景示意'} loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(image)} />{original&&<span className="news-original-caption">原文配图</span>}</> : <div className="news-category-art" role="img" aria-label={newsCategory(item) + '分类配图'} data-category={newsCategory(item)}><span>棚智农讯</span><strong>{newsCategory(item)}</strong><i aria-hidden="true" /><small>FIELD NOTES</small></div>}
   </div>
 }

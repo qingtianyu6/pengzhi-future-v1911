@@ -49,7 +49,13 @@ interface ActionValues {
   execution_note?: string; observed_change?: string; requires_follow_up?: boolean; follow_up_note?: string
 }
 
-export default function FarmTaskManagementPage() {
+export default function FarmTaskManagementPage() { return <TaskWorkspace /> }
+
+export function FarmTaskDialogs({ onChanged }: { onChanged: () => void }) {
+  return <TaskWorkspace dialogsOnly onChanged={onChanged} />
+}
+
+function TaskWorkspace({ dialogsOnly = false, onChanged }: { dialogsOnly?: boolean; onChanged?: () => void }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const [greenhouses, setGreenhouses] = useState<Greenhouse[]>([])
   const [batches, setBatches] = useState<CropBatch[]>([])
@@ -73,6 +79,7 @@ export default function FarmTaskManagementPage() {
   const taskIdFromUrl = Number(searchParams.get('task_id')) || null
 
   const load = useCallback(async () => {
+    if (dialogsOnly) { onChanged?.(); return }
     setLoading(true); setError(null)
     try {
       const [list, counts] = await Promise.all([
@@ -86,7 +93,7 @@ export default function FarmTaskManagementPage() {
       setItems(list.items); setTotal(list.total); setSummary(counts)
     } catch (requestError) { setItems([]); setSummary(null); setError(getApiErrorMessage(requestError)) }
     finally { setLoading(false) }
-  }, [assignee, batchId, endTime, greenhouseId, page, priority, sourceType, startTime, status])
+  }, [assignee, batchId, endTime, greenhouseId, page, priority, sourceType, startTime, status, dialogsOnly, onChanged])
 
   useEffect(() => {
     void getGreenhouses({ page: 1, page_size: 100, status: 'active' }).then((data) => {
@@ -98,7 +105,7 @@ export default function FarmTaskManagementPage() {
     if (!greenhouseId) { setBatches([]); return }
     void getCropBatches(greenhouseId).then((data) => setBatches(data)).catch((requestError) => messageApi.error(getApiErrorMessage(requestError)))
   }, [greenhouseId, messageApi])
-  useEffect(() => { void load() }, [load])
+  useEffect(() => { if (!dialogsOnly) void load() }, [load, dialogsOnly])
   useEffect(() => {
     const refresh = () => { void load() }
     window.addEventListener('guest-tasks-changed', refresh)
@@ -145,6 +152,10 @@ export default function FarmTaskManagementPage() {
         if (cancelled) return
         setDetail(task)
         setTrace(taskTrace)
+        if (searchParams.get('feedback') === '1' && task.status === 'in_progress' && canOperate()) {
+          actionForm.setFieldsValue({ operator: getStoredUser()?.display_name || task.assignee_name || '现场人员', result_type: 'unable_to_verify' })
+          setActionKind('feedback')
+        }
       })
       .catch((requestError) => {
         if (cancelled) return
@@ -154,11 +165,11 @@ export default function FarmTaskManagementPage() {
       })
 
     return () => { cancelled = true }
-  }, [messageApi, taskIdFromUrl])
+  }, [messageApi, taskIdFromUrl, searchParams, actionForm])
 
   const closeDetail = () => {
     const next = new URLSearchParams(searchParams)
-    next.delete('task_id')
+    next.delete('task_id'); next.delete('feedback')
     setSearchParams(next, { replace: true })
     setDetail(null)
     setTrace(null)
@@ -187,7 +198,7 @@ export default function FarmTaskManagementPage() {
       if (actionKind === 'cancel' && values.reason) await cancelTask(detail.id, { version: detail.version, operator: values.operator, reason: values.reason })
       if (actionKind === 'complete' && values.result_type && values.execution_note) await completeTask(detail.id, { version: detail.version, operator: values.operator, executed_at: new Date().toISOString(), result_type: values.result_type, execution_note: values.execution_note, observed_change: values.observed_change, requires_follow_up: values.requires_follow_up, follow_up_note: values.follow_up_note })
       if (actionKind === 'feedback' && values.result_type && values.execution_note) await addTaskFeedback(detail.id, { version: detail.version, operator: values.operator, executed_at: new Date().toISOString(), result_type: values.result_type, execution_note: values.execution_note, observed_change: values.observed_change, requires_follow_up: values.requires_follow_up, follow_up_note: values.follow_up_note, attachments: feedbackFiles.flatMap((item) => item.originFileObj ? [item.originFileObj] : []) })
-      messageApi.success('操作已保存到生命周期'); setActionKind(null); actionForm.resetFields(); setFeedbackFiles([]); await refreshDetail(detail.id)
+      messageApi.success('操作已保存到生命周期'); if (dialogsOnly) { const next = new URLSearchParams(searchParams); next.delete('feedback'); setSearchParams(next, { replace: true }) } setActionKind(null); actionForm.resetFields(); setFeedbackFiles([]); await refreshDetail(detail.id)
     } catch (requestError) { messageApi.error(getApiErrorMessage(requestError)) } finally { setSaving(false) }
   }
 
@@ -217,6 +228,7 @@ export default function FarmTaskManagementPage() {
   return <div className="business-page task-page v17-page v17-task-page v18-task-page">
     {messageContext}
 
+    {!dialogsOnly && <>
     <section className="v17-hero-line v17-task-hero">
       <div>
         <span className="v17-kicker">FARM OPERATIONS</span>
@@ -270,7 +282,8 @@ export default function FarmTaskManagementPage() {
       <section className="v17-panel v17-path-panel"><div className="v17-section-head"><div><h2>快捷操作</h2></div></div><div className="v17-task-quick-actions"><Button block icon={<PlusOutlined />} disabled={!canOperate()} onClick={openCreate}>新建任务</Button><Button block onClick={() => void load()}>刷新任务</Button><Button block disabled={!focusTask} onClick={() => focusTask && openDetail(focusTask.id)}>打开当前任务</Button></div></section>
     </div>
 
-    <Drawer title={detail ? `${detail.task_code} · ${detail.title}` : '任务详情'} width="min(760px, 100vw)" push={false} open={Boolean(detail)} onClose={closeDetail} extra={detail && canOperate() && <Space wrap>{detail.status === 'draft' && <Button type="primary" onClick={() => void simpleAction('submit')}>提交</Button>}{detail.status === 'pending' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('assign') }}>分配</Button><Button type="primary" disabled={!detail.assignee_name} onClick={() => void simpleAction('start')}>开始</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'in_progress' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'unable_to_verify' }); setActionKind('feedback') }}>填写反馈</Button><Button type="primary" onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'improved' }); setActionKind('complete') }}>完成</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'completed' && <Button onClick={() => void simpleAction('reopen')}>重新打开</Button>}</Space>}>
+    </>}
+    <Drawer title={detail ? `${detail.task_code} · ${detail.title}` : '任务详情'} width="min(760px, 100vw)" push={false} open={Boolean(detail) && !(dialogsOnly && actionKind)} onClose={closeDetail} extra={detail && canOperate() && <Space wrap>{detail.status === 'draft' && <Button type="primary" onClick={() => void simpleAction('submit')}>提交</Button>}{detail.status === 'pending' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('assign') }}>分配</Button><Button type="primary" disabled={!detail.assignee_name} onClick={() => void simpleAction('start')}>开始</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: '管理员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'in_progress' && <><Button onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'unable_to_verify' }); setActionKind('feedback') }}>填写反馈</Button><Button type="primary" onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员', result_type: 'improved' }); setActionKind('complete') }}>完成</Button><Button danger onClick={() => { actionForm.setFieldsValue({ operator: detail.assignee_name ?? '现场人员' }); setActionKind('cancel') }}>取消</Button></>}{detail.status === 'completed' && <Button onClick={() => void simpleAction('reopen')}>重新打开</Button>}</Space>}>
       {detail && <Space direction="vertical" size="large" className="full-width">
         <Alert type="warning" showIcon message={detail.safety_note} description={detail.causality_notice} />
         <Descriptions bordered size="small" column={2} items={[
@@ -292,8 +305,8 @@ export default function FarmTaskManagementPage() {
       </Space>}
     </Drawer>
 
-    <Modal title="手工创建任务草稿" open={createOpen} confirmLoading={saving} onCancel={() => setCreateOpen(false)} onOk={() => createForm.submit()} destroyOnHidden><Alert className="page-alert" type="info" showIcon message="创建后仍需人工提交，不会自动执行设备操作。" /><Form form={createForm} layout="vertical" onFinish={(values) => void createManual(values)}><Row gutter={12}><Col span={12}><Form.Item name="greenhouse_id" label="大棚" rules={[{ required: true }]}><Select onChange={(value) => void getCropBatches(value).then(setBatches)} options={greenhouses.map((item) => ({ value: item.id, label: item.name }))} /></Form.Item></Col><Col span={12}><Form.Item name="crop_batch_id" label="批次" rules={[{ required: true }]}><Select options={batches.map((item) => ({ value: item.id, label: item.batch_code }))} /></Form.Item></Col></Row><Form.Item name="title" label="标题" rules={[{ required: true }, { max: 160 }]}><Input /></Form.Item><Form.Item name="description" label="任务说明" rules={[{ required: true }, { max: 3000 }]}><Input.TextArea rows={3} /></Form.Item><Row gutter={12}><Col span={12}><Form.Item name="action_type" label="人工动作" rules={[{ required: true }]}><Select options={actionOptions} /></Form.Item></Col><Col span={12}><Form.Item name="priority" label="优先级" rules={[{ required: true }]}><Select options={Object.entries(priorityMeta).map(([value, meta]) => ({ value, label: meta.label }))} /></Form.Item></Col></Row><Form.Item name="due_at" label="截止时间"><Input type="datetime-local" /></Form.Item><Form.Item name="created_by" label="创建人" rules={[{ required: true }]}><Input /></Form.Item></Form></Modal>
+    <Modal title="手工创建任务草稿" open={createOpen} confirmLoading={saving} onCancel={() => setCreateOpen(false)} onOk={() => createForm.submit()} destroyOnHidden><Alert className="page-alert" type="info" showIcon message="创建后仍需人工提交，不会自动执行设备操作。" /><Form form={createForm} layout="vertical" onFinish={(values) => void createManual(values)}><Row gutter={12}><Col span={12}><Form.Item name="greenhouse_id" label="大棚" rules={[{ required: true }]}><Select onChange={(value) => { createForm.setFieldValue('crop_batch_id', undefined); setBatches([]); void getCropBatches(value).then(setBatches).catch(e => messageApi.error(getApiErrorMessage(e))) }} options={greenhouses.map((item) => ({ value: item.id, label: item.name }))} /></Form.Item></Col><Col span={12}><Form.Item name="crop_batch_id" label="批次" rules={[{ required: true }]}><Select options={batches.map((item) => ({ value: item.id, label: item.batch_code }))} /></Form.Item></Col></Row><Form.Item name="title" label="标题" rules={[{ required: true }, { max: 160 }]}><Input /></Form.Item><Form.Item name="description" label="任务说明" rules={[{ required: true }, { max: 3000 }]}><Input.TextArea rows={3} /></Form.Item><Row gutter={12}><Col span={12}><Form.Item name="action_type" label="人工动作" rules={[{ required: true }]}><Select options={actionOptions} /></Form.Item></Col><Col span={12}><Form.Item name="priority" label="优先级" rules={[{ required: true }]}><Select options={Object.entries(priorityMeta).map(([value, meta]) => ({ value, label: meta.label }))} /></Form.Item></Col></Row><Form.Item name="due_at" label="截止时间"><Input type="datetime-local" /></Form.Item><Form.Item name="created_by" label="创建人" rules={[{ required: true }]}><Input /></Form.Item></Form></Modal>
 
-    <Modal title={actionKind === 'assign' ? '分配负责人' : actionKind === 'cancel' ? '取消任务' : actionKind === 'complete' ? '完成任务并反馈' : '追加执行反馈'} open={Boolean(actionKind)} confirmLoading={saving} onCancel={() => { setActionKind(null); setFeedbackFiles([]) }} onOk={() => actionForm.submit()} destroyOnHidden><Form form={actionForm} layout="vertical" onFinish={(values) => void submitAction(values)}><Form.Item name="operator" label="操作人" rules={[{ required: true }]}><Input /></Form.Item>{actionKind === 'assign' && <Form.Item name="assignee_name" label="负责人" rules={[{ required: true }]}><Input /></Form.Item>}{actionKind === 'cancel' && <Form.Item name="reason" label="取消原因" rules={[{ required: true }, { max: 1000 }]}><Input.TextArea rows={3} /></Form.Item>}{['complete', 'feedback'].includes(actionKind ?? '') && <><Form.Item name="result_type" label="现场结果" rules={[{ required: true }]}><Select options={resultOptions} /></Form.Item><Form.Item name="execution_note" label="执行记录" rules={[{ required: true }, { max: 3000 }]}><Input.TextArea rows={4} /></Form.Item><Form.Item name="observed_change" label="观察到的变化"><Input.TextArea rows={2} /></Form.Item><Form.Item name="requires_follow_up" label="后续跟进" initialValue={false}><Select options={[{ value: false, label: '暂不需要' }, { value: true, label: '需要继续跟进' }]} /></Form.Item><Form.Item noStyle shouldUpdate={(before, after) => before.requires_follow_up !== after.requires_follow_up}>{({ getFieldValue }) => getFieldValue('requires_follow_up') ? <Form.Item name="follow_up_note" label="跟进说明" rules={[{ required: true }]}><Input.TextArea rows={2} /></Form.Item> : null}</Form.Item>{actionKind === 'feedback' && <Form.Item label="现场附件（可选）"><Upload beforeUpload={() => false} accept=".jpg,.jpeg,.png,.webp" maxCount={5} fileList={feedbackFiles} onChange={({ fileList }) => setFeedbackFiles(fileList)}><Button>选择图片</Button></Upload></Form.Item>}<Alert type="warning" showIcon message="现场反馈只记录观察，不自动推断任务操作与环境变化存在因果关系。" /></>}</Form></Modal>
+    <Modal title={actionKind === 'assign' ? '分配负责人' : actionKind === 'cancel' ? '取消任务' : actionKind === 'complete' ? '完成任务并反馈' : '追加执行反馈'} open={Boolean(actionKind)} confirmLoading={saving} onCancel={() => { setActionKind(null); setFeedbackFiles([]); if (dialogsOnly && searchParams.has('feedback')) closeDetail() }} onOk={() => actionForm.submit()} destroyOnHidden><Form form={actionForm} layout="vertical" onFinish={(values) => void submitAction(values)}><Form.Item name="operator" label="操作人" rules={[{ required: true }]}><Input /></Form.Item>{actionKind === 'assign' && <Form.Item name="assignee_name" label="负责人" rules={[{ required: true }]}><Input /></Form.Item>}{actionKind === 'cancel' && <Form.Item name="reason" label="取消原因" rules={[{ required: true }, { max: 1000 }]}><Input.TextArea rows={3} /></Form.Item>}{['complete', 'feedback'].includes(actionKind ?? '') && <><Form.Item name="result_type" label="现场结果" rules={[{ required: true }]}><Select options={resultOptions} /></Form.Item><Form.Item name="execution_note" label="执行记录" rules={[{ required: true }, { max: 3000 }]}><Input.TextArea rows={4} /></Form.Item><Form.Item name="observed_change" label="观察到的变化"><Input.TextArea rows={2} /></Form.Item><Form.Item name="requires_follow_up" label="后续跟进" initialValue={false}><Select options={[{ value: false, label: '暂不需要' }, { value: true, label: '需要继续跟进' }]} /></Form.Item><Form.Item noStyle shouldUpdate={(before, after) => before.requires_follow_up !== after.requires_follow_up}>{({ getFieldValue }) => getFieldValue('requires_follow_up') ? <Form.Item name="follow_up_note" label="跟进说明" rules={[{ required: true }]}><Input.TextArea rows={2} /></Form.Item> : null}</Form.Item>{actionKind === 'feedback' && <Form.Item label="现场附件（可选）"><Upload beforeUpload={() => false} accept=".jpg,.jpeg,.png,.webp" maxCount={5} fileList={feedbackFiles} onChange={({ fileList }) => setFeedbackFiles(fileList)}><Button>选择图片</Button></Upload></Form.Item>}<Alert type="warning" showIcon message="现场反馈只记录观察，不自动推断任务操作与环境变化存在因果关系。" /></>}</Form></Modal>
   </div>
 }

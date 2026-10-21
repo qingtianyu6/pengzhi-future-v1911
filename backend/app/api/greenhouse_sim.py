@@ -83,6 +83,7 @@ def mount(prefix,dependency):
             if data.target: r.target=data.target
             if data.mode: r.mode=data.mode
             if data.manual: r.manual=data.manual; r.mode='manual'
+            r.humidity_baseline=abs(r.env.air_humidity-r.target.air_humidity)
             r.record('input_updated')
             return r.snapshot()
     @sub.post('/operation')
@@ -92,6 +93,7 @@ def mount(prefix,dependency):
             elif data.action=='reset':
                 r.stop(); r.emergency=False; r.env=scenario('normal'); r.scenario_id='normal'
                 r.simulation_time=0; r.history.clear(); r.mode='threshold'; r.manual=Actions(); r.decision=None
+                r.humidity_baseline=abs(r.env.air_humidity-r.target.air_humidity)
                 r.record('reset')
             else:
                 if r.emergency: raise HTTPException(409,'急停已锁定，请先重置')

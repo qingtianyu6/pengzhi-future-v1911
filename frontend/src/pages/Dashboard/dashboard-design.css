@@ -1,0 +1,131 @@
+/* Production dashboard, measured against the approved 1491 × 1055 design. */
+#pengzhi-platform.unified-navigation-shell .wb-content:has(.dashboard-design){padding:12px 20px 20px 24px!important}
+#pengzhi-platform.unified-navigation-shell .wb-content:has(.dashboard-design)>.wb-route-body{width:100%;max-width:none;gap:0}
+#pengzhi-platform.unified-navigation-shell .dashboard-design{display:grid;grid-template-columns:minmax(0,1fr);gap:10px!important;max-width:1600px;margin:0 auto;color:#173e35;font-family:var(--font-sans);font-size:14px;line-height:1.6}
+.dashboard-design *{box-sizing:border-box}
+.dashboard-design>*{min-width:0}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design h1{font-size:32px!important;line-height:42px!important;font-weight:650!important;letter-spacing:0!important;margin:0!important;color:#0e302c!important}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design h2{font-size:18px!important;line-height:26px!important;font-weight:600!important;letter-spacing:0!important;margin:0!important;color:#102f2b}
+#pengzhi-platform.unified-navigation-shell .dashboard-design .ant-btn{font-size:13px!important;font-weight:550!important;letter-spacing:0;min-height:0}
+.dd-intro{height:80px}
+.dd-eyebrow{font-size:12px;font-weight:550;color:#536f66;line-height:18px}
+.dd-title-row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.dd-date{font-size:14px;color:#365951}
+#pengzhi-platform .dashboard-design .dd-demo-tag{font-size:12px!important;line-height:24px;border-color:#cae8d7;background:#e9f7ef;color:#247451;margin:0;border-radius:5px;padding:0 9px}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-intro>p{font-size:14px!important;color:#6c8177;line-height:20px!important;margin:0}
+.dd-surface{background:#fffefa;border:1px solid #e3e7da;border-radius:10px;min-width:0}
+.dd-hero{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(0,1fr);height:198px;border:1px solid #e0e6d7;border-radius:10px;overflow:hidden;background:#f4f6e9}
+.dd-hero-visual{position:relative;overflow:hidden;background:#f7f7ed;min-width:0}
+.dd-hero-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%;transform:scaleX(-1)}
+.dd-hero-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#f9f9ed 0%,#f9f9edf5 22%,#f9f9ed9c 40%,transparent 63%);pointer-events:none}
+.dd-hero-copy{position:relative;z-index:1;padding:32px 32px 22px}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-hero-copy h2{font-size:24px!important;line-height:1.65!important;font-weight:650!important;color:#103c30}
+.dd-hero-actions{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+#pengzhi-platform .dashboard-design .dd-hero-actions .ant-btn{height:38px;border-radius:7px;padding-inline:16px;background:#fffef5;border-color:#82a78e;color:#23513e}
+#pengzhi-platform .dashboard-design .ant-btn-primary{background:#00563e;border-color:#00563e;color:#fff;box-shadow:inset 0 1px 0 #ffffff12}
+#pengzhi-platform .dashboard-design .ant-btn-primary:hover{background:#0b684b;border-color:#0b684b}
+#pengzhi-platform .dashboard-design .dd-hero-actions .ant-btn-primary{background:#00563e;border-color:#00563e;color:#fff}
+.dd-scene-caption{position:absolute;z-index:1;bottom:8px;left:18px;font-size:10px;color:#6a8074}
+.dd-focus{position:relative;padding:22px 24px 20px 30px;background:#f3f6e8;min-width:0}
+.dd-focus:before{content:'';position:absolute;top:0;bottom:0;left:-30px;width:32px;background:#f3f6e8;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.dd-focus:after{content:'';position:absolute;right:8px;bottom:-15px;width:100px;height:138px;opacity:.35;background:radial-gradient(ellipse at 60% 22%,#d4e2bf 0 16%,transparent 17%),radial-gradient(ellipse at 24% 55%,#d4e2bf 0 19%,transparent 20%),radial-gradient(ellipse at 78% 68%,#d4e2bf 0 16%,transparent 17%);transform:rotate(-16deg);pointer-events:none}
+.dd-focus>*{position:relative;z-index:1}
+.dd-focus-status{display:flex;align-items:center;gap:9px;color:#2f7359;font-size:12px;line-height:18px}
+.dd-focus-status i{width:9px;height:9px;border-radius:50%;background:#31946f;flex-shrink:0}
+.dd-focus-status.is-attention{color:#c77c27}.dd-focus-status.is-attention i{background:#ee850d}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-focus h2{font-size:23px!important;line-height:1.4!important;margin:6px 0 5px!important;overflow-wrap:anywhere}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-focus p{font-size:13px!important;color:#62796b;line-height:1.7!important;margin:0 0 14px}
+#pengzhi-platform .dashboard-design .dd-focus .ant-btn{height:38px;padding-inline:17px;border-radius:7px}
+.dd-environment{height:164px;padding:10px 18px 14px}
+.dd-section-heading{display:flex;gap:16px;align-items:center;min-width:0;min-height:28px}
+.dd-section-heading>span,.dd-chart-heading>span{font-size:12px;color:#72857b;white-space:nowrap}
+#pengzhi-platform .dashboard-design .dd-section-heading>.ant-btn{margin-left:auto;height:28px;padding:0;color:#166549}
+.dd-metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:15px}
+.dd-metric{display:flex;gap:16px;min-width:0;border-right:1px solid #e5e9dd;padding:0 22px}
+.dd-metric:first-child{padding-left:14px}.dd-metric:last-child{border-right:0}
+.dd-metric>div{min-width:0}
+.dd-metric-icon{font-size:24px;line-height:30px}
+.metric-temperature .dd-metric-icon{color:#f54f39}.metric-humidity .dd-metric-icon{color:#2a8bfe}.metric-soil .dd-metric-icon{color:#159a68}.metric-light .dd-metric-icon{color:#e89712}.metric-co2 .dd-metric-icon{color:#3c89ed}
+.dd-metric-label{font-size:13px;color:#61786d;line-height:22px;white-space:nowrap}
+.dd-metric-value{display:flex;gap:6px;align-items:baseline;white-space:nowrap;line-height:1.3}
+.dd-metric-value strong{font-variant-numeric:tabular-nums;letter-spacing:-.02em;font-size:29px;font-weight:600;color:#0c3530}
+.dd-metric-value small{font-size:13px;font-weight:400;color:#687e73}
+.dd-metric-change{font-size:12px;color:#73887b;white-space:nowrap;margin-top:8px;line-height:20px}
+.dd-metric-change>.anticon{font-size:19px;margin-right:8px;vertical-align:middle;color:#a8cbe6}
+.dd-metric-change.is-up>.anticon{color:#e79b31}
+.dd-work-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:10px;align-items:stretch}
+.dd-chart{padding:12px 18px 10px;min-height:252px}
+.dd-chart-heading{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.dd-chart-tools{display:flex;align-items:center;gap:12px;margin-left:auto}
+.dd-chart-filters{display:flex;border:1px solid #e0e7da;border-radius:6px;overflow:hidden}
+.dd-chart-filters button{padding:5px 10px;font:inherit;line-height:17px;font-size:11px;background:transparent;border:0;border-right:1px solid #e4e9de;color:#627a6f;cursor:pointer;white-space:nowrap}
+.dd-chart-filters button:last-child{border:0}
+.dd-chart-filters button[aria-pressed=true]{background:#00573f;color:white}
+.dd-date-switch{display:flex;align-items:center;gap:5px;white-space:nowrap}
+#pengzhi-platform .dashboard-design .dd-date-switch .ant-btn{width:24px;height:24px;padding:0;color:#4c7966}
+.dd-date-switch b{font-size:12px;font-weight:550;color:#244c40}
+.dd-chart .exact-environment-chart{height:197px;min-height:0;margin-top:4px}
+.dd-todo{padding:12px 18px 10px;display:flex;flex-direction:column;min-width:0}
+.dd-task-list{margin-top:8px}
+.dd-task{display:flex;align-items:center;gap:10px;width:100%;padding:13px 0;border:0;border-bottom:1px solid #e5e9df;background:none;cursor:pointer;text-align:left;font:inherit;color:#173f35;min-width:0}
+.dd-task:last-child{border-bottom:0}
+.dd-task-dot{width:7px;height:7px;border-radius:50%;background:#ee870e;flex-shrink:0}
+.dd-task-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:10px;background:#e8f6ed;color:#169e72;font-size:24px;flex-shrink:0}
+.dd-task-copy{min-width:0;flex:1}.dd-task-copy strong{font-size:13px;font-weight:600;display:block;overflow-wrap:anywhere;line-height:1.7}.dd-task-copy small{font-size:12px;color:#71877b;display:block;line-height:1.8}
+.dd-task time{flex-shrink:0;white-space:nowrap;font-size:11px;color:#e68b19;background:#fff1d9;border-radius:6px;padding:4px 7px}
+.dd-task-arrow{flex-shrink:0;width:32px;height:32px;display:grid;place-items:center;border:1px solid #dce5dd;border-radius:8px;color:#678476;font-size:13px}
+.dd-task.task-progress .dd-task-dot{background:#3d89f6}.dd-task.task-progress .dd-task-icon{color:#3d89f6;background:#edf3ff}.dd-task.task-progress time{background:#edf3ff;color:#3a86ed}
+.dd-task.task-urgent time{background:#fff0e6;color:#b85e26}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-task-note{display:flex;gap:8px;align-items:center;font-size:11px!important;line-height:1.7!important;padding:8px 10px;border-radius:6px;background:#edf3e7;color:#687f6a;margin:10px 0 0}
+.dd-task-note>.anticon{font-size:14px;flex-shrink:0}
+.dd-status-ribbon{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:10px 0;min-height:84px}
+.dd-status{display:flex;align-items:center;gap:22px;min-width:0;padding:0 25px;border:0;border-right:1px solid #e4e9db;background:none;text-align:left;font:inherit;cursor:pointer}
+.dd-status:last-child{border-right:0}
+.dd-status>.anticon:first-child{font-size:26px;color:#0c9868;flex-shrink:0}.dd-status-risk>.anticon:first-child{color:#f45b43}.dd-status-decision>.anticon:first-child{color:#8253d3}
+.dd-status>span:not(.anticon){min-width:0;flex:1}
+.dd-status small{font-size:12px;color:#6e8377;display:block;line-height:18px}
+.dd-status strong{font-size:17px;line-height:25px;font-weight:600;color:#143c32;display:block}
+#pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-status p{font-size:12px!important;line-height:18px!important;margin:0;color:#768b80;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dd-status>.anticon:last-child{font-size:12px;color:#6f8c7c}
+.dd-activity{padding:5px 18px 6px}
+.dd-activity .dd-section-heading{min-height:25px}
+.dd-activity-list{display:grid}
+.dd-activity-row{display:grid;grid-template-columns:55px 8px minmax(0,1.25fr) minmax(0,2fr);align-items:center;gap:13px;min-height:24px;border-bottom:1px solid #edf0e5;font-size:11px;line-height:1.5}
+.dd-activity-row:last-child{border:0}
+.dd-activity-row time,.dd-activity-row>span{color:#7b8d82}
+.dd-activity-row strong{font-size:12px;font-weight:550;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#294d3e}
+.dd-activity-row>i{width:7px;height:7px;border-radius:50%;background:#8ea193}.dd-activity-row>i.warning{background:#ec890e}
+.dd-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:#7d9081;font-size:11px;line-height:20px;min-height:22px;padding-left:4px}
+.dd-footer>nav{display:flex;gap:5px;flex-wrap:wrap}.dd-footer>nav>span{display:flex;gap:5px}.dd-footer button{border:0;background:none;color:inherit;font:inherit;padding:0;cursor:pointer}
+#pengzhi-platform .dashboard-design .dd-footer>.ant-btn{font-size:11px!important;height:20px;margin-left:auto}
+.dashboard-design button:focus-visible{outline:2px solid #408c65;outline-offset:3px}
+.dd-chart .saas-empty-state,.dd-todo .saas-empty-state{min-height:150px;padding:16px}
+.dd-no-activity{color:#748879;font-size:13px}
+@media(max-width:1450px){.dd-chart-heading{gap:8px}.dd-chart-heading>span{display:none}.dd-metric{padding-inline:14px;gap:10px}.dd-task{gap:8px}.dd-task time{font-size:10px;padding-inline:5px}.dd-status{padding-inline:18px;gap:14px}}
+@media(max-width:1200px){.dd-hero-copy{padding-left:22px}.dd-hero-actions{gap:10px}.dd-focus{padding-left:20px}.dd-metric{gap:7px;padding-inline:10px}.dd-metric-icon{font-size:21px}.dd-metric-value strong{font-size:25px}.dd-metric-change{font-size:10px}.dd-metric-change>.anticon{margin-right:3px}.dd-work-grid{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.dd-chart-tools{gap:4px}.dd-chart-filters button{padding-inline:6px}.dd-task-icon{width:32px;height:35px;font-size:21px}.dd-task-arrow{width:25px;height:28px}.dd-task-copy strong{font-size:12px}}
+@media(max-width:1000px){.dd-intro{height:auto;min-height:80px}.dd-hero{height:auto;min-height:198px;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}.dd-hero-actions{margin-top:8px}.dd-hero-copy{padding:24px 18px 26px}.dd-hero-actions .ant-btn{padding-inline:10px!important}.dd-focus{padding:20px 16px}.dd-focus:before{left:-15px;width:16px}.dd-environment{height:auto}.dd-metric{display:block;padding-inline:10px}.dd-metric:first-child{padding-left:0}.dd-metric-icon{display:none}.dd-metric-label{font-size:12px}.dd-metric-change{white-space:normal}.dd-work-grid{grid-template-columns:1fr}.dd-chart-heading>span{display:block}.dd-chart .exact-environment-chart{height:230px}.dd-task-icon{width:40px;height:40px}.dd-task-copy strong{font-size:14px}.dd-task time{font-size:12px}.dd-todo{padding-bottom:14px}.dd-status{gap:10px;padding-inline:13px}.dd-status>.anticon:first-child{font-size:21px}}
+@media(max-width:760px){
+ #pengzhi-platform.unified-navigation-shell .wb-content:has(.dashboard-design){padding:16px 14px 26px!important}
+ #pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design h1{font-size:28px!important;line-height:38px!important}
+ .dd-title-row{gap:7px 12px}.dd-date{font-size:12px;order:2;flex-basis:100%}.dd-intro{min-height:108px}.dd-intro>p{margin-top:4px!important}
+ .dd-hero{grid-template-columns:1fr}.dd-hero-visual{min-height:200px}.dd-hero-copy{padding:28px 20px}.dd-focus{padding:18px 20px}.dd-focus:before{display:none}
+ #pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-hero-copy h2{font-size:22px!important}
+ #pengzhi-platform.unified-navigation-shell .pz-workspace-page .dashboard-design .dd-focus h2{font-size:20px!important}
+ .dd-environment{padding:12px}.dd-section-heading{gap:9px;flex-wrap:wrap}.dd-environment .dd-section-heading>span{order:3;flex-basis:100%;font-size:11px}
+ .dd-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-top:6px}
+ .dd-metric{display:flex;gap:12px;padding:14px 8px!important;border-bottom:1px solid #e5e9dd}.dd-metric-icon{display:block;font-size:22px}.dd-metric:nth-child(2n){border-right:0}.dd-metric:last-child{grid-column:1/-1;border-bottom:0}
+ .dd-metric-value strong{font-size:27px}.dd-metric-change{font-size:11px;white-space:nowrap}.dd-metric-label{font-size:13px}
+ .dd-chart{padding:12px}.dd-chart-heading{gap:8px}.dd-chart-heading>span{display:block;flex-basis:auto;font-size:10px}.dd-chart-tools{width:100%;justify-content:space-between;margin:0}
+ .dd-chart-filters button{padding:5px 8px}.dd-chart .exact-environment-chart{height:215px}
+ .dd-todo{padding:12px}.dd-task{gap:8px;flex-wrap:wrap}.dd-task-copy{flex:1 1 calc(100% - 90px)}.dd-task time{margin-left:auto;font-size:11px}.dd-task-arrow{width:28px;height:28px}
+ .dd-status-ribbon{grid-template-columns:1fr;padding:0 14px}.dd-status{padding:12px 0;border-right:0;border-bottom:1px solid #e4e9db;gap:18px}.dd-status:last-child{border-bottom:0}.dd-status>.anticon:first-child{font-size:25px}.dd-status p{white-space:normal!important}
+ .dd-activity{padding:10px 12px}.dd-activity-row{grid-template-columns:35px 7px minmax(0,1fr);gap:8px;padding:7px 0}.dd-activity-row>span{grid-column:3;font-size:11px}.dd-activity-row strong{white-space:normal}.dd-activity-row time{font-size:10px}.dd-footer{padding-right:50px}
+}
+@media(max-width:380px){
+ .dd-metric{gap:7px;padding-inline:4px!important}
+ .dd-metric-label{font-size:12px}
+ .dd-metric-change{white-space:normal}
+ .dd-metric-change>.anticon{font-size:14px;margin-right:4px}
+ .dd-chart-tools{flex-wrap:wrap;row-gap:8px}
+ .dd-date-switch{margin-left:auto}
+}

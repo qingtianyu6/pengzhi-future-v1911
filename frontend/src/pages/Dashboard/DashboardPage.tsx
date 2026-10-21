@@ -4,9 +4,12 @@ import {
   ArrowRightOutlined,
   ArrowUpOutlined,
   BulbOutlined,
+  FileTextOutlined,
+  InfoCircleOutlined,
+  DeploymentUnitOutlined,
+  CheckCircleOutlined,
   CloudOutlined,
   DatabaseOutlined,
-  ExperimentOutlined,
   FireOutlined,
   LeftOutlined,
   RightOutlined,
@@ -22,9 +25,11 @@ import { getSensorHistory } from '../../api/sensorApi'
 import type { DashboardSummary, MetricChanges } from '../../types/dashboard'
 import type { SensorReading } from '../../types/sensor'
 import type { FarmTask } from '../../types/task'
-import { EnvironmentTrendChart } from './EnvironmentTrendChart'
+import { EnvironmentTrendChart, type ChartMetric } from './EnvironmentTrendChart'
 import { ModelCenter } from '../../components/ModelCenter'
-import { SaasEmptyState, SectionHeading } from '../../components/SaasUI'
+import { SaasEmptyState } from '../../components/SaasUI'
+import { isGuestMode } from '../../api/guestMode'
+import './dashboard-design.css'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 type ChangeKey = keyof MetricChanges
@@ -60,16 +65,6 @@ function formatDueTime(value: string): string {
   return `${formatDate(date)} ${formatTime(value)}`
 }
 
-function metricStatus(key: ChangeKey, value: number | null) {
-  if (value === null) return { label: '待采集', tone: 'muted' }
-  if (key === 'temperature') return value > 30 ? { label: '偏高', tone: 'warning' } : value < 16 ? { label: '偏低', tone: 'warning' } : { label: '正常', tone: 'normal' }
-  if (key === 'air_humidity') return value > 82 ? { label: '偏高', tone: 'warning' } : value < 40 ? { label: '偏低', tone: 'warning' } : { label: '正常', tone: 'normal' }
-  if (key === 'soil_moisture') return value < 38 ? { label: '偏低', tone: 'warning' } : { label: '正常', tone: 'normal' }
-  if (key === 'light_intensity') return value > 80 ? { label: '偏强', tone: 'attention' } : { label: '正常', tone: 'normal' }
-  if (key === 'co2_concentration') return value > 1200 ? { label: '偏高', tone: 'warning' } : { label: '正常', tone: 'normal' }
-  return { label: '正常', tone: 'normal' }
-}
-
 function taskTone(task: FarmTask): string {
   if (task.priority === 'urgent') return 'urgent'
   if (task.status === 'completed') return 'done'
@@ -85,17 +80,9 @@ function metricIcon(tone: MetricTone) {
   return <CloudOutlined />
 }
 
-function greeting() {
-  const hour = new Date().getHours()
-  if (hour < 11) return '早上好，'
-  if (hour < 14) return '中午好，'
-  if (hour < 18) return '下午好，'
-  return '晚上好，'
-}
-
 function metricMeta(change: number | null, unit: string) {
   if (change === null) return <>暂无同期变化</>
-  return <>{change >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} 较上次采样 {change > 0 ? '+' : ''}{change.toFixed(1)}{unit}</>
+  return <>{change >= 0 ? <ArrowUpOutlined /> : <ArrowDownOutlined />} 较上次 {change > 0 ? '+' : ''}{Number.isInteger(change) ? change.toFixed(0) : change.toFixed(1)}{unit}</>
 }
 
 export default function DashboardPage() {
@@ -107,6 +94,8 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null)
   const [modelCenterOpen, setModelCenterOpen] = useState(false)
   const [chartOffset, setChartOffset] = useState(0)
+  const [chartMetric, setChartMetric] = useState<ChartMetric>('all')
+  const guest = isGuestMode()
   const [history, setHistory] = useState<{ greenhouseId: number; offset: number; items: SensorReading[] } | null>(null)
   const [historyLoading, setHistoryLoading] = useState(false)
   const [historyError, setHistoryError] = useState<string | null>(null)
@@ -182,67 +171,86 @@ export default function DashboardPage() {
   const stale = Boolean(summary?.data_updated_at && Date.now() - new Date(summary.data_updated_at).getTime() > 2 * 3600_000)
   const hasWarning = Boolean(summary?.warning_summary.open_warning_count)
 
-  if (loading && !summary) return <div className="dashboard-page exact-dashboard"><Skeleton active paragraph={{ rows: 12 }} /></div>
 
-  return <div className="dashboard-page commercial-dashboard exact-dashboard">
-    {error && <Alert className="page-alert" type="error" showIcon message="种植总览数据加载失败" description={error} action={<Button size="small" onClick={() => selectedId ? void loadSummary() : void loadGreenhouses()}>重试</Button>} />}
+  const href = (path: string, extra = '') => {
+    const params = new URLSearchParams(location.search)
+    if (selectedId) params.set('greenhouse_id', String(selectedId))
+    for (const [key, value] of new URLSearchParams(extra)) params.set(key, value)
+    return path + '?' + params.toString()
+  }
+  const focusHref = !hasEnvironment ? href('/platform/data', 'tab=connection')
+    : href('/platform/environment', stale ? 'tab=monitoring' : hasWarning ? 'tab=alerts' : 'tab=monitoring')
+  const crop = summary?.active_batch?.crop_type
+  const scene = crop === 'muskmelon' ? '/images/greenhouse-management/muskmelon.png'
+    : crop === 'tomato' ? '/images/dashboard/tomato-greenhouse.webp' : '/images/greenhouse-management/hero.png'
+  const currentDate = new Date().toLocaleDateString('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' }).replace('星期', ' · 星期')
+  const heroTitle = stale ? <>先核实数据，<br/>再安排今天的工作。</>
+    : !hasEnvironment ? <>连接第一份数据，<br/>让大棚状态看得见。</>
+    : hasWarning ? <>棚况已更新，<br/>今天先关注{todayTasks.length ? '这两件事' : '这项预警'}。</>
+    : <>棚况已更新，<br/>{todayTasks.length ? '把今天的农事逐项落实。' : '从一次日常巡检开始。'}</>
+  if (loading && !summary) return <div className="dashboard-page dashboard-design"><Skeleton active paragraph={{ rows: 12 }}/></div>
+  return <div className="dashboard-page dashboard-design">
+    {error && <Alert type="error" showIcon message="生产工作台数据加载失败" description={error} action={<Button aria-label="重试读取工作台" size="small" onClick={() => selectedId ? void loadSummary() : void loadGreenhouses()}>重试</Button>}/>}
+    {!summary && !error ? <SaasEmptyState title="还没有可用的大棚工作区" description="先创建大棚和种植批次，再接入环境记录。" actionLabel="进入大棚管理" onAction={() => navigate(href('/platform/data'))}/> : summary && <>
+      <header className="dd-intro">
+        <span className="dd-eyebrow">今日生产概览</span>
+        <div className="dd-title-row"><h1>生产工作台</h1><span className="dd-date">{currentDate}</span>{guest && <Tag className="dd-demo-tag">游客演示</Tag>}</div>
+        <p>让每一棚生长，都有据可循。</p>
+      </header>
 
-    {!summary && !error ? <SaasEmptyState title="还没有可用的大棚工作区" description="先创建大棚和种植批次，系统会自动汇总环境、风险、建议和农事任务。" actionLabel="进入大棚管理" onAction={() => navigate('/platform/data')} /> : summary && <>
-      <section className="exact-welcome-banner pz-command-hero">
-        <div className="exact-welcome-copy">
-          <span>{greeting()}</span>
-          <div className="exact-welcome-title"><h1>让每一棚生长，<br />都有据可循。</h1><Tag color={hasWarning ? 'orange' : hasEnvironment ? 'green' : 'default'}>{stale ? '待同步' : hasWarning ? '需关注' : hasEnvironment ? '监测中' : '待接入'}</Tag></div>
-          <p>{stale ? '最近采集已超过2小时，以下为历史记录，请检查设备连接。' : hasWarning ? `当前有 ${summary.warning_summary.open_warning_count} 项待处理预警，请查看风险详情。` : hasEnvironment ? '环境数据已接入，可继续查看监测趋势与处理建议。' : '尚无环境数据，接入传感器或导入历史数据后可查看监测结果。'}</p>
+      <section className="dd-hero" aria-label="今日生产重点">
+        <div className="dd-hero-visual">
+          <img className="dd-hero-image" src={scene} alt="" aria-hidden="true"/>
+          <div className="dd-hero-copy"><h2>{heroTitle}</h2><div className="dd-hero-actions">
+            <Button type="primary" onClick={() => navigate(href('/platform/3d'))}>走进三维大棚 <ArrowRightOutlined/></Button>
+            <Button aria-label="记录观察" icon={<FileTextOutlined/>} disabled={!summary.active_batch} title={!summary.active_batch ? '先建立种植批次后记录观察' : undefined} onClick={() => navigate(href('/platform/research', 'tab=archive&observe=1'))}>记录观察</Button>
+          </div></div><span className="dd-scene-caption">种植场景示意</span>
         </div>
-        <div className="pz-today-focus"><span className="pz-focus-eyebrow">今日重点 · {summary.greenhouse.name}</span><h2>{stale ? '先核实数据，再判断棚况' : !hasEnvironment ? '为大棚连接第一份数据' : summary.warning_summary.latest_warning_title || (todayTasks.length ? '把今日农事，逐项落实' : '棚况已就绪，开始日常巡检')}</h2><p>{stale ? '最近采集已超过 2 小时，请先检查设备或采样记录。' : summary.warning_summary.latest_recommendation_title || summary.risk.reasons[0] || '结合环境变化与现场观察，安排今天的工作。'}</p><div className="pz-focus-counts"><span><b>{summary.warning_summary.open_warning_count}</b> 项预警</span><span><b>{todayTasks.length}</b> 项最近待办</span></div><Button type="primary" onClick={() => navigate(!hasEnvironment ? `/platform/data?tab=connection&greenhouse_id=${selectedId}` : stale ? `/platform/environment?tab=monitoring&greenhouse_id=${selectedId}` : hasWarning ? `/platform/environment?tab=alerts&greenhouse_id=${selectedId}` : `/platform/production?tab=tasks&greenhouse_id=${selectedId}`)}>{!hasEnvironment ? '连接环境数据' : stale ? '核实采样记录' : hasWarning ? '查看预警与建议' : '安排今日农事'} <ArrowRightOutlined /></Button></div>
+        <div className="dd-focus">
+          <span className={'dd-focus-status'+(hasWarning||stale?' is-attention':'')}><i/>{stale ? '采样数据待同步' : hasWarning ? summary.warning_summary.open_warning_count+' 项待处理预警' : hasEnvironment ? '今日关注' : '环境数据待接入'}</span>
+          <h2>{stale ? '先核实数据，再判断棚况' : !hasEnvironment ? '连接第一份环境数据' : summary.warning_summary.latest_warning_title?.replace(/，.*$/, '') || (todayTasks.length ? '安排今天的农事' : '结合现场情况开展巡检')}</h2>
+          <p>{stale ? '最近采集已超过2小时，请先检查设备或采样记录。' : !hasEnvironment ? '接入有效采样后显示环境与风险状态。' : hasWarning && /湿度|通风/.test(summary.warning_summary.latest_warning_title||'') ? '先核实棚温，再安排通风与复测。' : summary.warning_summary.latest_recommendation_title || '结合环境变化与作物观察，逐项核实。'}</p>
+          <Button type="primary" onClick={() => navigate(focusHref)}>{stale ? '核实采样记录' : !hasEnvironment ? '连接环境数据' : hasWarning ? '查看预警与建议' : '查看环境监测'} <ArrowRightOutlined/></Button>
+        </div>
       </section>
 
-      <div className="pz-monitor-heading"><div><span className="pz-section-kicker">大棚实况</span><h2>环境的每一次变化，都看得见</h2><p>{summary.data_updated_at ? `最近采集 ${formatDueTime(summary.data_updated_at)}` : '等待环境采样'}{stale ? ' · 历史记录' : ''}</p></div><div className="pz-monitor-actions"><Button type="link" aria-label="现场异常排查" icon={<ExperimentOutlined />} onClick={() => navigate(`/platform/investigate?greenhouse_id=${selectedId}`)}>现场异常排查</Button><Button onClick={() => navigate(`/platform/3d?greenhouse_id=${selectedId}`)}>走进三维大棚 <ArrowRightOutlined /></Button><Button type="text" onClick={() => setModelCenterOpen(true)}>模型说明</Button></div></div>
-
-      <section className="exact-metric-grid">
-        {metrics.map((metric) => {
-          const state = metricStatus(metric.key, metric.value)
-          return <article className={`exact-metric-card metric-${metric.tone}`} key={metric.key}>
-            <div className="exact-metric-top"><span className="exact-metric-icon">{metricIcon(metric.tone)}</span><span className="exact-metric-label">{metric.label}</span><i className={`exact-status-pill ${state.tone}`}>{state.label}</i></div>
-            <div className="exact-metric-main"><strong>{formatValue(metric.value, metric.digits)}</strong><small>{metric.unit}</small></div>
-            <div className="exact-metric-bottom"><span>{metricMeta(metric.change, metric.unit)}</span></div>
-          </article>
-        })}
+      <section className="dd-environment dd-surface" aria-label="环境实况">
+        <div className="dd-section-heading"><h2>环境实况</h2><span>{summary.data_updated_at ? '最近采集 '+formatDueTime(summary.data_updated_at) : '等待环境采样'}{guest ? ' · 示例数据' : ''}{stale ? ' · 历史记录' : ''}</span><Button type="link" onClick={() => navigate(href('/platform/environment'))}>查看环境监测 <ArrowRightOutlined/></Button></div>
+        <div className="dd-metrics">{metrics.map(metric => <article className={'dd-metric metric-'+metric.tone} key={metric.key}>
+          <span className="dd-metric-icon">{metricIcon(metric.tone)}</span><div><span className="dd-metric-label">{metric.label}</span><div className="dd-metric-value"><strong>{formatValue(metric.value, metric.digits)}</strong><small>{metric.unit}</small></div><div className={'dd-metric-change'+(metric.change!=null&&metric.change>=0?' is-up':' is-down')}>{metricMeta(metric.change,metric.unit)}</div></div>
+        </article>)}</div>
       </section>
 
-      <section className="exact-primary-grid">
-        <article className="exact-panel exact-chart-card">
-          <SectionHeading title="24 小时环境趋势" description={`${chartData.length} 条记录${chartOffset === 0 ? ' · 环境采样记录' : ' · 历史原始数据（最多1000条）'}`} action={<div className="exact-date-switch"><Button type="text" icon={<LeftOutlined />} aria-label="上一天" onClick={() => setChartOffset((value) => value + 1)} /><b>{formatDate(chartEnd)}</b><Button type="text" icon={<RightOutlined />} aria-label="下一天" disabled={chartOffset === 0} onClick={() => setChartOffset((value) => Math.max(0, value - 1))} /></div>} />
-          {chartOffset > 0 && historyLoading ? <Skeleton active paragraph={{ rows: 4 }} /> : chartOffset > 0 && historyError ? <Alert type="error" showIcon message="历史趋势加载失败" description={historyError} action={<Button size="small" onClick={() => setHistoryRetry((value) => value + 1)}>重试</Button>} /> : chartData.length > 0 ? <EnvironmentTrendChart data={chartData} /> : <SaasEmptyState title="该时段没有环境记录" description="连接传感器或导入历史数据后，这里会显示环境变化曲线。" actionLabel="导入数据" onAction={() => navigate('/platform/data')} />}
+      <section className="dd-work-grid">
+        <article className="dd-chart dd-surface">
+          <header className="dd-chart-heading"><h2>24 小时环境趋势</h2><span>{guest ? '示例趋势 · ' : ''}{chartData.length} 条采样记录</span>
+            <div className="dd-chart-tools"><div className="dd-chart-filters" role="group" aria-label="趋势指标">{([{key:'all',label:'全部'},{key:'temperature',label:'温度'},{key:'air_humidity',label:'湿度'},{key:'soil_moisture',label:'土壤湿度'}] as const).map(m=><button key={m.key} type="button" aria-pressed={chartMetric===m.key} onClick={()=>setChartMetric(m.key)}>{m.label}</button>)}</div>
+              <div className="dd-date-switch"><Button type="text" size="small" icon={<LeftOutlined/>} aria-label="上一天" onClick={()=>setChartOffset(v=>v+1)}/><b>{formatDate(chartEnd)}</b><Button type="text" size="small" icon={<RightOutlined/>} aria-label="下一天" disabled={chartOffset===0} onClick={()=>setChartOffset(v=>Math.max(0,v-1))}/></div>
+            </div>
+          </header>
+          {chartOffset>0&&historyLoading ? <Skeleton active paragraph={{rows:4}}/> : chartOffset>0&&historyError ? <Alert type="error" showIcon message="历史趋势加载失败" description={historyError} action={<Button aria-label="重试读取历史趋势" size="small" onClick={()=>setHistoryRetry(v=>v+1)}>重试</Button>}/> : chartData.length ? <EnvironmentTrendChart data={chartData} metric={chartMetric}/> : <SaasEmptyState title="该时段没有环境记录" description="这里只展示当前大棚的有效采样。" actionLabel="导入数据" onAction={()=>navigate(href('/platform/data'))}/>}
         </article>
-
-        <article className="exact-panel exact-todo-card">
-          <SectionHeading title="待处理任务" description={`${todayTasks.length} 项最近任务`} action={<Button type="link" onClick={() => navigate(`/platform/production?greenhouse_id=${selectedId ?? ''}`)}>查看全部 <ArrowRightOutlined /></Button>} />
-          {todayTasks.length ? <div className="exact-task-list">{todayTasks.map((task, index) => <button type="button" key={task.id} className="exact-task-row" onClick={() => navigate(`/platform/production?greenhouse_id=${selectedId ?? ''}&task_id=${task.id}`)}>
-            <i className={`exact-task-dot ${taskTone(task)}`} /><span className={`exact-task-icon task-${taskTone(task)}`}>{index === 0 ? <BulbOutlined /> : index === 1 ? <ExperimentOutlined /> : <DatabaseOutlined />}</span><span className="exact-task-copy"><strong>{task.title}</strong><small>{task.assignee_name || taskSourceLabel[task.source_type] || '待分配'} · {taskStatusLabel[task.status] ?? task.status}</small></span><time>{task.due_at ? `${formatDueTime(task.due_at)} 前` : '待安排'}</time><ArrowRightOutlined className="exact-task-arrow" />
-          </button>)}</div> : <SaasEmptyState title="没有待处理任务" description="当系统生成建议或预警时，会自动在这里形成待办。" />}
+        <article className="dd-todo dd-surface">
+          <header className="dd-section-heading"><h2>今日待办</h2><span>{todayTasks.length} 项任务</span><Button type="link" onClick={()=>navigate(href('/platform/production'))}>查看全部 <ArrowRightOutlined/></Button></header>
+          {todayTasks.length ? <div className="dd-task-list">{todayTasks.map((task,index)=><button type="button" key={task.id} className={'dd-task task-'+taskTone(task)} onClick={()=>navigate(href('/platform/production','task_id='+task.id))}>
+            <i className="dd-task-dot"/><span className="dd-task-icon">{index===0?<DeploymentUnitOutlined/>:<BulbOutlined/>}</span><span className="dd-task-copy"><strong>{task.title}</strong><small>{task.assignee_name||taskSourceLabel[task.source_type]||'待分配'} · {taskStatusLabel[task.status]||task.status}</small></span><time dateTime={task.due_at||undefined}>{task.due_at ? ((new Date(task.due_at).toDateString()===new Date().toDateString())?formatTime(task.due_at):formatDueTime(task.due_at))+' 前' : '待安排'}</time><ArrowRightOutlined className="dd-task-arrow"/>
+          </button>)}</div> : <SaasEmptyState title="没有待处理任务" description="新建农事任务后可在这里查看。" actionLabel="新建任务" onAction={()=>navigate(href('/platform/production','create=1'))}/>}
+          <p className="dd-task-note"><InfoCircleOutlined/>执行前请核实现场条件，结合棚内实际情况进行操作。</p>
         </article>
       </section>
 
-      <section className="exact-insight-grid">
-        <button type="button" className="exact-insight-card exact-risk-card" onClick={() => navigate(`/platform/environment?greenhouse_id=${selectedId}&tab=alerts`)}><span className="exact-insight-icon"><SafetyCertificateOutlined /></span><div><small>病害与环境风险</small><strong>{summary.risk.data_status === 'insufficient' && !hasWarning ? '待评估' : warningLevelLabel[summary.warning_summary.highest_risk_level] ?? warningLevelLabel[summary.risk.level] ?? '待评估'}</strong><p>{summary.risk.reasons[0] || (hasEnvironment ? '暂无待处理的风险事件' : '接入环境数据后显示风险判断')}</p></div><b>{summary.warning_summary.open_warning_count}</b><em>项预警</em><ArrowRightOutlined /></button>
-        <button type="button" className="exact-insight-card exact-health-card" onClick={() => navigate(`/platform/environment?greenhouse_id=${selectedId}&tab=monitoring`)}><span className="exact-insight-icon"><DatabaseOutlined /></span><div><small>数据采集</small><strong>{stale ? '数据待同步' : hasEnvironment ? '已接入' : '待接入'}</strong><p>{hasEnvironment ? `最近采集 ${formatDueTime(summary.data_updated_at || summary.latest_environment!.recorded_at)}` : '暂无环境数据'}</p></div><b>{summary.trend_24h.length}</b><em>条</em><ArrowRightOutlined /></button>
-        <button type="button" className="exact-insight-card exact-decision-card" onClick={() => navigate(`/platform/production?greenhouse_id=${selectedId}`)}><span className="exact-insight-icon"><ThunderboltOutlined /></span><div><small>决策状态</small><strong>{summary.warning_summary.latest_recommendation_title ? '有最新建议' : '暂无建议'}</strong><p>{summary.warning_summary.latest_recommendation_title || '等待风险研判结果'}</p></div><ArrowRightOutlined /></button>
+      <section className="dd-status-ribbon dd-surface" aria-label="生产状态">
+        <button type="button" className="dd-status dd-status-risk" onClick={()=>navigate(href('/platform/environment','tab=alerts'))}><SafetyCertificateOutlined/><span><small>环境风险</small><strong>{summary.risk.data_status==='insufficient'&&!hasWarning?'待评估':warningLevelLabel[summary.warning_summary.highest_risk_level]||warningLevelLabel[summary.risk.level]||'待评估'}</strong><p>{summary.risk.reasons[0]||(hasEnvironment?'暂无待处理的风险事件':'接入环境数据后显示风险判断')}</p></span><ArrowRightOutlined/></button>
+        <button type="button" className="dd-status dd-status-data" onClick={()=>navigate(href('/platform/environment','tab=monitoring'))}><DatabaseOutlined/><span><small>数据采集</small><strong>{stale?'数据待同步':hasEnvironment?'已接入':'待接入'}</strong><p>{summary.data_updated_at?'最近采集 '+formatDueTime(summary.data_updated_at):'暂无环境数据'}</p></span><ArrowRightOutlined/></button>
+        <button type="button" className="dd-status dd-status-decision" onClick={()=>navigate(href('/platform/production'))}><ThunderboltOutlined/><span><small>决策状态</small><strong>{summary.warning_summary.latest_recommendation_title?'有最新建议':'暂无建议'}</strong><p>{summary.warning_summary.latest_recommendation_title||'等待风险研判结果'}</p></span><ArrowRightOutlined/></button>
       </section>
 
-      <section className="wb-process-strip" aria-label="生产处理流程">{[
-        ['01', '监测发现', '环境记录与风险预警', '/platform/environment'],
-        ['02', '主动探因', '收集证据，逐步缩小原因', '/platform/investigate'],
-        ['03', '人工确认', '安排农事任务与执行', '/platform/production'],
-        ['04', '经验积累', '记录观察，沉淀生产经验', '/platform/research'],
-      ].map(([step,title,description,path]) => <button key={step} type="button" onClick={() => navigate(`${path}${path.includes('?') ? '&' : '?'}greenhouse_id=${selectedId}`)}><b>{step}</b><strong>{title}</strong><small>{description}</small></button>)}</section>
-
-      <section className="exact-panel exact-activity-card">
-        <SectionHeading title="最近动态" action={<Button type="link" onClick={() => navigate(`/platform/production?greenhouse_id=${selectedId ?? ''}`)}>查看更多 <ArrowRightOutlined /></Button>} />
-        {recentActivities.length ? <div className="exact-activity-list">{recentActivities.map((activity, index) => <div className="exact-activity-row" key={`${activity.title}-${index}`}><time>{activity.time}</time><i className={`exact-activity-dot ${activity.tone}`} /><strong>{activity.title}</strong><span>{activity.meta}</span></div>)}</div> : <SaasEmptyState title="还没有动态记录" description="完成数据接入后，这里会显示工作区中的关键变化。" />}
+      <section className="dd-activity dd-surface">
+        <header className="dd-section-heading"><h2>最近动态</h2><Button type="link" onClick={()=>navigate(href('/platform/production'))}>查看全部 <ArrowRightOutlined/></Button></header>
+        {recentActivities.length ? <div className="dd-activity-list">{recentActivities.map((activity,i)=><div key={activity.title+i} className="dd-activity-row"><time>{activity.time}</time><i className={activity.tone}/><strong>{activity.title}</strong><span>{activity.meta}</span></div>)}</div> : <p className="dd-no-activity">还没有动态记录，接入数据或创建任务后显示。</p>}
       </section>
+      <footer className="dd-footer"><CheckCircleOutlined/><nav aria-label="生产处理流程">{[['监测发现','/platform/environment'],['主动探因','/platform/investigate'],['人工确认','/platform/production'],['经验积累','/platform/research']].map(([label,path],i)=><span key={path}>{i>0&&<span aria-hidden="true">→</span>}<button type="button" onClick={()=>navigate(href(path))}>{label}</button></span>)}</nav><span>让大棚生产持续优化。</span><Button type="text" size="small" onClick={()=>setModelCenterOpen(true)}>模型说明</Button></footer>
     </>}
-
-    <ModelCenter open={modelCenterOpen} onClose={() => setModelCenterOpen(false)} />
+    <ModelCenter open={modelCenterOpen} onClose={()=>setModelCenterOpen(false)}/>
   </div>
 }

@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 
 
 BACKEND_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BACKEND_DIR / ".env")
+if os.getenv("PYTHON_DOTENV_DISABLED") != "1":
+    load_dotenv(BACKEND_DIR / ".env")
 
 
 @dataclass(frozen=True)

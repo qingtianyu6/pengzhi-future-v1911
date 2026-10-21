@@ -15,6 +15,7 @@ import {
 import { Avatar, Badge, Button, ConfigProvider, Divider, Drawer, Dropdown, Input, Layout, Menu, Select, Switch, Tooltip, type MenuProps } from 'antd'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { FloatingAIAssistant } from '../components/FloatingAIAssistant'
+import { useAssistantClearance } from '../hooks/useAssistantClearance'
 import { isGuestMode } from '../api/guestMode'
 import { communityRequest } from '../api/communityApi'
 import { ServiceStatus } from '../components/ServiceStatus'
@@ -23,6 +24,7 @@ import { getWarningSummary } from '../api/warningApi'
 import type { Greenhouse } from '../types/greenhouse'
 import { useSystemStore } from '../store/system'
 import { getStoredUser, logoutAccount, type AuthUser } from '../api/authApi'
+import './platform-tokens.css'
 import './workbench-refresh.css'
 import { platformTheme } from '../theme'
 import { allWorkspaceGroups, navigationItems, workspaceGroups, resolveWorkspace, workspaceHref } from './workspaceNavigation'
@@ -89,6 +91,7 @@ export function AppLayout() {
   const [productionExpanded, setProductionExpanded] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
+  useAssistantClearance(location.pathname)
   const checkHealth = useSystemStore((state) => state.checkHealth)
   const systemStatus = useSystemStore((state) => state.status)
   const is3DPage = location.pathname === '/platform/3d' || location.pathname.startsWith('/platform/3d/')

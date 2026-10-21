@@ -7,14 +7,15 @@ import type { SensorReading } from '../../types/sensor'
 
 echarts.use([LineChart, GridComponent, LegendComponent, TooltipComponent, CanvasRenderer])
 
-export function EnvironmentTrendChart({ data }: { data: SensorReading[] }) {
+export type ChartMetric = 'all' | 'temperature' | 'air_humidity' | 'soil_moisture'
+export function EnvironmentTrendChart({ data, metric = 'all' }: { data: SensorReading[]; metric?: ChartMetric }) {
   const chartRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!chartRef.current) return
     const chart = echarts.init(chartRef.current)
     chart.setOption({
-      animationDuration: 850,
+      animationDuration: 300,
       color: ['#f27b18', '#2f7ff7', '#149666'],
       tooltip: {
         trigger: 'axis',
@@ -27,32 +28,35 @@ export function EnvironmentTrendChart({ data }: { data: SensorReading[] }) {
       },
       legend: {
         data: ['温度 (℃)', '湿度 (%)', '土壤湿度 (%)'],
-        right: 14,
+        selected: { '温度 (℃)': metric==='all'||metric==='temperature', '湿度 (%)': metric==='all'||metric==='air_humidity', '土壤湿度 (%)': metric==='all'||metric==='soil_moisture' },
+        right: 2,
         top: 2,
         icon: 'circle',
         itemWidth: 8,
         itemHeight: 8,
-        itemGap: 22,
+        itemGap: 14,
         textStyle: { color: '#71847d', fontSize: 10 },
       },
-      grid: { left: 4, right: 6, bottom: 2, top: 42, containLabel: true },
+      grid: { left: 0, right: 0, bottom: 0, top: 38, containLabel: true },
       xAxis: {
         type: 'category',
         boundaryGap: false,
         data: data.map((item) => new Date(item.recorded_at).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false })),
         axisLine: { lineStyle: { color: '#d7e1dd' } },
         axisTick: { show: false },
-        axisLabel: { color: '#7c8e87', fontSize: 9, margin: 10, interval: Math.max(0, Math.floor(data.length / 8) - 1) },
+        axisLabel: { color: '#73877b', fontSize: 10, margin: 8, hideOverlap: true, interval: Math.max(0, Math.floor(data.length / 8) - 1) },
       },
       yAxis: [
         {
           type: 'value', name: '温度 (℃)', nameGap: 14, nameTextStyle: { color: '#83948e', fontSize: 9, align: 'left' },
-          axisLabel: { color: '#7e8f89', fontSize: 9 }, axisLine: { show: false }, axisTick: { show: false },
+          show: metric==='all'||metric==='temperature',
+          axisLabel: { color: '#7e8f89', fontSize: 10 }, axisLine: { show: false }, axisTick: { show: false },
           splitLine: { lineStyle: { color: '#e7ece9', type: 'solid' } }, min: 'dataMin',
         },
         {
           type: 'value', name: '湿度 / 土壤湿度 (%)', nameGap: 14, nameTextStyle: { color: '#83948e', fontSize: 9, align: 'right' },
-          axisLabel: { color: '#7e8f89', fontSize: 9 }, axisLine: { show: false }, axisTick: { show: false },
+          show: metric!=='temperature',
+          axisLabel: { color: '#7e8f89', fontSize: 10 }, axisLine: { show: false }, axisTick: { show: false },
           splitLine: { show: false }, min: 0, max: 100,
         },
       ],
@@ -65,7 +69,7 @@ export function EnvironmentTrendChart({ data }: { data: SensorReading[] }) {
     const observer = new ResizeObserver(() => chart.resize())
     observer.observe(chartRef.current)
     return () => { observer.disconnect(); chart.dispose() }
-  }, [data])
+  }, [data, metric])
 
   return <div ref={chartRef} className="environment-chart exact-environment-chart" aria-label="所选24小时温湿度与土壤湿度趋势图" />
 }

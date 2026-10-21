@@ -9,7 +9,7 @@ from typing import Any
 
 from fastapi.encoders import jsonable_encoder
 from PIL import Image, UnidentifiedImageError
-from sqlalchemy import and_, func, select
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 
@@ -264,7 +264,9 @@ def create_from_disease(db: Session, record_id: int, payload: SourceTaskCreate) 
 def list_tasks(db: Session, *, greenhouse_id: int | None, crop_batch_id: int | None,
                source_type: str | None, status: str | None, priority: str | None,
                assignee_name: str | None, start_time: datetime | None, end_time: datetime | None,
-               page: int, page_size: int) -> PaginatedData[FarmTaskData]:
+               page: int, page_size: int, q: str | None = None, status_group: str | None = None,
+               sort: str = "created", scheduled_start: datetime | None = None,
+               scheduled_end: datetime | None = None) -> PaginatedData[FarmTaskData]:
     filters = []
     if greenhouse_id is not None:
         filters.append(FarmTask.greenhouse_id == greenhouse_id)
@@ -282,9 +284,20 @@ def list_tasks(db: Session, *, greenhouse_id: int | None, crop_batch_id: int | N
         filters.append(FarmTask.created_at >= _naive_utc(start_time))
     if end_time:
         filters.append(FarmTask.created_at <= _naive_utc(end_time))
+    if status_group == "pending":
+        filters.append(FarmTask.status.in_(["draft", "pending"]))
+    if q and q.strip():
+        filters.append(or_(*(field.contains(q.strip(), autoescape=True) for field in
+                            (FarmTask.title, FarmTask.description, FarmTask.assignee_name, FarmTask.task_code))))
+    scheduled = func.coalesce(FarmTask.planned_start_at, FarmTask.due_at)
+    if scheduled_start:
+        filters.append(scheduled >= _naive_utc(scheduled_start))
+    if scheduled_end:
+        filters.append(scheduled < _naive_utc(scheduled_end))
     total = int(db.scalar(select(func.count()).select_from(FarmTask).where(*filters)) or 0)
+    order = (scheduled.is_(None), scheduled.asc(), FarmTask.id.asc()) if sort == "schedule" else (FarmTask.created_at.desc(), FarmTask.id.desc())
     records = list(db.scalars(
-        select(FarmTask).where(*filters).order_by(FarmTask.created_at.desc(), FarmTask.id.desc())
+        select(FarmTask).where(*filters).order_by(*order)
         .offset((page - 1) * page_size).limit(page_size)
     ))
     return PaginatedData(items=[FarmTaskData.model_validate(item) for item in records],
@@ -300,6 +313,7 @@ def task_summary(db: Session, greenhouse_id: int | None = None) -> TaskSummaryDa
         return int(db.scalar(select(func.count()).select_from(FarmTask).where(*filters, *extra)) or 0)
 
     return TaskSummaryData(
+        total=count(), completed_total=count(FarmTask.status == "completed"),
         draft_total=count(FarmTask.status == "draft"),
         pending_total=count(FarmTask.status == "pending"),
         in_progress_total=count(FarmTask.status == "in_progress"),

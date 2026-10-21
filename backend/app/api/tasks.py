@@ -31,12 +31,17 @@ def get_tasks(
     priority: Literal["low", "medium", "high", "urgent"] | None = None,
     assignee_name: str | None = Query(default=None, max_length=60),
     start_time: datetime | None = None, end_time: datetime | None = None,
+    q: str | None = Query(default=None, max_length=160),
+    status_group: Literal["pending"] | None = None,
+    sort: Literal["created", "schedule"] = "created",
+    scheduled_start: datetime | None = None, scheduled_end: datetime | None = None,
     page: int = Query(default=1, ge=1), page_size: int = Query(default=20, ge=1, le=100),
 ):
     return ApiResponse(data=task_service.list_tasks(
         db, greenhouse_id=greenhouse_id, crop_batch_id=crop_batch_id, source_type=source_type,
         status=status, priority=priority, assignee_name=assignee_name, start_time=start_time,
-        end_time=end_time, page=page, page_size=page_size,
+        end_time=end_time, page=page, page_size=page_size, q=q, status_group=status_group,
+        sort=sort, scheduled_start=scheduled_start, scheduled_end=scheduled_end,
     ))
 
 

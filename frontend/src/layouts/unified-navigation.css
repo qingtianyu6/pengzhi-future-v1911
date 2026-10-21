@@ -1,24 +1,24 @@
 /* One navigation shell for every platform route; content styling stays page-specific. */
-#pengzhi-platform.unified-navigation-shell .exact-header{height:75px!important;min-height:75px!important;border-bottom:1px solid #dbdfd6!important;padding-inline:30px!important;background:#fffefa!important}
+#pengzhi-platform.unified-navigation-shell .exact-header{height:62px!important;min-height:62px!important;border-bottom:1px solid #dbdfd6!important;padding-inline:30px!important;background:var(--pz-surface)!important}
 #pengzhi-platform.unified-navigation-shell .exact-sider{background:radial-gradient(ellipse at 10% 5%,#07513a 0%,#073e30 42%,#0b3b2e 100%)!important}
 #pengzhi-platform.unified-navigation-shell .pz-sider-search{display:none!important}
-#pengzhi-platform.unified-navigation-shell .exact-brand{height:105px!important;min-height:105px!important;padding:20px 21px!important;gap:15px!important}
+#pengzhi-platform.unified-navigation-shell .exact-brand{height:96px!important;min-height:96px!important;padding:20px 21px!important;gap:15px!important}
 #pengzhi-platform.unified-navigation-shell .exact-brand-symbol{width:53px!important;height:53px!important;min-width:53px!important;font-size:32px!important;border-radius:12px!important;background:#f6f8ee!important}
-#pengzhi-platform.unified-navigation-shell .exact-brand-copy strong{font-size:25px!important;letter-spacing:2px}
-#pengzhi-platform.unified-navigation-shell .exact-side-menu{padding:0 12px!important}
+#pengzhi-platform.unified-navigation-shell .exact-brand-copy strong{font-size:24px!important;letter-spacing:1px}
+#pengzhi-platform.unified-navigation-shell .exact-side-menu{padding:0 12px!important;flex:0 1 auto!important;min-height:0}
 #pengzhi-platform.unified-navigation-shell .exact-side-menu .ant-menu-item-group-title{display:none!important}
-#pengzhi-platform.unified-navigation-shell .exact-side-menu .ant-menu-item,#pengzhi-platform.unified-navigation-shell .exact-side-menu .ant-menu-submenu-title{font-size:18px!important;height:58px!important;line-height:58px!important;padding-left:20px!important;margin:1px 0!important;letter-spacing:.4px}
+#pengzhi-platform.unified-navigation-shell .exact-side-menu .ant-menu-item,#pengzhi-platform.unified-navigation-shell .exact-side-menu .ant-menu-submenu-title{font-size:16px!important;height:56px!important;line-height:56px!important;padding-left:20px!important;margin:1px 0!important;letter-spacing:.4px}
 #pengzhi-platform.unified-navigation-shell .exact-side-menu .anticon{font-size:23px!important}
 #pengzhi-platform.unified-navigation-shell .exact-side-menu .pz-knowledge-toggle .anticon{font-size:12px!important}
 #pengzhi-platform.unified-navigation-shell .exact-status-pill{font-size:12px!important}
 #pengzhi-platform.unified-navigation-shell :is(.pz-production-design-nav,.pz-knowledge-nav)>.ant-menu-submenu-title{background:#ffffff0b!important}
 #pengzhi-platform.unified-navigation-shell :is(.pz-production-design-nav,.pz-knowledge-nav)>.ant-menu{background:none!important}
-#pengzhi-platform.unified-navigation-shell :is(.pz-production-design-nav,.pz-knowledge-nav)>.ant-menu>.ant-menu-item{height:44px!important;line-height:44px!important;padding-left:52px!important;font-size:16px!important;margin:4px 7px!important;width:calc(100% - 14px)!important;position:relative}
+#pengzhi-platform.unified-navigation-shell :is(.pz-production-design-nav,.pz-knowledge-nav)>.ant-menu>.ant-menu-item{height:40px!important;line-height:40px!important;padding-left:52px!important;font-size:15px!important;margin:0 7px!important;width:calc(100% - 14px)!important;position:relative}
 #pengzhi-platform.unified-navigation-shell :is(.pz-production-design-nav,.pz-knowledge-nav)>.ant-menu>.ant-menu-item:before{display:block!important;content:"";position:absolute;left:24px;top:0;bottom:0;border-left:1px solid #8eae8777;width:1px;background:none!important}
-#pengzhi-platform.unified-navigation-shell :is(.pz-production-design-nav,.pz-knowledge-nav)>.ant-menu>.ant-menu-item:after{display:block!important;content:"";position:absolute;left:22px;top:21px;width:5px;height:5px;background:#a9c49b;border:0!important;border-radius:50%;right:auto;transform:none}
-#pengzhi-platform.unified-navigation-shell .exact-side-menu .ant-menu-item-selected{background:linear-gradient(100deg,#e9f1d8,#f5fae9)!important;color:#0b5239!important}
-#pengzhi-platform.unified-navigation-shell .exact-sider-bottom{display:flex!important;flex-direction:column;gap:0;margin:18px 19px 24px!important;padding-top:10px!important;border-top:1px solid #ffffff25!important}
-#pengzhi-platform.unified-navigation-shell .exact-sider-bottom>.ant-btn{width:100%;height:54px!important;justify-content:flex-start;padding-left:12px!important;font-size:17px!important;color:#e6efe5!important}
+#pengzhi-platform.unified-navigation-shell :is(.pz-production-design-nav,.pz-knowledge-nav)>.ant-menu>.ant-menu-item:after{display:block!important;content:"";position:absolute;left:22px;top:19px;width:5px;height:5px;background:#a9c49b;border:0!important;border-radius:50%;right:auto;transform:none}
+#pengzhi-platform.unified-navigation-shell .exact-side-menu .ant-menu-item-selected{height:50px!important;line-height:50px!important;background:linear-gradient(100deg,#e9f1d8,#f5fae9)!important;color:#0b5239!important}
+#pengzhi-platform.unified-navigation-shell .exact-sider-bottom{display:flex!important;flex-direction:column;gap:0;margin:24px 19px 24px!important;padding-top:10px!important;border-top:1px solid #ffffff25!important}
+#pengzhi-platform.unified-navigation-shell .exact-sider-bottom>.ant-btn{width:100%;height:50px!important;justify-content:flex-start;padding-left:12px!important;font-size:17px!important;color:#e6efe5!important}
 #pengzhi-platform.unified-navigation-shell .exact-sider-bottom>.ant-btn .anticon{font-size:23px!important;margin-right:4px}
 #pengzhi-platform.unified-navigation-shell .sider-account,#pengzhi-platform.unified-navigation-shell .sider-back-home,#pengzhi-platform.unified-navigation-shell .exact-sider-divider{display:none!important}
 #pengzhi-platform.unified-navigation-shell .exact-sider.is-collapsed .exact-brand{padding:16px 10px!important;gap:0!important}

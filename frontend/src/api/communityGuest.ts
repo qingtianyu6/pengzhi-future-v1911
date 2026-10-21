@@ -1,13 +1,14 @@
 import type { ForumPost, PostInput, ForumComment } from '../types/community'
+import { forumScenarioPosts, mergeForumScenarios } from './forumScenarios'
 
 const storage = 'pengzhi_forum_demo_v2'
 const date = () => new Date().toISOString()
-function initial(): ForumPost[] {
-  return [{ id: 1, title: '游客示例：清晨叶片潮湿，应该补充哪些观察？', body: '这是棚友论坛的示例讨论，供体验界面。可以记录**作物阶段、观察区域、湿度采样时间**，再提出待验证问题。\n\n示例内容不是农艺结论。', category: 'question', visibility: 'public', status: 'published', review_state: 'unreviewed', fields: { crop: 'tomato', stage: '开花坐果期' }, tags: ['观察记录'], author: '示例棚友', author_id: -2, version: 1, created_at: date(), updated_at: date(), accepted_comment_id: null, can_edit: false, can_moderate: false, likes: 0, liked: false, bookmarked: false, comment_count: 0, comments: [], assets: [] }]
-}
+const initial = forumScenarioPosts
 export function guestCommunity(path: string, method: string, payload: object): unknown {
   let posts: ForumPost[]
   try { posts = JSON.parse(sessionStorage.getItem(storage) || 'null') || initial() } catch { posts = initial() }
+  posts = mergeForumScenarios(posts)
+  sessionStorage.setItem(storage, JSON.stringify(posts))
   const p = payload as Record<string, unknown>
   const save = (result: unknown) => { sessionStorage.setItem(storage, JSON.stringify(posts)); return result }
   if (path === 'forum/posts' && method === 'get') {

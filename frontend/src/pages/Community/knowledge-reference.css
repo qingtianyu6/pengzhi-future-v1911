@@ -1,4 +1,5 @@
 /* Knowledge library reference: shares the community navigation shell with the forum. */
+.knowledge-image-note{margin:8px 0 0;color:#667d70;font-size:12px;line-height:1.65;overflow-wrap:anywhere}
 .pz-ui.wb-shell .knowledge-page{display:block!important;width:100%;max-width:1280px;min-width:0;margin:auto;color:#203f37}
 .pz-ui.wb-shell .knowledge-page .community-hero{display:flex;justify-content:space-between;align-items:center;gap:24px;min-height:113px;background:none!important;padding:0 0 22px!important;margin:0!important;border:0!important}
 .pz-ui.wb-shell .knowledge-page .community-eyebrow{font-size:10px;font-weight:700;letter-spacing:1.4px;color:#7b9480}

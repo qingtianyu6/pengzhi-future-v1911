@@ -1,11 +1,12 @@
 from pathlib import Path
+import os
 from playwright.sync_api import sync_playwright,expect
 import json
 out=Path(__file__).resolve().parents[2]/'.run/assistant-free-drag';out.mkdir(parents=True,exist_ok=True);checks=[];errors=[]
 def pos(page):return page.locator('.pengxiaozhi-dock').evaluate('e=>({right:parseFloat(getComputedStyle(e).right),bottom:parseFloat(getComputedStyle(e).bottom),x:e.getBoundingClientRect().x,y:e.getBoundingClientRect().y,width:e.offsetWidth,height:e.offsetHeight})')
 def same(a,b):return abs(a['right']-b['right'])<2 and abs(a['bottom']-b['bottom'])<2
 with sync_playwright() as p:
- b=p.chromium.launch();page=b.new_page(viewport={'width':1440,'height':1000});page.on('pageerror',lambda e:errors.append(str(e)))
+ b=p.chromium.launch(channel=os.environ.get('PENGZHI_BROWSER_CHANNEL'));page=b.new_page(viewport={'width':1440,'height':1000});page.on('pageerror',lambda e:errors.append(str(e)))
  page.goto('http://127.0.0.1:5173/platform/data?mode=guest&greenhouse_id=101');page.evaluate('document.fonts.ready');page.get_by_role('button',name='打开棚小智',exact=True).wait_for();page.wait_for_timeout(700)
  trigger=page.get_by_role('button',name='打开棚小智',exact=True);old=pos(page);box=trigger.bounding_box();x=box['x']+box['width']/2;y=box['y']+box['height']/2
  page.mouse.move(x,y);page.mouse.down();page.mouse.move(x-250,y-180,steps=12);page.mouse.up();page.mouse.move(0,0);page.wait_for_timeout(600);moved=pos(page)

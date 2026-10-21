@@ -14,6 +14,7 @@ class Runtime:
         self.key=key; self.owner=owner; self.link=DeviceLink(device or MockSTM32())
         self.persist=persist; self.lock=threading.RLock(); self.safety=Safety()
         self.env=scenario('normal'); self.target=Environment(); self.scenario_id='normal'
+        self.humidity_baseline=abs(self.env.air_humidity-self.target.air_humidity)
         self.mode='threshold'; self.running=False; self.simulation_time=0; self.manual=Actions()
         self.decision=None; self.error=None; self.history=deque(maxlen=300); self.events=deque(maxlen=100)
         self.last_seen=time.monotonic(); self.emergency=False
@@ -34,6 +35,7 @@ class Runtime:
             return {'source':'simulation','environment':self.env.model_dump(),'target':self.target.model_dump(),
                     'scenario_id':self.scenario_id,'simulation_time':self.simulation_time,'mode':self.mode,
                     'running':self.running,'emergency':self.emergency,'decision':self.decision,
+                    'humidity_baseline':self.humidity_baseline,
                     'planned':self.safety.action.model_dump(),'device':{
                         'mode':self.link.device.mode,'connected':self.link.connected,'status':self.link.status,
                         'confirmed':self.link.confirmed,'last_ack':self.link.last_ack,'physical_verified':False,
@@ -71,11 +73,24 @@ class Runtime:
         self.record('decision')
 
 class Manager:
+    IDLE_TTL = 15 * 60
+
+    def _reap_idle(self):
+        # Caller holds manager.lock. Real device ownership is never recycled here.
+        now = time.monotonic()
+        for key, r in list(self.runtimes.items()):
+            with r.lock:
+                if isinstance(r.link.device, MockSTM32) and not r.running and now-r.last_seen > self.IDLE_TTL:
+                    r.stop()
+                    r.link.device.close()
+                    del self.runtimes[key]
+
     def __init__(self): self.runtimes={}; self.lock=threading.RLock(); self.real_owner=None
     def get(self,key,owner=None,real=False):
         with self.lock:
+            self._reap_idle()
             if key not in self.runtimes:
-                if len(self.runtimes)>=64: raise ValueError('模拟会话已满，请重启演示服务释放会话')
+                if len(self.runtimes)>=64: raise ValueError('模拟会话暂满，请稍后重试，闲置会话将自动释放')
                 if real:
                     if self.real_owner is not None and self.real_owner!=key: raise ValueError('真实串口已由其他控制会话独占')
                     if os.getenv('GREENHOUSE_REAL_ENABLED')!='YES_PINS_VERIFIED':
@@ -83,6 +98,7 @@ class Manager:
                     device=BridgeDevice(); self.real_owner=key
                 else: device=MockSTM32()
                 self.runtimes[key]=Runtime(key,owner,device)
+            self.runtimes[key].last_seen=time.monotonic()
             return self.runtimes[key]
     def tick(self):
         with self.lock: items=list(self.runtimes.values())
@@ -102,6 +118,8 @@ class Manager:
                     r.link.confirmed=r.link.device.safety.action.model_dump() if r.link.connected else None
                 elif r.link.last_ack and time.time()-r.link.last_ack['at']>4:
                     r.link.confirmed=None; r.link.status='expired'
+        with self.lock: self._reap_idle()
+
     def close(self):
         for r in list(self.runtimes.values()):
             with r.lock: r.stop(); r.link.device.close()

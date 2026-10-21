@@ -16,14 +16,22 @@ type Step = { title: string; action_type: string; description: string; depends_o
 type ObservationValues = { note: string; zone: string; phase: string; observed_at: string; study_id?: number; metric?: string; value?: number }
 
 function MiniChart({ series, unit }: { series: { name: string; values: number[]; color: string }[]; unit: string }) {
+  const element = useRef<SVGSVGElement>(null), [width, setWidth] = useState(600)
   const values = series.flatMap(s => s.values).filter(Number.isFinite)
+  const hasValues = values.length > 0
+  useEffect(() => {
+    if (!element.current) return
+    const observer = new ResizeObserver(entries => setWidth(Math.max(280, Math.round(entries[0].contentRect.width))))
+    observer.observe(element.current)
+    return () => observer.disconnect()
+  }, [hasValues])
   if (!values.length) return <Empty description="暂无趋势数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
   const min = Math.floor(Math.min(...values)-2), max = Math.ceil(Math.max(...values)+2)
   const y = (v: number) => 146-(v-min)/(max-min)*116
-  return <div className="ag-chart"><svg viewBox="0 0 600 180" role="img" aria-label={`${unit}趋势比较`}>
-    {[0, 1, 2, 3].map(i => <g key={i}><line x1="45" x2="584" y1={30+i*38.7} y2={30+i*38.7} stroke="#e5eae3" strokeDasharray="4 5" /><text x="4" y={34+i*38.7} fill="#84958a" fontSize="11">{Math.round(max-(max-min)*i/3)}{unit}</text></g>)}
-    {series.map(s => <polyline key={s.name} fill="none" stroke={s.color} strokeWidth="2.6" strokeLinejoin="round" points={s.values.map((v, i) => `${45+i*535/Math.max(1, s.values.length-1)},${y(v)}`).join(' ')} />)}
-    <text x="45" y="174" fontSize="11" fill="#84958a">起点</text><text x="555" y="174" fontSize="11" fill="#84958a">末点</text>
+  return <div className="ag-chart"><svg ref={element} viewBox={`0 0 ${width} 180`} role="img" aria-label={`${unit}趋势比较`}>
+    {[0, 1, 2, 3].map(i => <g key={i}><line x1="45" x2={width-16} y1={30+i*38.7} y2={30+i*38.7} stroke="#e5eae3" strokeDasharray="4 5" /><text x="4" y={34+i*38.7} fill="#84958a" fontSize="12">{Math.round(max-(max-min)*i/3)}{unit}</text></g>)}
+    {series.map(s => <polyline key={s.name} fill="none" stroke={s.color} strokeWidth="2.6" strokeLinejoin="round" points={s.values.map((v, i) => `${45+i*(width-61)/Math.max(1, s.values.length-1)},${y(v)}`).join(' ')} />)}
+    <text x="45" y="174" fontSize="12" fill="#84958a">起点</text><text x={width-45} y="174" fontSize="12" fill="#84958a">末点</text>
   </svg><div className="ag-legend">{series.map(s => <span key={s.name}><i style={{ background: s.color }} />{s.name}</span>)}</div></div>
 }
 
@@ -47,6 +55,15 @@ function ResearchWorkbench({ greenhouseId }: { greenhouseId: number }) {
   const [observationOpen, setObservationOpen] = useState(false)
   const [observationForm] = Form.useForm<ObservationValues>(), [studyForm] = Form.useForm(), [goalForm] = Form.useForm()
   const [observationStudy, setObservationStudy] = useState<number | undefined>()
+  useEffect(() => {
+    if (!archive?.batch || params.get('observe') !== '1') return
+    observationForm.resetFields()
+    const local = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16)
+    observationForm.setFieldsValue({phase:'routine',zone:'全棚',observed_at:local})
+    setObservationStudy(undefined)
+    setObservationOpen(true)
+    setParams(previous => {const next=new URLSearchParams(previous);next.delete('observe');return next},{replace:true})
+  }, [archive?.batch, params, observationForm, setParams])
   const generation = useRef(0)
   const invalidate = useCallback(() => { generation.current++ }, [])
   const guest = isGuestMode()
@@ -134,10 +151,10 @@ function ResearchWorkbench({ greenhouseId }: { greenhouseId: number }) {
     { key: 'archive', label: '生长档案', children: <>
       <div className="ag-stats">{[{ label: '批次生长天数', value: archive?.batch?.growth_day ?? '—', suffix: '天' }, { label: '有效环境采样', value: archive?.sample_count ?? 0, suffix: '条' }, { label: '已记录作物观察', value: archive?.observations.length ?? 0, suffix: '条' }, { label: '待处理预警', value: archive?.open_warnings ?? 0, suffix: '项' }].map(s => <div key={s.label}><span>{s.label}</span><strong>{s.value}<small>{s.suffix}</small></strong></div>)}</div>
       <div className="ag-two-col"><Card className="ag-growth-card"><div className="ag-section-title"><div><span className="ag-eyebrow">GROWTH ARCHIVE</span><h2>{archive?.batch?.variety || '等待建立种植批次'}</h2></div><Tag color="green">{archive?.batch?.growth_stage || '未设置'}</Tag></div>
-        <div className="ag-greenhouse-scene" aria-hidden="true"><div className="ag-greenhouse-roof" /><div className="ag-crop-rows">{Array.from({ length: 18 }, (_, i) => <span key={i}>♧</span>)}</div><span className="ag-scene-caption">批次档案 · 环境与作物观察</span></div>
+        <div className="ag-archive-scene"><img src={/甜瓜|蜜瓜|香瓜/.test(archive?.batch?.variety || '') ? '/images/knowledge/muskmelon-v1.webp' : /番茄|西红柿/.test(archive?.batch?.variety || '') ? '/images/knowledge/tomato-v1.webp' : '/images/knowledge/greenhouse-v1.webp'} alt="设施作物种植场景示意，非本批次实拍" /><div><span>每一次观察，都成为下一步的依据</span><small>种植场景示意 · 非本批次实拍</small></div></div>
         <div className="ag-batch-info"><span>定植日期 <b>{archive?.batch?.planted_at?.slice(0, 10) || '—'}</b></span><span>最新采样 <b>{archive?.latest ? date(archive.latest.recorded_at) : '暂无'}</b></span><span>采样状态 <b>{archive?.latest ? archive.fresh ? '最近两小时内' : '历史采样' : '等待接入'}</b></span></div>
         <Space wrap><Button type="primary" icon={<PlusOutlined />} disabled={!archive?.batch || busy} onClick={() => openObservation()}>记录作物观察</Button><Button onClick={() => switchTab('scenarios')}>比较管理方案 <ArrowRightOutlined /></Button></Space>
-      </Card><Card title="本棚数据概况"><div className="ag-environment">{(['temperature', 'air_humidity', 'soil_moisture'] as const).map(key => <div key={key}><span>{metricLabels[key]}</span><strong>{archive?.latest?.[key] ?? '—'}<small>{key === 'temperature' ? '°C' : '%'}</small></strong><span>窗口均值 {archive?.metrics[key]?.mean ?? '—'}</span></div>)}</div>
+      </Card><Card className="ag-environment-card" title={<><span>本棚数据概况</span><small>ENVIRONMENT SNAPSHOT</small></>}><div className="ag-environment">{(['temperature', 'air_humidity', 'soil_moisture'] as const).map(key => <div key={key}><span>{metricLabels[key]}</span><strong>{archive?.latest?.[key] ?? '—'}<small>{key === 'temperature' ? '°C' : '%'}</small></strong><span>窗口均值 {archive?.metrics[key]?.mean ?? '—'}</span></div>)}</div>
         {(archive?.gaps || []).map(gap => <p key={gap} className="ag-gap">{gap}</p>)}<p className="ag-muted">{archive?.window_note}</p></Card></div>
       <div className="ag-two-col"><Card title="环境变化 · 有效空气湿度采样"><MiniChart unit="%" series={[{ name: '空气湿度', color: '#327c62', values: archive?.history.map(r => r.air_humidity).filter((v): v is number => v !== null) || [] }]} /></Card><Card title="生产时间线">{archive?.timeline.length ? <div className="ag-timeline"><Timeline items={archive.timeline.slice(0, 12).map(e => ({ color: e.type === 'warning' ? '#cf9439' : '#3c8064', children: <><span className="ag-eyebrow">{date(e.at)} · {labels[e.type]}</span><p>{e.title}</p><small>{labels[e.detail] || e.detail}</small></> }))} /></div> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="添加观察、任务后，这里会形成生产时间线" />}</Card></div>
       <Card title="作物观察记录"><div className="ag-table-scroll"><Table size="small" rowKey="id" pagination={{ pageSize: 8, hideOnSinglePage: true }} dataSource={archive?.observations} columns={[
@@ -157,9 +174,9 @@ function ResearchWorkbench({ greenhouseId }: { greenhouseId: number }) {
     { key: 'skills', label: '农事技能', children: <><div className="ag-section-intro"><span className="ag-eyebrow">REUSABLE SKILLS</span><h2>让处理经验，成为下一次的工作方法</h2><p>从研究沉淀操作步骤、适用条件和证据。启用流程后，可以在目标编排中复用。</p></div>{recordCards('skill')}</> },
     { key: 'goals', label: '目标编排', children: <><Card><span className="ag-eyebrow">GOAL PLANNING</span><h2>告诉棚小智，你想完成什么</h2><Form form={goalForm} layout="vertical" onFinish={values => void operation(() => createAgronomyGoal({ ...context, ...values }), '目标计划已保存')}><Form.Item name="goal" label="生产目标" rules={[{ required: true, whitespace: true, min: 2, message: '请填写至少两个字的目标' }]}><Input.TextArea maxLength={500} rows={2} placeholder="例如：检查清晨湿度偏高问题，记录处理前后作物状态" /></Form.Item><div className="ag-form-grid">{scenarioSelectors}<Form.Item name="study_id" label="关联生产研究"><Select allowClear placeholder="可选" options={options(records, 'study')} /></Form.Item><Form.Item name="skill_id" label="复用农事技能"><Select allowClear placeholder="可选，选择已启用流程" options={options(records.filter(r => r.status === 'active'), 'skill')} /></Form.Item></div><Space wrap><Button type="primary" htmlType="submit" loading={busy}>生成目标计划</Button><Button icon={<RobotOutlined />} loading={busy} disabled={guest} onClick={() => void aiGoal()}>AI 定制计划</Button></Space><span className="ag-inline-note">结构化编排不调用模型；AI 定制结合本棚数据生成步骤</span></Form></Card>{recordCards('goal')}</> },
   ]
-  return <div className="ag-workbench">
+  return <div className="ag-workbench ag-refined">
     <header className="ag-hero"><div><span className="ag-eyebrow"><ExperimentOutlined /> AGRONOMIST WORKSPACE</span><h1>AI 研究台</h1><p>生长有档案，决策有依据，经验可复用。</p></div><Space wrap><Button icon={<RobotOutlined />} onClick={() => window.dispatchEvent(new Event('pengzhi:open-assistant'))}>与棚小智交流</Button><Button icon={<ExportOutlined />} onClick={exportRecords} disabled={!archive}>导出档案</Button><Button aria-label="刷新研究台" icon={<ReloadOutlined />} loading={refreshing} onClick={() => void refresh()} /></Space></header>
-    {guest && <Alert type="info" showIcon message="游客体验 · 数据与推演均为示例，新增记录保存在当前浏览器会话，刷新可以继续。" />}
+    {guest && <div className="ag-demo-note"><ExperimentOutlined /><span>体验模式 · 数据与推演为示例，新增记录仅保存在当前浏览器会话。</span></div>}
     {error && <Alert type="error" showIcon message={error} action={<Button size="small" onClick={() => void refresh()}>重试</Button>} />}
     <div className="ag-context"><span><i />{archive?.greenhouse.name || '正在读取大棚'}</span><Select aria-label="研究批次" placeholder="当前批次" value={archive?.batch?.id} options={archive?.batches.map(b => ({ value: b.id, label: `${b.batch_code} · ${labels[b.status] || (b.status === 'growing' ? '生长中' : b.status)}` }))} onChange={value => { setParams(previous => { const p = new URLSearchParams(previous); p.set('batch_id', String(value)); return p }) }} /><span className="ag-muted">本批次 {studies.length} 项研究 · {skills.length} 项技能 · {goals.length} 个目标</span></div>
     {!archive && !error ? <Skeleton active paragraph={{ rows: 12 }} /> : <Tabs activeKey={tabs.some(t => t.key === tab) ? tab : 'archive'} onChange={switchTab} items={tabs} />}

@@ -9,9 +9,9 @@ export const platformTheme: ThemeConfig = {
     colorBorder: '#d9e2d7', colorBorderSecondary: '#e6eae1',
     borderRadius: 10, borderRadiusLG: 18, controlHeight: 38,
     boxShadowSecondary: '0 12px 36px rgba(31, 60, 46, .08)',
-    fontFamily: "'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif",
+    fontFamily: "'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif",
     fontSize: 15, fontSizeSM: 13, fontSizeLG: 16,
-    fontSizeHeading1: 32, fontSizeHeading2: 22, fontSizeHeading3: 18,
+    fontSizeHeading1: 34, fontSizeHeading2: 22, fontSizeHeading3: 18,
     fontSizeHeading4: 16, fontSizeHeading5: 15, lineHeight: 1.75,
   },
   components: {

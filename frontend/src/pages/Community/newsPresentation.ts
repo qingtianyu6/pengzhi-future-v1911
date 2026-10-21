@@ -1,8 +1,9 @@
 import type { NewsArticle, NewsPreference } from '../../types/community'
 import greenhouse from '../../assets/pure-scenes/greenhouse-wide-1920.webp'
 
-export type NewsItem = NewsArticle & { public_preview?: boolean }
-export interface PublicHeadlines { items: { title: string; url: string; source: string; published_at: string | null }[]; fetched_at: string; sources: { status: string }[] }
+export type NewsItem = NewsArticle & { public_preview?: boolean; image_url?: string; image_article_url?: string }
+type PublicHeadline = { title: string; url: string; source: string; published_at: string | null; image_url?: string; image_article_url?: string }
+export interface PublicHeadlines { items: PublicHeadline[]; photo_stories?: PublicHeadline[]; fetched_at: string; sources: { status: string }[] }
 export interface PublicNewsState { saved: NewsItem[]; read: string[]; preferences: NewsPreference }
 export const defaultNewsPreference: NewsPreference = { crops: [], topics: [], enabled: false, local_hour: 8 }
 export const themes = [{ value: 'all', label: '全部' }, { value: 'facility', label: '设施农业' }, { value: 'cultivation', label: '种植技术' }, { value: 'disease', label: '病虫防治' }, { value: 'policy', label: '农业政策' }]
@@ -15,7 +16,8 @@ const words: Record<string, RegExp> = {
 export const newsUrl = (url: string) => /^https?:\/\//i.test(url) ? url : undefined
 export function matchesNews(item: NewsItem, theme: string) { return theme === 'all' || item.tags.includes(theme) || !!words[theme]?.test(item.title + ' ' + item.summary) }
 export function publicItems(data: PublicHeadlines | null, state: PublicNewsState): NewsItem[] {
-  return (data?.items || []).filter(a => newsUrl(a.url)).map((a, i) => ({ ...a, id: -i - 1, public_preview: true, summary: '', collected_at: data!.fetched_at, tags: Object.keys(words).filter(key => words[key].test(a.title)), status: 'metadata_only', analysis: {}, bookmarked: state.saved.some(s => s.url === a.url), read_at: state.read.includes(a.url) ? data!.fetched_at : null }))
+  const items = [...(data?.items || []), ...(data?.photo_stories || [])]
+  return Array.from(new Map(items.map(a => [a.url,a])).values()).filter(a => newsUrl(a.url)).map((a, i) => ({ ...a, id: -i - 1, public_preview: true, summary: '', collected_at: data!.fetched_at, tags: Object.keys(words).filter(key => words[key].test(a.title)), status: 'metadata_only', analysis: {}, bookmarked: state.saved.some(s => s.url === a.url), read_at: state.read.includes(a.url) ? data!.fetched_at : null }))
 }
 export function readPublicNews(key: string): PublicNewsState {
   const fallback = { saved: [], read: [], preferences: { ...defaultNewsPreference } }

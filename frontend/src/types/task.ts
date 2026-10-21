@@ -40,6 +40,7 @@ export interface TaskDetail extends FarmTask {
 }
 
 export interface TaskSummary {
+  total: number; completed_total: number
   draft_total: number; pending_total: number; in_progress_total: number; completed_today: number
   overdue_total: number; urgent_total: number
 }

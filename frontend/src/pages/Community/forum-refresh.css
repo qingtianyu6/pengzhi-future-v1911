@@ -57,3 +57,8 @@
 .pz-ui.wb-shell.forum-workspace-shell .forum-page .community-hero{padding-bottom:0!important;margin-bottom:0!important}
 .pz-ui.wb-shell.forum-workspace-shell .forum-post{padding-block:18px}
 @media(max-width:620px){.pz-ui.wb-shell.forum-workspace-shell .forum-page .community-hero{padding-bottom:12px!important}}
+
+.forum-scenario-note{margin:0 0 12px;padding-left:11px;border-left:2px solid #adc59f;color:#657a6b;line-height:1.75;font-size:12px}
+.forum-post:nth-child(4n+2) .forum-author-avatar{background:#e9e2d1;color:#857046}
+.forum-post:nth-child(4n+3) .forum-author-avatar{background:#dfe9e6;color:#55776a}
+.forum-post:nth-child(4n) .forum-author-avatar{background:#e7e7db;color:#717752}

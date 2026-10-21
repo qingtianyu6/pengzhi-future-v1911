@@ -1,0 +1,10 @@
+/* Shared platform palette and reading sizes. Navigation remains in unified-navigation.css. */
+:root {
+  --pz-canvas: #f8f7f1;
+  --pz-surface: #fffefa;
+  --pz-ink: #102e2c;
+  --pz-green: #07543f;
+  --pz-muted: #596b60;
+  --pz-line: #e0e6dc;
+  --pz-note-size: 13px;
+}

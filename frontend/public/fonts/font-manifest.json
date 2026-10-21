@@ -15,5 +15,14 @@
     "source_bytes": 2532364,
     "glyph_coverage_verified": true,
     "weight_axis_verified": true
+  },
+  "brand_handwriting": {
+    "family": "Ma Shan Zheng",
+    "source": "https://github.com/google/fonts/tree/main/ofl/mashanzheng",
+    "license": "SIL OFL 1.1",
+    "file": "pengzhi-brand-hand.woff2",
+    "bytes": 3250416,
+    "sha256": "b0d54aacebcd68802da8c1edb1d5eca467cd06617a3f00bdfe77ff9815e1b78b",
+    "source_sha256": "6d2546bb189c732a8ca29af9e22457b152387d158aa459e4ac2ce1e51788b7fb"
   }
 }

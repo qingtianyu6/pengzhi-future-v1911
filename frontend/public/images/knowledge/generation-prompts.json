@@ -1,0 +1,27 @@
+{
+  "tool": "imagegen built-in",
+  "date": "2026-10-20",
+  "usage": "AI生成主题示意图，非原文图片、实拍凭证或病害诊断样本。",
+  "prompts": [
+    [
+      "light",
+      "Photorealistic-natural editorial scene illustration for an agricultural knowledge library, landscape 16:9. Close low angle of a Chinese arched plastic tomato greenhouse in late winter, clean transparent film glowing with soft golden sunshine, a long handled soft cleaning brush gently wiping the outside film near the edge, visible clean condensation-free surface and healthy tomato canopy behind. Focus on film clarity and useful natural light. Natural authentic textures, warm cream and green palette, professionally composed magazine photography style, no text, no logos, no diagram, no collage, no people faces. This is an AI illustrative scene, never presented as source documentary evidence. Entire subject in center safe area for small thumbnail crop."
+    ],
+    [
+      "ventilation",
+      "Photorealistic-natural editorial scene illustration for an agricultural knowledge library, landscape 16:9. Inside a Chinese tomato greenhouse in winter, close view of a distinctly open upper roof ventilation flap, diagonal metal braces and translucent film, fresh cool blue sky visible through the opening, foreground healthy green tomato canopy, subtle morning condensation beads on one side of the film, bright clean daylight. The visual subject is the open roof vent, not weather instruments, no arrows, no text, no logos, no diagram, no collage, no people. Elegant natural blue green palette. AI illustrative scene only, never source documentary evidence. Main vent centered so readable at 200 pixels."
+    ],
+    [
+      "winter",
+      "Photorealistic-natural editorial scene illustration for an agricultural knowledge library, landscape 16:9. Exterior Chinese solar greenhouse on a clear cold winter morning, side view of quilted grey beige thermal insulation blanket partially rolled on top of the arched roof and covered roof portion, realistically supported steel pipe roller, light snow on the ground beside the structure but no unsafe thick snow load on roof. Warm light glows through uncovered clean film, muted blue winter sky, earthy green and cream palette, focus on thermal covering and winter preparation. No text, no logo, no collage, no diagram, no people. AI illustrative scene only, never source documentary evidence. Central strong subject suitable for 200px thumbnail."
+    ],
+    [
+      "irrigation",
+      "Photorealistic-natural editorial scene illustration for Chinese greenhouse agricultural knowledge article. Landscape 16:9 close-up of working black drip irrigation tubing with a small emitter delivering one clear drop beside healthy young tomato roots at soil surface, rich dark moist soil, healthy green tomato stems and lower leaves softly blurred behind, realistic neat small greenhouse cultivation bed. Beautiful natural morning light, balanced warm earth and green palette, subject centered for 200 pixel thumbnail, no text no labels no diagram no collage no logos no person. AI illustrative scene only, not documentary evidence nor instructional equipment diagram."
+    ],
+    [
+      "inspection",
+      "Photorealistic-natural editorial scene illustration for Chinese agricultural knowledge library. Landscape 16:9, close-up gloved gardener hands gently turning over a HEALTHY green tomato leaf for routine pest scouting, simple handheld magnifying glass centered near leaf, tomato greenhouse background softly blurred. No diseased leaf lesions, no invented pathogen signs, no bugs magnified, no medical diagnostic evidence. Soft natural daylight, fresh deep greens, realistic botanical texture. Beautiful editorial agriculture composition readable at 200 pixel thumbnail. No text no labels no diagram no collage no logos no faces. AI illustrative routine scouting scene only."
+    ]
+  ]
+}

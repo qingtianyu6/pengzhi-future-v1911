@@ -14,7 +14,7 @@ expect=playwright_api.expect
 pytestmark=pytest.mark.skipif(os.environ.get('PENGZHI_BROWSER_TESTS')!='1',reason='Opt-in browser acceptance requires the Vite service')
 from app.database import SessionLocal
 from app.models.community import NewsArticle,NewsSource,NewsAutomation
-from app.services import chinese_news
+from app.services import chinese_news, news_images
 
 OUT=Path(__file__).resolve().parents[2]/'.run/news-reference'
 
@@ -28,6 +28,7 @@ def test_news_editorial_browser(client,monkeypatch):
     tags=[['tomato','technology'],['tomato','technology'],['muskmelon','cultivation'],['policy'],['tomato','disease']]
     public={'items':[{'title':t,'url':f'https://example.org/editorial-ui/{i}','source':'隔离测试栏目（非新闻）','published_at':f'2026-10-{19-i:02}'} for i,t in enumerate(titles)],'sources':[{'status':'ok'}],'fetched_at':datetime.now(UTC).isoformat()}
     monkeypatch.setattr(chinese_news,'public_headlines',lambda:public)
+    monkeypatch.setattr(news_images,'article_image',lambda url,**kwargs:{'status':'no_image','image_url':None,'article_url':url})
     user=client.get('/api/auth/me').json()['data']
     with SessionLocal() as db:
         source=NewsSource(organization_id=user['organization_id'],name='隔离测试来源（非新闻）',url='https://example.org/ui-fixture.xml',kind='rss',enabled=False,permission_note='临时数据库测试，不是真实新闻来源');db.add(source);db.flush()
@@ -62,7 +63,7 @@ def test_news_editorial_browser(client,monkeypatch):
         check('真实临时数据库渲染头条与四条资讯',titles[0] in page.locator('.news-feature-copy').inner_text())
         geometry=page.evaluate('''()=>{let rect=s=>{let r=document.querySelector(s).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}};return {sidebar:rect('.exact-sider'),lead:rect('.news-lead'),photo:rect('.news-feature-photo'),quick:rect('.news-quick'),title:getComputedStyle(document.querySelector('.news-masthead h1')).fontSize}}''')
         check('设计图侧栏与主区起点',abs(geometry['sidebar']['width']-240)<1 and abs(geometry['lead']['x']-296)<3)
-        check('头条图片高度与大标题字号',abs(geometry['photo']['height']-310)<1 and geometry['title']=='60px')
+        check('纯文字头条不保留大图占位，标题字号统一',geometry['photo']['height']==0 and geometry['title']=='42px')
         check('今日速览三条',page.locator('.news-quick>div>button').count()==3)
         check('主页面仅保留两个入口',page.locator('.news-main-navigation>nav>button').count()==2)
         page.locator('.news-editorial-row').first.locator('.news-row-copy h2 button').click()

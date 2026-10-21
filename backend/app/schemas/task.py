@@ -172,6 +172,8 @@ class TaskDetailData(FarmTaskData):
 
 
 class TaskSummaryData(BaseModel):
+    total: int = 0
+    completed_total: int = 0
     draft_total: int
     pending_total: int
     in_progress_total: int

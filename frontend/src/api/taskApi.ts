@@ -5,6 +5,8 @@ import type { AddFeedbackInput, CompleteTaskInput, FarmTask, ManualTaskInput, Ta
 export interface TaskFilters {
   greenhouse_id?: number; crop_batch_id?: number; source_type?: string; status?: string
   priority?: string; assignee_name?: string; start_time?: string; end_time?: string
+  q?: string; status_group?: 'pending'; sort?: 'created' | 'schedule'
+  scheduled_start?: string; scheduled_end?: string
   page?: number; page_size?: number
 }
 export async function getTasks(filters: TaskFilters = {}): Promise<TaskPage> {

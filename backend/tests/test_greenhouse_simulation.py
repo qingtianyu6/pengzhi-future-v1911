@@ -162,7 +162,7 @@ def test_idle_guard_stops_without_viewer():
     r=Runtime(persist=False);r.running=True;r.last_seen=-1000
     manager.runtimes['idle-test']=r
     manager.tick();assert not r.running and r.safety.action.mask()==0
-    del manager.runtimes['idle-test']
+    manager.runtimes.pop('idle-test', None)  # An expired stopped mock may already be reclaimed.
 
 def test_bridge_auth_fragmented_frame_timeout_reopen():
     class FakeSerial:

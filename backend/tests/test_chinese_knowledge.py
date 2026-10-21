@@ -70,7 +70,8 @@ def test_public_headlines_cache_is_independent_of_organization_records(client,mo
     first=client.get('/api/community-public/news/public-headlines')
     assert first.status_code==200 and len(first.json()['data']['items'])==6
     assert client.get('/api/community-public/news/public-headlines').json()==first.json()
-    assert len(calls)==3
+    assert len(calls)==4  # Three headline indexes plus the separate photo-news index.
+    assert first.json()['data']['photo_stories']==[]
     with SessionLocal() as db:assert db.scalar(select(func.count()).select_from(NewsArticle))==0
 
 
